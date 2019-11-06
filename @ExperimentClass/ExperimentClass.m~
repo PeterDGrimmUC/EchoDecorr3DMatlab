@@ -11,15 +11,23 @@ classdef ExperimentClass < handle
         initDataSet; 
         % main arrays
         ultrasoundDataSeries; 
+        experimentalUSDataSeries; 
         decorrelationMapSeries;
         decorrelationMapSeriesROI;
         cumulativeDecorr; 
         cumulativeDecorrROI;
         decorrSumSeries; 
-        decorrSumSeriesROI; 
+        decorrSumSeriesROI;
+        decorrAverageSeries;
+        decorrAverageSeriesROI;
         decorrVolume; 
         averageDecorr; 
-        % ultrasound data parameters 
+        subRegionMap
+        % ultrasound data parameters
+        dx
+        dy
+        dz
+        dr
         rmin;
         rmax;
         cartScalingFactor;
@@ -36,7 +44,7 @@ classdef ExperimentClass < handle
         % experiment parameters
         numDataSets;
         dataFolder; 
-        
+        subRegionROIMap
         activeFolder;
         activeFolderDir; 
         numVolumes; 
@@ -69,6 +77,17 @@ classdef ExperimentClass < handle
         ROIBeta;
         ROIGamma;
         ROIMap; 
+        ROIMapSubregion; 
+        subRegionRbounds;
+        subRegionThetabounds;
+        subRegionPhibounds;
+        subRegionRboundsi;
+        subRegionThetaboundsi;
+        subRegionPhiboundsi;
+        subRegionXbounds;
+        subRegionYbounds;
+        subRegionZbounds;
+        regionOverlay;
     end
     
     methods
@@ -99,11 +118,10 @@ classdef ExperimentClass < handle
             obj.decorrThresh = thisdecorrthresh;
             obj.defaultDataFileName = 'bufApl0Out_0x0_0x0.data.dm.pmcr';
         end
-        function setControlParams(obj,myThresh, mySigma)
-            obj.sigma = mySigma; 
+        function setControlParams(obj,myThresh)
             obj.decorrThresh = myThresh; 
         end
-        function setImagingParams(obj,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thisinterFrameTime)
+        function setImagingParams(obj,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thisinterFrameTime,thissigma)
             %EXPERIMENTCLASS Construct an instance of this class
             %   Detailed explanation goes here
             obj.cartScalingFactor = thiscartScalingFactor;
@@ -113,6 +131,7 @@ classdef ExperimentClass < handle
             obj.phimin = thisphimin;
             obj.phimax = thisphimax; 
             obj.defaultDataFileName = 'bufApl0Out_0x0_0x0.data.dm.pmcr';
+            obj.sigma = thissigma; 
         end
         function setROIParams(obj,myx0,myy0,myz0,myr0,myr1,myr2,myr0_in,myr1_in,myr2_in,myalpha,mygamma,mybeta)
             obj.ROIx0 = myx0;
@@ -144,6 +163,7 @@ classdef ExperimentClass < handle
         end
         function getInitDataSet(obj)
             nextDataSet = obj.getNextDataSetFolder();
+            
             if(~isempty(nextDataSet))
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
@@ -151,8 +171,13 @@ classdef ExperimentClass < handle
                 obj.numVolumes = 0; 
                 obj.xVec = obj.initDataSet.x_range; 
                 obj.yVec = obj.initDataSet.y_range; 
-                obj.zVec = obj.initDataSet.z_range; 
+                obj.zVec = obj.initDataSet.z_range;
+                obj.dx = obj.initDataSet.dx;
+                obj.dy = obj.initDataSet.dy;
+                obj.dz = obj.initDataSet.dz;
+                obj.dr = obj.initDataSet.dr;
             end
+            obj.numDataSets = 1; 
         end
         
         function outDataSet = parseDataFromDir(obj,thisFileName)
@@ -172,15 +197,41 @@ classdef ExperimentClass < handle
             end
             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
         end
+        function outDataSet = parseDataFromDirExperimental(obj,thisFileName)
+            Dm = read_lbdump(thisFileName);
+            obj.rmin = 0;
+            obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
+            try 
+                obj.framerate = Dm.Info.framerate;
+                obj.phiRange = Dm.Info.phiRange;
+                obj.thetaRange = Dm.Info.thetaRange;
+                obj.thetamax = pi/360*obj.thetaRange;
+                obj.thetamin = -obj.thetamax;
+                obj.phimax = pi/360*obj.phiRange;
+                obj.phimin = -obj.phimax;
+            catch
+                display('Could not read additional info file');
+            end
+            rmin = obj.subRegionRbounds(1);
+            rmax = obj.subRegionRbounds(2);
+            thetamin = obj.subRegionThetabounds(1);
+            thetamax = obj.subRegionThetabounds(2);
+            phimin = obj.subRegionPhibounds(1);
+            phimax = obj.subRegionPhibounds(2);
+            rV = obj.subRegionRboundsi(1):obj.subRegionRboundsi(2);
+            thetaV = obj.subRegionThetaboundsi(1):obj.subRegionThetaboundsi(2);
+            phiV = obj.subRegionPhiboundsi(1):obj.subRegionPhiboundsi(2);
+            outDataSet = USDataClass(Dm.data(rV,thetaV,phiV,:),Dm.startTime, Dm.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+        end
         
         function defineROI(obj) 
-            xMid = obj.xVec(floor(end/2));
-            yMid = obj.yVec(floor(end/2));
-            zMid = obj.zVec(floor(end/2));
-            diffX = abs(obj.xVec(1) - obj.xVec(2));
-            diffY = abs(obj.yVec(1) - obj.yVec(2));
-            diffZ = abs(obj.zVec(1) - obj.zVec(2));
-            [xGrid,yGrid,zGrid] = ndgrid(obj.xVec-xMid,obj.yVec-yMid,obj.zVec-zMid);
+            xMid = obj.initDataSet.x_range(floor(end/2));
+            yMid = obj.initDataSet.y_range(floor(end/2));
+            zMid = obj.initDataSet.z_range(floor(end/2));
+            diffX = abs(obj.initDataSet.x_range(1) - obj.initDataSet.x_range(2));
+            diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
+            diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
+            [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range-xMid,obj.initDataSet.y_range-yMid,obj.initDataSet.z_range-zMid);
             validPoints = find(((xGrid).^2./obj.ROIr0^2 + (yGrid).^2./obj.ROIr1^2 + (zGrid).^2./obj.ROIr2^2)<1);
             finalGrid = zeros(size(xGrid));
             finalGrid(validPoints) = 1;
@@ -190,17 +241,101 @@ classdef ExperimentClass < handle
             finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],'crop');
             finalGrid = imtranslate(finalGrid, [(obj.ROIx0-xMid)/diffX,(obj.ROIy0-yMid)/diffY,(obj.ROIz0-zMid)/diffZ ]);
             obj.ROIMap = logical(finalGrid); 
-            obj.ROIVoxelNum = sum(obj.ROIMap); 
+            obj.ROIVoxelNum = sum(obj.ROIMap(:)); 
+            
         end
-        
+        function defineGridBounds(obj)
+            xMid = obj.initDataSet.x_range(floor(end/2));
+            yMid = obj.initDataSet.y_range(floor(end/2));
+            zMid = obj.initDataSet.z_range(floor(end/2));
+            diffX = abs(obj.initDataSet.x_range(1) - obj.initDataSet.x_range(2));
+            diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
+            diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
+            [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range-xMid,obj.initDataSet.y_range-yMid,obj.initDataSet.z_range-zMid);
+            validPoints = find(((xGrid).^2./((obj.ROIr0+3*obj.sigma)^2) + (yGrid).^2./((obj.ROIr1+3*obj.sigma)^2) + (zGrid).^2./((obj.ROIr2+3*obj.sigma)^2))<1);
+            finalGrid = zeros(size(xGrid));
+            finalGrid(validPoints) = 1;
+            finalGrid = reshape(finalGrid,(size(xGrid)));
+            finalGrid = imrotate3(finalGrid, obj.ROIAlpha,[1 0 0],'crop');
+            finalGrid = imrotate3(finalGrid, obj.ROIBeta,[0 1 0],'crop');
+            finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],'crop');
+            finalGrid = imtranslate(finalGrid, [(obj.ROIx0-xMid)/diffX,(obj.ROIy0-yMid)/diffY,(obj.ROIz0-zMid)/diffZ ]);
+            finalGrid = logical(finalGrid);
+            pts = find(finalGrid == 1); 
+            [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range,obj.initDataSet.y_range,obj.initDataSet.z_range);
+           
+            R = sqrt(xGrid.^2 + yGrid.^2 + zGrid.^2);
+            Theta = yGrid./(sqrt(zGrid.^2 + yGrid.^2));
+            Phi = xGrid./(sqrt(R.^2 - yGrid.^2));
+            ROIR = R(pts); maxR = max(ROIR); minR = min(ROIR);
+            ROITheta = Theta(pts); maxTheta = max(ROITheta); minTheta = min(ROITheta);
+            ROIPhi = Phi(pts); maxPhi = max(ROIPhi); minPhi = min(ROIPhi);
+            
+            sizeAz = size(obj.initDataSet.rawData,2);
+            sizeEl = size(obj.initDataSet.rawData,3);
+            dr = 1/obj.initDataSet.InfoFile.NumSamplesPerMm;         % range (mm)
+            obj.rmin = obj.initDataSet.rmin;
+            obj.rmax = obj.initDataSet.rmax;
+            RVec = obj.rmin:dr:obj.rmax;
+            muVec = linspace(sin(obj.thetamin),sin(obj.thetamax), sizeAz);
+            nuVec = linspace(sin(obj.phimin),sin(obj.phimax), sizeEl);
+           
+            
+            obj.subRegionRbounds = [minR,maxR];
+            obj.subRegionThetabounds = [minTheta,maxTheta];
+            obj.subRegionPhibounds = [minPhi,maxPhi];
+            [~,minRi] = min(abs(minR-RVec));
+            [~,maxRi] = min(abs(maxR-RVec));
+            [~,minThetai] = min(abs(minTheta-muVec));
+            [~,maxThetai] = min(abs(maxTheta-muVec));
+            [~,minPhii] = min(abs(minPhi-nuVec));
+            [~,maxPhii] = min(abs(maxPhi-nuVec));
+            
+            obj.subRegionRboundsi = [minRi,maxRi];
+            obj.subRegionThetaboundsi = [minThetai,maxThetai];
+            obj.subRegionPhiboundsi = [minPhii,maxPhii];
+            %obj.ROIMap = obj.ROIMap(xMini:xMaxi,yMini:yMaxi,zMini:zMaxi);
+            %obj.subRegionROIMap = obj.ROIMap(minRi:maxRi,minThetai,maxThetai,minPhii,maxPhii);
+            %obj.subRegionMap = zeros(size(obj.ROIMap));
+            %obj.subRegionMap(minRi:maxRi,minThetai,maxThetai,minPhii,maxPhii) = 1; 
+            rmin = obj.subRegionRbounds(1);
+            rmax = obj.subRegionRbounds(2);
+            thetamin = obj.subRegionThetabounds(1);
+            thetamax = obj.subRegionThetabounds(2);
+            phimin = obj.subRegionPhibounds(1);
+            phimax = obj.subRegionPhibounds(2);
+            rV = obj.subRegionRboundsi(1):obj.subRegionRboundsi(2);
+            thetaV = obj.subRegionThetaboundsi(1):obj.subRegionThetaboundsi(2);
+            phiV = obj.subRegionPhiboundsi(1):obj.subRegionPhiboundsi(2);
+            tempDataSet = USDataClass(obj.initDataSet.rawData(rV,thetaV,phiV,:),obj.initDataSet.time, obj.initDataSet.InfoFile,rmin,rmax,thetamin,thetamax,phimin,phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+            tempDataSet.scanConv_Frust(); 
+            [~,xMini] = min(abs(tempDataSet.x_range(1)-obj.initDataSet.x_range));
+            [~,yMini] = min(abs(tempDataSet.y_range(1)-obj.initDataSet.y_range));
+            [~,zMini] = min(abs(tempDataSet.z_range(1)-obj.initDataSet.z_range));
+            xRa = xMini:xMini+numel(tempDataSet.x_range)-1;
+            yRa = yMini:yMini+numel(tempDataSet.y_range)-1;
+            zRa = zMini:zMini+numel(tempDataSet.z_range)-1;
+            obj.ROIMapSubregion = obj.ROIMap(xRa,yRa,zRa);
+            obj.regionOverlay = zeros(size(obj.ROIMap)); 
+            obj.regionOverlay(xRa,yRa,zRa) = 1; 
+            
+            %tempDataSet.x_range;
+            %tempDataSet.y_range;
+            %tempDataSet.z_range;
+       end
         function getDecorrInROI(obj)
             logical(obj.ROIMap); 
         end
         function returnVal = addNextDataSet(obj)
             nextDataSet = obj.getNextDataSetFolder();
+            if obj.numDataSets == []
+                obj.numDataSets = 1; 
+            end
             if(~isempty(nextDataSet))
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
-                dataObj = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
+                defineGridBounds(obj)
+                %dataObj = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
+                dataObj = obj.parseDataFromDirExperimental(fullfile(dataFolderPath,obj.defaultDataFileName));
                 newPath = fullfile(obj.dataFolder,'Complete',nextDataSet.name);
                 movefile(dataFolderPath,newPath);
                 dataObj.scanConv_Frust();
@@ -208,10 +343,14 @@ classdef ExperimentClass < handle
                 dataObj.decorrThresh = obj.decorrThresh;
                 if(isempty(obj.cumulativeDecorr))
                     obj.cumulativeDecorr = dataObj.decorr;
-                    obj.cumulativeDecorrROI = dataObj.decorr();
+                    obj.cumulativeDecorrROI = dataObj.decorr.*obj.ROIMapSubregion;
+                    obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
+                    obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMapSubregion(:));
                 else
                     obj.cumulativeDecorr = max(obj.cumulativeDecorr,dataObj.decorr);
-                    obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,dataObj.decorr);
+                    obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,dataObj.decorr.*obj.ROIMapSubregion);
+                    obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
+                    obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMapSubregion(:));
                 end
                 if(isempty(obj.ultrasoundDataSeries))
                     obj.ultrasoundDataSeries = dataObj;
@@ -271,6 +410,7 @@ classdef ExperimentClass < handle
             tempDataSet.scanConv_Frust();
             tempDataSet.compute3DDecorr(); 
             tempDataSet.decorrThresh = obj.decorrThresh;
+            
             if(isempty(obj.cumulativeDecorr))
                 obj.cumulativeDecorr = tempDataSet.decorr;
             else

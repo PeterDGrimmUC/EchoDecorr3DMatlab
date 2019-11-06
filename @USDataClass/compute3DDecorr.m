@@ -8,8 +8,8 @@ function compute3DDecorr( obj )
     %
     %%
     % *Define Guassian Window* 
-    y_range_length = size(obj.x_range,2);
-    x_range_length = size(obj.y_range,2);
+    x_range_length = size(obj.x_range,2);
+    y_range_length = size(obj.y_range,2);
     z_range_length = size(obj.z_range,2);
     obj.windowSigma = 5;
     sigx = obj.windowSigma/obj.dx;
@@ -35,7 +35,7 @@ function compute3DDecorr( obj )
     ymask = exp(-(((1:y_range_length)-y_mid).^2)/2/sigfra^2);
     zmask = exp(-(((1:z_range_length)-z_mid).^2)/2/sigfel^2); 
 
-    [x_mask_mat,y_mask_mat,z_mask_mat] = ndgrid(zmask,xmask,ymask); 
+    [x_mask_mat,y_mask_mat,z_mask_mat] = ndgrid(xmask,ymask,zmask); 
     %maskfilt = fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat); 
     %maskfilt = maskfilt/sum(maskfilt(:));
     maskfilt = (fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat)); 
@@ -52,24 +52,19 @@ function compute3DDecorr( obj )
     %compute windowed ibs
     for currVolume = 1:size(obj.ibs,4)
       obj.ibs(:,:,:,currVolume) = abs(ifftn(fftn(obj.ibs(:,:,:,currVolume)).*maskfilt));
-        %obj.ibs(:,:,:,currVolume) = imgaussfilt3(abs(obj.ibs(:,:,:,currVolume)),sigx);
     end
     %compute autcorrelation and decorrelation
     for currVolume = 1:(size(obj.ibs,4)-1)
         obj.autocorr01(:,:,:,currVolume) = abs(ifftn(fftn(obj.autocorr01(:,:,:,currVolume)).*maskfilt));
-       %obj.autocorr01(:,:,:,currVolume) = imgaussfilt3((obj.autocorr01(:,:,:,currVolume)),sigx);
     end
     for currVolume = 1:(size(obj.ibs,4)-1)
-        %obj.decorr(:,:,:,currVolume) = (1 - abs(obj.autocorr01(:,:,:,currVolume)).^2./(obj.ibs(:,:,:,currVolume).*obj.ibs(:,:,:,currVolume+1)))./obj.interFrameTime;
         R00 = obj.ibs(:,:,:,currVolume);
         R11 = obj.ibs(:,:,:,currVolume+1);
         B2 = R00.*R11;
         R01 = abs(obj.autocorr01(:,:,:,currVolume)).^2;
-        %thisMean = mean(abs(obj.autocorr01(:)));
         tau = obj.interFrameTime;
         obj.decorr(:,:,:,currVolume) = 2*10^-3*(B2-R01)./(B2 + mean(B2(:)))/tau;
-        %obj.decorr(:,:,:,currVolume) = (1 - abs(obj.autocorr01(:,:,:,currVolume)).^2./(thisMean+obj.ibs(:,:,:,currVolume).*obj.ibs(:,:,:,currVolume+1)))./;
-        %obj.decorr(:,:,:,currVolume) = 2*((B2 - (obj.autocorr01)).^2./(obj.interFrameTime*(mean(B2(:)) + B2)));
+
     end
     % set values outside of volume to small number 
     obj.autocorr01(find(isnan(obj.rawData_cart(:,:,:,1:(end-1))))) = realmin('double');

@@ -1,4 +1,4 @@
-function hOVM = alphamask(bwMask, colour, transparency, axHandle)
+function hOVM = alphamask(bwMask, colour, transparency, axHandle,inXData,inYData)
 % ALPHAMASK:  Overlay image with semi-transparent mask
 %
 % Overlays a semi-transparent mask over an image.  By default the 
@@ -37,6 +37,10 @@ if maskRange ~= 1 && maskRange ~= 0, error('bwMask must consist only of the valu
 % Create colour image and overlay it
 rgbI = cat(3, colour(1)*ones(size(bwMask)), colour(2)*ones(size(bwMask)), colour(3)*ones(size(bwMask)));
 hold on,
-hOVM = imshow(rgbI, 'Parent', axHandle);
+if exist('inXData','var') && exist('inYData','var')
+    hOVM = imshow(rgbI, 'XData',inXData,'YData',inYData,'Parent', axHandle);
+else
+    hOVM = imshow(rgbI, 'Parent', axHandle);
+end
 set(hOVM, 'AlphaData', bwMask*transparency);       % use mask values as alpha channel of overlay
 hold off;
