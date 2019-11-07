@@ -628,7 +628,7 @@ classdef ExperimentClass < handle
         end
         
         function boolOut = decorrExceedsThresh(obj) 
-            if((obj.totalThresh) <= log10(obj.decorrSumSeriesROI(obj.numVolumes-1)))
+            if((obj.totalThresh) <= log10(obj.decorrAverageSeriesROI(obj.numDataSets-1)))
                 boolOut =  1; 
             else
                 boolOut =  0; 
