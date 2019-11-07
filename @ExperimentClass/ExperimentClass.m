@@ -168,8 +168,16 @@ classdef ExperimentClass < handle
             outVec = find(x_grid);
         end
         function getInitDataSet(obj)
-            nextDataSet = obj.getNextDataSetFolder();
-            
+            while 1
+                nextDataSet = obj.getNextDataSetFolder();
+                
+                if ~isempty(nextDataSet)
+                    while numel(dir(fullfile(nextDataSet.folder,nextDataSet.name))) ~= 23
+                    
+                    end
+                    break
+                end
+            end
             if(~isempty(nextDataSet))
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
