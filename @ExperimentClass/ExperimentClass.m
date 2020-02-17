@@ -172,6 +172,36 @@ classdef ExperimentClass < handle
                 nextDataSet = obj.getNextDataSetFolder();
                 
                 if ~isempty(nextDataSet)
+                    temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
+                    tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
+                    tempInd = ~[tempInd{:}];
+                    temp(tempInd) = [];
+                    while length(temp) ~= 23
+                    
+                    end
+                    break
+                end
+            end
+            if(~isempty(nextDataSet))
+                dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
+                obj.initDataSet = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
+                obj.initDataSet.scanConv_Frust();
+                obj.numVolumes = 0; 
+                obj.xVec = obj.initDataSet.x_range; 
+                obj.yVec = obj.initDataSet.y_range; 
+                obj.zVec = obj.initDataSet.z_range;
+                obj.dx = obj.initDataSet.dx;
+                obj.dy = obj.initDataSet.dy;
+                obj.dz = obj.initDataSet.dz;
+                obj.dr = obj.initDataSet.dr;
+            end
+            obj.numDataSets = 1; 
+        end
+        function getInitDataSetNoMove(obj)
+            while 1
+                nextDataSet = obj.getNextDataSetFolder();
+                
+                if ~isempty(nextDataSet)
                     while numel(dir(fullfile(nextDataSet.folder,nextDataSet.name))) ~= 23
                     
                     end
@@ -193,7 +223,6 @@ classdef ExperimentClass < handle
             end
             obj.numDataSets = 1; 
         end
-        
         function outDataSet = parseDataFromDir(obj,thisFileName)
             Dm = read_lbdump(thisFileName);
             obj.rmin = 0;
@@ -386,16 +415,59 @@ classdef ExperimentClass < handle
             end
             
         end
-        
+        function returnVal = addNextRawDataSet(obj)
+            nextDataSet = obj.getNextDataSetFolder();
+            if obj.numDataSets == []
+                obj.numDataSets = 1; 
+            end
+            if(~isempty(nextDataSet))
+                dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
+                defineGridBounds(obj)
+                
+                dataObj = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
+                dataObj.folderName = dataFolderPath;
+                %toc
+                newPath = fullfile(obj.dataFolder,'Complete',nextDataSet.name);
+                movefile(dataFolderPath,newPath);
+                tic
+                dataObj.scanConv_Frust();
+                dataObj.compute3DDecorr(); 
+                toc
+                dataObj.decorrThresh = obj.decorrThresh;
+                if(isempty(obj.cumulativeDecorr))
+                    obj.cumulativeDecorr = dataObj.decorr;
+                    obj.cumulativeDecorrROI = dataObj.decorr.*obj.ROIMap;
+                    obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
+                    obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
+                else
+                    obj.cumulativeDecorr = max(obj.cumulativeDecorr,dataObj.decorr);
+                    obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,dataObj.decorr.*obj.ROIMap);
+                    obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
+                    obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
+                end
+                if(isempty(obj.ultrasoundDataSeries))
+                    obj.ultrasoundDataSeries = dataObj;
+                else
+                    obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries,dataObj]; 
+                end
+                obj.numDataSets = obj.numDataSets +1;
+                returnVal = 1;
+            else
+                returnVal = -1;  
+            end
+            
+        end
         function nextDataSetFolder = getNextDataSetFolder(obj)
             % getNextDataSetFolder
             % gets next (chronologically) data set inside of the target
             % folder. 
             % Returns a dir struct of next data set folder
             dataSetsReady = obj.getWaitingDataSets();
+            timeCells = arrayfun(@(x) regexp(x.name,'\d+','match'),dataSetsReady,'UniformOutput',false);
+            dateTimeArr = cellfun(@(y) posixtime(datetime(str2num(y{3}),str2num(y{1}),str2num(y{2}),str2num(y{4}),str2num(y{5}),str2num(y{6}),str2num(y{7}))),timeCells,'UniformOutput',false);
+            dateTimeArr = [dateTimeArr{:}];
             if(~isempty(dataSetsReady))
-                timeVec = arrayfun(@(x)x.datenum,dataSetsReady);
-                [~,minInd] = min(timeVec);
+                [~,minInd] = min(dateTimeArr);
                 nextDataSetFolder = dataSetsReady(minInd);
             else
                 nextDataSetFolder = [];
@@ -524,7 +596,15 @@ classdef ExperimentClass < handle
             obj.activeFolderDir = fullDirectory(3:end);
             obj.numVolumes = 1; 
         end
-        
+        function obj = initDataFolder(obj,dirName)
+            
+            obj.activeFolder =  dirName;
+            obj.dataFolder = obj.activeFolder; 
+            mkdir(fullfile(obj.dataFolder,'Complete'));
+            fullDirectory  = dir(obj.activeFolder);
+            obj.activeFolderDir = fullDirectory(3:end);
+            obj.numVolumes = 1; 
+        end
         function newFilePresent = checkFolder(obj)
             obj.activeFolderDir  = dir(obj.activeFolder);
             if ismac

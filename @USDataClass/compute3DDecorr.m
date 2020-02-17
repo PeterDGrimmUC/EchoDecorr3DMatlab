@@ -11,7 +11,6 @@ function compute3DDecorr( obj )
     x_range_length = size(obj.x_range,2);
     y_range_length = size(obj.y_range,2);
     z_range_length = size(obj.z_range,2);
-    obj.windowSigma = 5;
     sigx = obj.windowSigma/obj.dx;
     sigy = obj.windowSigma/obj.dy;
     sigz = obj.windowSigma/obj.dz;
@@ -62,8 +61,8 @@ function compute3DDecorr( obj )
         R11 = obj.ibs(:,:,:,currVolume+1);
         B2 = R00.*R11;
         R01 = abs(obj.autocorr01(:,:,:,currVolume)).^2;
-        tau = obj.interFrameTime;
-        obj.decorr(:,:,:,currVolume) = 2*10^-3*(B2-R01)./(B2 + mean(B2(:)))/tau;
+        tau = 10^3/(obj.interFrameTime);
+        obj.decorr(:,:,:,currVolume) = 2*(B2-R01)./(B2 + mean(B2(:)))/tau;
 
     end
     % set values outside of volume to small number 

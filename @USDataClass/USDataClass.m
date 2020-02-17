@@ -24,7 +24,7 @@ classdef USDataClass < handle
         % bounds 
         ROIBounds;         % bounds of region of interest [xMin xMax yMin yMax zMin zMax]
         ROIBounds_spherical; %TODO, minimum bounds in spherical coordinates
-        
+        folderName;
         % bounded data properties 
         rawData_cart_ROI;
         ibs_ROI;
