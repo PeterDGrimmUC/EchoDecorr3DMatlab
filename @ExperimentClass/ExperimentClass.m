@@ -174,10 +174,13 @@ classdef ExperimentClass < handle
                 if ~isempty(nextDataSet)
                     temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
                     tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
-                    tempInd = ~[tempInd{:}];
+                    tempInd = [tempInd{:}];
                     temp(tempInd) = [];
-                    while length(temp) ~= 23
-                    
+                    while length(temp) ~= 21
+                    temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
+                    tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
+                    tempInd = [tempInd{:}];
+                    temp(tempInd) = [];
                     end
                     break
                 end
@@ -381,11 +384,13 @@ classdef ExperimentClass < handle
             end
             if(~isempty(nextDataSet))
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
-                defineGridBounds(obj)
+                %defineGridBounds(obj)
                 
                 dataObj = obj.parseDataFromDirExperimental(fullfile(dataFolderPath,obj.defaultDataFileName));
                 %toc
+                %dataObj = obj.parseDataFromDir;
                 newPath = fullfile(obj.dataFolder,'Complete',nextDataSet.name);
+                fclose all;
                 movefile(dataFolderPath,newPath);
                 tic
                 dataObj.scanConv_Frust();
@@ -428,6 +433,7 @@ classdef ExperimentClass < handle
                 dataObj.folderName = dataFolderPath;
                 %toc
                 newPath = fullfile(obj.dataFolder,'Complete',nextDataSet.name);
+                fclose all;
                 movefile(dataFolderPath,newPath);
                 tic
                 dataObj.scanConv_Frust();
@@ -708,7 +714,7 @@ classdef ExperimentClass < handle
         end
         
         function boolOut = decorrExceedsThresh(obj) 
-            if((obj.totalThresh) <= log10(obj.decorrAverageSeriesROI(obj.numDataSets-1)))
+            if((obj.decorrThresh) <= log10(obj.decorrAverageSeriesROI(obj.numDataSets-1)))
                 boolOut =  1; 
             else
                 boolOut =  0; 
