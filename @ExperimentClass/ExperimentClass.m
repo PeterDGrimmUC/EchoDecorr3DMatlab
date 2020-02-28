@@ -298,7 +298,7 @@ classdef ExperimentClass < handle
             diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
             diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
             [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range-xMid,obj.initDataSet.y_range-yMid,obj.initDataSet.z_range-zMid);
-            validPoints = find(((xGrid).^2./((obj.ROIr0+3*obj.sigma)^2) + (yGrid).^2./((obj.ROIr1+3*obj.sigma)^2) + (zGrid).^2./((obj.ROIr2+3*obj.sigma)^2))<1);
+            validPoints = find(((xGrid).^2./((obj.ROIr0+6*obj.sigma)^2) + (yGrid).^2./((obj.ROIr1+6*obj.sigma)^2) + (zGrid).^2./((obj.ROIr2+6*obj.sigma)^2))<1);
             finalGrid = zeros(size(xGrid));
             finalGrid(validPoints) = 1;
             finalGrid = reshape(finalGrid,(size(xGrid)));
