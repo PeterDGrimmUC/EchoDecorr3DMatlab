@@ -189,6 +189,7 @@ classdef ExperimentClass < handle
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir(fullfile(dataFolderPath,obj.defaultDataFileName));
                 obj.initDataSet.scanConv_Frust();
+                
                 obj.numVolumes = 0; 
                 obj.xVec = obj.initDataSet.x_range; 
                 obj.yVec = obj.initDataSet.y_range; 
@@ -288,7 +289,8 @@ classdef ExperimentClass < handle
             finalGrid = imtranslate(finalGrid, [(obj.ROIx0-xMid)/diffX,(obj.ROIy0-yMid)/diffY,(obj.ROIz0-zMid)/diffZ ]);
             obj.ROIMap = logical(finalGrid); 
             obj.ROIVoxelNum = sum(obj.ROIMap(:)); 
-            
+            obj.initDataSet.ROIMap = obj.ROIMap;
+            obj.initDataSet.compute3DDecorr_ROI();
         end
         function defineGridBounds(obj)
             xMid = obj.initDataSet.x_range(floor(end/2));
@@ -442,13 +444,13 @@ classdef ExperimentClass < handle
                 toc
                 dataObj.decorrThresh = obj.decorrThresh;
                 if(isempty(obj.cumulativeDecorr))
-                    obj.cumulativeDecorr = dataObj.decorr;
-                    obj.cumulativeDecorrROI = dataObj.decorr.*obj.ROIMap;
+                    obj.cumulativeDecorr = (dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr);
+                    obj.cumulativeDecorrROI = obj.cumulativeDecorr.*obj.ROIMap;
                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
                 else
-                    obj.cumulativeDecorr = max(obj.cumulativeDecorr,dataObj.decorr);
-                    obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,dataObj.decorr.*obj.ROIMap);
+                    obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr));
+                    obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,obj.cumulativeDecorr.*obj.ROIMap);
                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
                 end
@@ -509,6 +511,7 @@ classdef ExperimentClass < handle
             end
             tempDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
             tempDataSet.scanConv_Frust();
+            
             tempDataSet.compute3DDecorr(); 
             tempDataSet.decorrThresh = obj.decorrThresh;
             
