@@ -10,6 +10,8 @@ classdef USDataClass < handle
         rawData;           % raw spherical volume data for one data set export
         rawData_cart;      % scan converted cartesian data from spherical data
         ROICart;  
+        ROIMask; 
+        ROIMap;
         ibs;               % Integrated backscatter for every (cartesian) volume
         decorr;            % decorr (cartesian) between volume at t and t+tau
         autocorr01;        % autocorr between volume at t and t+tau
@@ -43,7 +45,7 @@ classdef USDataClass < handle
         dr;                % distance in cm in the radius direction(cm/pixel)
         dx;                % distance in cm in the x direction (cm/pixel)
         dy;                % distance in cm in the x direction (cm/pixel)
-        dz;                 % distance in cm in the x direction (cm/pixel)
+        dz;                % distance in cm in the x direction (cm/pixel)
         interFrameTime;    % time between volume recordings (cm/pixel)
         cartScalingFactor; % Factor to scale cartesian distances by (dx/dr)
                            % e.g Given dr, to find dx take

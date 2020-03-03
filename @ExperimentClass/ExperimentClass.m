@@ -437,7 +437,8 @@ classdef ExperimentClass < handle
                 movefile(dataFolderPath,newPath);
                 tic
                 dataObj.scanConv_Frust();
-                dataObj.compute3DDecorr(); 
+                dataObj.ROIMap = obj.ROIMap;
+                dataObj.compute3DDecorr_ROI(); 
                 toc
                 dataObj.decorrThresh = obj.decorrThresh;
                 if(isempty(obj.cumulativeDecorr))
