@@ -9,7 +9,7 @@ Dm.H = [];
 Dm.data = [];
 
 % read file according to known formatting per data type
-fid = fopen(filename,'r');
+fid = fopen(filename,'r');  
 while 1,
     tline = fgetl(fid);
     if ~ischar(tline), break, end

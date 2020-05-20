@@ -63,7 +63,7 @@ function compute3DDecorr( obj )
         R01 = abs(obj.autocorr01(:,:,:,currVolume)).^2;
         tau = 10^3/(obj.interFrameTime);
         obj.decorr(:,:,:,currVolume) = 2*(B2-R01)./(B2 + mean(B2(:)))/tau;
-
+        % try without B2 local term 
     end
     % set values outside of volume to small number 
     obj.autocorr01(find(isnan(obj.rawData_cart(:,:,:,1:(end-1))))) = realmin('double');

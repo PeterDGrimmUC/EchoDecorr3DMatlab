@@ -14,29 +14,19 @@ function compute3DDecorr_ROI( obj )
     sigx = obj.windowSigma/obj.dx;
     sigy = obj.windowSigma/obj.dy;
     sigz = obj.windowSigma/obj.dz;
-    x_mid = ceil(x_range_length/2 + 1);
-    y_mid = ceil(y_range_length/2 + 1);
-    z_mid = ceil(z_range_length/2 + 1);
+    x_mid = ceil(x_range_length/2);
+    y_mid = ceil(y_range_length/2);
+    z_mid = ceil(z_range_length/2);
     sigfaz = x_range_length/(2*pi*sigx);
     sigfra = y_range_length/(2*pi*sigy);
     sigfel = z_range_length/(2*pi*sigz); 
-    %coeffX =    1/sqrt(2*pi*sigx^2);
-    %coeffY =    1/sqrt(2*pi*sigy^2);
-    %coeffZ =    1/sqrt(2*pi*sigz^2);
-%     xmask = coeffX*exp(-(((1:vol_x_length)-x_mid).^2)/(2*sigx^2));
-%     ymask = coeffY*exp(-(((1:vol_y_length)-y_mid).^2)/(2*sigy^2));
-%     zmask = coeffZ*exp(-(((1:vol_z_length)-z_mid).^2)/(2*sigz^2)); 
-%     azMask   = filtFactAz .* exp(-((1:nSigPad)-azId).^2/2/sigFAz^2);
-%     raMask   = filtFactRa .* exp(-((1:nRowPad)-rangeId).^2/2/sigFRa^2);
-%     [am,rm]  = meshgrid(azMask,raMask);
-%     maskFilt = fftshift(am.*rm);
+
     xmask = exp(-(((1:x_range_length)-x_mid).^2)/2/sigfaz^2);
     ymask = exp(-(((1:y_range_length)-y_mid).^2)/2/sigfra^2);
-    zmask = exp(-(((1:z_range_length)-z_mid).^2)/2/sigfel^2); 
+    zmask = exp(-(((1:z_range_length)-z_mid).^2)/2/sigfel^2);
 
     [x_mask_mat,y_mask_mat,z_mask_mat] = ndgrid(xmask,ymask,zmask); 
-    %maskfilt = fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat); 
-    %maskfilt = maskfilt/sum(maskfilt(:));
+
     maskfilt = (fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat)); 
     maskfilt = maskfilt/sum(maskfilt(:));
     
