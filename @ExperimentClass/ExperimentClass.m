@@ -155,32 +155,21 @@ classdef ExperimentClass < handle
             obj.ROIBeta = mybeta; 
             obj.defineROI; 
         end
-        function obj = setRoiEllipsParams(obj,myx0,myy0,myz0,myr0,myr1,myr2)
-            obj.ROIx0 = myx0;
-            obj.ROIy0 = myy0;
-            obj.ROIz0 = myz0;
-            obj.ROIr0 = myr0;
-            obj.ROIr1 = myr1;
-            obj.ROIr2 = myr2;
-        end
-        function outVec = computePointsInROIEllipse(obj,index)
-            [x_grid,y_grid,z_grid] = ndgrid(obj.ultrasoundDataSeries(index).x_range,obj.ultrasoundDataSeries(index).y_range,obj.ultrasoundDataSeries(index).z_range);
-            outVec = find(x_grid);
-        end
         function getInitDataSet(obj)
-            while 1
+            % Get initial data set from folder
+            while true
                 nextDataSet = obj.getNextDataSetFolder();
-                
                 if ~isempty(nextDataSet)
-                    temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
+                    temp = dir(fullfile(nextDataSet.folder,nextDataSet.name));
                     tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
                     tempInd = [tempInd{:}];
                     temp(tempInd) = [];
+                    display(length(temp))
                     while length(temp) ~= 21
-                    temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
-                    tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
-                    tempInd = [tempInd{:}];
-                    temp(tempInd) = [];
+                        temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
+                        tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
+                        tempInd = [tempInd{:}];
+                        temp(tempInd) = [];
                     end
                     break
                 end
@@ -202,19 +191,20 @@ classdef ExperimentClass < handle
             obj.numDataSets = 1; 
         end
         function getInitDataSet_c(obj)
-            while 1
+            % get initial data set, use mex files
+            while true
                 nextDataSet = obj.getNextDataSetFolder_c();
-                
                 if ~isempty(nextDataSet)
                     temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
                     tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
                     tempInd = [tempInd{:}];
                     temp(tempInd) = [];
-                    while length(temp) ~= 22
-                    temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
-                    tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
-                    tempInd = [tempInd{:}];
-                    temp(tempInd) = [];
+                    length(temp)
+                    while length(temp) ~= 21
+                        temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
+                        tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
+                        tempInd = [tempInd{:}];
+                        temp(tempInd) = [];
                     end
                     break
                 end
@@ -223,7 +213,6 @@ classdef ExperimentClass < handle
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
                 obj.scanConvLookup = obj.initDataSet.scanConv_Generate_c();
-                %obj.initDataSet.scanConv_Frust();
                 obj.initDataSet.scanConv_apply_c(obj.scanConvLookup); 
                 obj.numVolumes = 0; 
                 obj.xVec = obj.initDataSet.x_range; 
@@ -569,11 +558,13 @@ classdef ExperimentClass < handle
                 dataObj.decorrThresh = obj.decorrThresh;
                 if(isempty(obj.cumulativeDecorr))
                     obj.cumulativeDecorr = (dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr);
+                    %obj.cumulativeDecorr = dataObj.decorr;
                     obj.cumulativeDecorrROI = obj.cumulativeDecorr.*obj.ROIMap;
                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
                 else
                     obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr));
+                    %obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr));
                     obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,obj.cumulativeDecorr.*obj.ROIMap);
                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
@@ -661,6 +652,57 @@ classdef ExperimentClass < handle
             end
             obj.decorrSumSeries(obj.numVolumes) = sum(obj.cumulativeDecorr(:)/numel(obj.cumlativeDecorr));
             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries tempDataSet];
+        end
+        function infoOut = getInitInfo(obj)
+            infoOut = ones(1,4);
+            %try
+                folderDir = dir(obj.dataFolder);
+                folderDir = folderDir([folderDir.isdir]);
+                invalidFolders = {'.','..','Complete','ready'};
+                binOut = ones(1,numel(folderDir));
+                for invalidFoldN = 1:numel(invalidFolders)
+                    binOut = ~arrayfun(@(x) strcmp(x.name,invalidFolders(invalidFoldN)),folderDir)' & binOut;
+                end
+                dataSetList = folderDir(binOut); 
+                chosenfile = dataSetList(3).name;
+                fileName = fullfile(obj.dataFolder,chosenfile,'addParamFile.txt');
+                fidAdd = fopen(fileName);
+                endOfFile = 0
+                %try
+                    while ~endOfFile
+                        lineText=fgetl(fidAdd);
+                        regexString = '(\w+)\W+=\W+(\w+)';
+                        if lineText==-1
+                            endOfFile=1;
+                        else
+                        [mat, tok, exp ] = regexp(lineText,regexString,'match','tokens', 'tokenExtents');
+                        if ~isempty(mat)
+                            varName = tok{1};
+                            varName = varName{1};
+                            varVal = tok{1};
+                            varVal = varVal{2}
+                            switch varName
+                                case 'frameRate'
+                                    infoOut(1) = str2num(varVal)
+                                case 'depth'
+                                    infoOut(2) = str2num(varVal);
+                                case 'phiRange'
+                                    infoOut(3) = str2num(varVal);
+                                case 'thetaRange'
+                                    infoOut(4) = str2num(varVal);
+                                otherwise
+                                    error('Variable name not valid');
+                            end
+                        end
+                    end
+                end
+            %catch
+                display('Could not parse additional info file')
+            %end
+                display(fileName);
+            %catch
+                display('no file')
+            %end
         end
         function obj = addNextDataSetViaFilename(obj, thisFileName)
             % Compute decorr of data set
