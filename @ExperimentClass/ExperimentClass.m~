@@ -226,41 +226,6 @@ classdef ExperimentClass < handle
             end
             obj.numDataSets = 1; 
         end
-        function getInitDataSet_c_nocheck(obj)
-            % get initial data set, use mex files
-            while true
-                nextDataSet = obj.getNextDataSetFolder_c();
-                if ~isempty(nextDataSet)
-                    temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
-                    tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
-                    tempInd = [tempInd{:}];
-                    temp(tempInd) = [];
-                    length(temp)
-                    %while length(temp) ~= 21
-                        temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
-                        tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
-                        tempInd = [tempInd{:}];
-                        temp(tempInd) = [];
-                    %end
-                    break
-                end
-            end
-            if(~isempty(nextDataSet))
-                dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
-                obj.initDataSet = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
-                obj.scanConvLookup = obj.initDataSet.scanConv_Generate_c();
-                obj.initDataSet.scanConv_apply_c(obj.scanConvLookup); 
-                obj.numVolumes = 0; 
-                obj.xVec = obj.initDataSet.x_range; 
-                obj.yVec = obj.initDataSet.y_range; 
-                obj.zVec = obj.initDataSet.z_range;
-                obj.dx = obj.initDataSet.dx;
-                obj.dy = obj.initDataSet.dy;
-                obj.dz = obj.initDataSet.dz;
-                obj.dr = obj.initDataSet.dr;
-            end
-            obj.numDataSets = 1; 
-        end
         function getInitDataSetNoMove(obj)
             while 1
                 nextDataSet = obj.getNextDataSetFolder();
@@ -1005,13 +970,11 @@ classdef ExperimentClass < handle
             obj.templateFolder = myDir;
         end
         function succ = checkTransfer(obj,dirName)
-            currDir = dir(dirName);
-            succ = true;
+            currDir = dir(dirName)
+            succ = true
             for n = 1:numel(obj.templateFolder)
-                if currDir(n).name ~= obj.templateFolder(n).name
-                    if abs(currDir(n).bytes - obj.templateFolder(n).bytes) > .01 * currDir(n).bytes
-                        succ = false; 
-                    end
+                if currDir(n) != obj.templateFolder(n)
+                    
                 end
             end
         end
