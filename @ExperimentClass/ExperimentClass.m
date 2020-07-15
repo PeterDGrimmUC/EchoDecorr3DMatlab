@@ -201,7 +201,7 @@ classdef ExperimentClass < handle
                     tempInd = [tempInd{:}];
                     temp(tempInd) = [];
                     length(temp)
-                    while length(temp) ~= 21
+                    while length(temp) ~= 21 && length(temp) ~= 23
                         temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
                         tempInd = [arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false)];
                         tempInd = [tempInd{:}];
