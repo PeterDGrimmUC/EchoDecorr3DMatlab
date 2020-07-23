@@ -246,6 +246,7 @@ classdef ExperimentClass < handle
                 end
             end
             if(~isempty(nextDataSet))
+                %pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
                 obj.scanConvLookup = obj.initDataSet.scanConv_Generate_c();
@@ -331,6 +332,7 @@ classdef ExperimentClass < handle
             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
         end
         function outDataSet = parseDataFromDir_c(obj,thisFileName)
+            pause(3)
             Dm = read_lbdump_wrapc(thisFileName);
             obj.rmin = 0;
             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
@@ -458,7 +460,7 @@ classdef ExperimentClass < handle
             rV = obj.subRegionRboundsi(1):obj.subRegionRboundsi(2);
             thetaV = obj.subRegionThetaboundsi(1):obj.subRegionThetaboundsi(2);
             phiV = obj.subRegionPhiboundsi(1):obj.subRegionPhiboundsi(2);
-            tempDataSet = USDataClass(obj.initDataSet.rawData(rV,thetaV,phiV,:),obj.initDataSet.time, obj.initDataSet.InfoFile,rmin,rmax,thetamin,thetamax,phimin,phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+            tempDataSet = USDataClass(obj.initDataSet.rawData,obj.initDataSet.time, obj.initDataSet.InfoFile,rmin,rmax,thetamin,thetamax,phimin,phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
             tempDataSet.scanConv_Frust(); 
             [~,xMini] = min(abs(tempDataSet.x_range(1)-obj.initDataSet.x_range));
             [~,yMini] = min(abs(tempDataSet.y_range(1)-obj.initDataSet.y_range));
@@ -577,6 +579,7 @@ classdef ExperimentClass < handle
                 obj.numDataSets = 1; 
             end
             if(~isempty(nextDataSet))
+                pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 defineGridBounds(obj)
                 
@@ -700,7 +703,7 @@ classdef ExperimentClass < handle
                     binOut = ~arrayfun(@(x) strcmp(x.name,invalidFolders(invalidFoldN)),folderDir)' & binOut;
                 end
                 dataSetList = folderDir(binOut); 
-                chosenfile = dataSetList(3).name;
+                chosenfile = dataSetList(1).name;
                 fileName = fullfile(obj.dataFolder,chosenfile,'addParamFile.txt');
                 fidAdd = fopen(fileName);
                 endOfFile = 0
@@ -840,7 +843,6 @@ classdef ExperimentClass < handle
                 obj.activeFolderDir = obj.activeFolderDir(3:end); 
             end
             if(length(obj.activeFolderDir) >= obj.numVolumes)
-                pause(1)
                 newFilePresent = 1; 
             else
                 newFilePresent = 0;
@@ -977,7 +979,7 @@ classdef ExperimentClass < handle
             end
         end
         function sendSerialData(obj)
-            %pause(3)
+            pause(3)
             fprintf(obj.outSerialObj,'S');
         end
         function setSerialOutName(obj,myname)
