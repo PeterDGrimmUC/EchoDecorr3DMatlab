@@ -51,7 +51,7 @@ function compute3DDecorr( obj )
         B2 = R00.*R11;
         R01 = abs(obj.autocorr01(:,:,:,currVolume)).^2;
         tau = 10^3/(obj.interFrameTime);
-        obj.decorr(:,:,:,currVolume) = 2*(B2-R01)./(B2 + mean(B2(:)))/tau;
+        obj.decorr(:,:,:,currVolume) = 2*(B2-R01)./(mean(B2(:)))/tau;
         % try without B2 local term
     end
     % set values outside of volume to small number 
