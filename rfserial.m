@@ -5,7 +5,7 @@ if (~exist('g'))
     g = serialport('COM8',9600);
 end
 %%
-expNum = 6;
+expNum = 4;
 clear outputRaw timeArr
 %%
 % get params
@@ -35,12 +35,12 @@ writeToFile(oFile,nn)
 tArr(i) = nn.t1;
 impedanceArr(i) = nn.impedance;
 powerArr(i) = nn.currentPower;
-figure(1)
-plot(tArr)
-figure(2)
-plot(impedanceArr);
-figure(3)
-plot(powerArr);
+%figure(1)
+%plot(tArr)
+%figure(2)
+%plot(impedanceArr);
+%figure(3)
+%plot(powerArr);
 i = i+1;
 end
 %%
