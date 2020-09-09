@@ -246,7 +246,7 @@ classdef ExperimentClass < handle
                 end
             end
             if(~isempty(nextDataSet))
-                %pause(3)
+                pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
                 obj.scanConvLookup = obj.initDataSet.scanConv_Generate_c();
