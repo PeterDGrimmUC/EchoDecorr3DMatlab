@@ -246,7 +246,7 @@ classdef ExperimentClass < handle
                 end
             end
             if(~isempty(nextDataSet))
-                pause(3)
+                %pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 obj.initDataSet = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
                 obj.scanConvLookup = obj.initDataSet.scanConv_Generate_c();
@@ -579,7 +579,7 @@ classdef ExperimentClass < handle
                 obj.numDataSets = 1; 
             end
             if(~isempty(nextDataSet))
-                pause(3)
+                %pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 defineGridBounds(obj)
                 
@@ -979,7 +979,7 @@ classdef ExperimentClass < handle
             end
         end
         function sendSerialData(obj)
-            pause(3)
+            %pause(3)
             fprintf(obj.outSerialObj,'S');
         end
         function setSerialOutName(obj,myname)
