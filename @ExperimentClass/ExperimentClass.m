@@ -332,7 +332,7 @@ classdef ExperimentClass < handle
             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
         end
         function outDataSet = parseDataFromDir_c(obj,thisFileName)
-            pause(3)
+            %pause(3)
             Dm = read_lbdump_wrapc(thisFileName);
             obj.rmin = 0;
             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
@@ -579,7 +579,7 @@ classdef ExperimentClass < handle
                 obj.numDataSets = 1; 
             end
             if(~isempty(nextDataSet))
-                %pause(3)
+                pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 defineGridBounds(obj)
                 
