@@ -579,9 +579,9 @@ classdef ExperimentClass < handle
                 obj.numDataSets = 1; 
             end
             if(~isempty(nextDataSet))
-                pause(3)
+                %pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
-                defineGridBounds(obj)
+                %defineGridBounds(obj)
                 
                 dataObj = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
                 dataObj.folderName = dataFolderPath;
@@ -1017,6 +1017,41 @@ classdef ExperimentClass < handle
                 end
             end
         end
+        function volOut = fixvolume(obj,vol)
+            for j = 1:size(vol,4)
+                temp = permute(squeeze(vol(:,:,:,j)),[3,2,1]); % permute to same layout as mask data
+                temp = flipdim(temp,2); % flip dim from right to left -> left to right 
+                temp = flipdim(temp,3); % flip dim from top to bottm -> bottom to top 
+                volOut(:,:,:,j) = temp; 
+            end
+        end
+        function outObj = saveObj(obj)
+            % need inst decorr sets, scan converted volumes, imaging
+            % settings, timestamp
+            outObj.dx = obj.initDataSet.dx;
+            outObj.dy = obj.initDataSet.dy;
+            outObj.dz = obj.initDataSet.dz;
+            outObj.rmax = obj.initDataSet.rmax;
+            outObj.rmin = obj.initDataSet.rmin;
+            outObj.thetamax = obj.initDataSet.thetamax;
+            outObj.thetamin = obj.initDataSet.thetamin;
+            outObj.phimax = obj.initDataSet.phimax;
+            outObj.phimin = obj.initDataSet.phimin;
+            outObj.xmin = obj.initDataSet.xMin;
+            outObj.xmax = obj.initDataSet.xMax;
+            outObj.ymin = obj.initDataSet.yMin;
+            outObj.ymax = obj.initDataSet.yMax;
+            outObj.zmin = obj.initDataSet.zMin;
+            outObj.zmax = obj.initDataSet.zMax;
+            outObj.timeArr = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.instibs = arrayfun(@(x)obj.fixvolume(x.ibs), obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.instdecorr = arrayfun(@(x)obj.fixvolume(x.decorr), obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.Bmode = arrayfun(@(x)obj.fixvolume(x.rawData_cart), obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.decorr = obj.fixvolume(obj.cumulativeDecorr); 
+            outObj.decorrThresh = obj.decorrThresh; 
+            outObj.folderNames = arrayfun(@(x)x.folderName, obj.ultrasoundDataSeries, 'UniformOutput', false); 
+        end
+        
     end
     
 end
