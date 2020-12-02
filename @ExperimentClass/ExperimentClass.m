@@ -96,6 +96,8 @@ classdef ExperimentClass < handle
         subRegionYRange;
         subRegionZRange;
         regionOverlay;
+        %%
+        timeArr;
     end
     
     methods
@@ -348,6 +350,7 @@ classdef ExperimentClass < handle
                 display('Could not read additional info file');
             end
             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+            %obj.timeArr(end) = Dm.startTime;
         end
         function outDataSet = parseDataFromDirExperimental(obj,thisFileName)
             Dm = read_lbdump(thisFileName);
@@ -1051,7 +1054,9 @@ classdef ExperimentClass < handle
             outObj.decorrThresh = obj.decorrThresh; 
             outObj.folderNames = arrayfun(@(x)x.folderName, obj.ultrasoundDataSeries, 'UniformOutput', false); 
         end
-        
+        function outDat = getTimeArr(obj)
+            outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
+        end
     end
     
 end
