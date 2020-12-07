@@ -5,7 +5,7 @@ if (~exist('g'))
     g = serialport('COM8',9600);
 end
 %%
-expNum = 4;
+expNum = 6;
 clear outputRaw timeArr
 %%
 % get params

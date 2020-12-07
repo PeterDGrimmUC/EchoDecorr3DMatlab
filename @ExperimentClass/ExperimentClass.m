@@ -98,6 +98,7 @@ classdef ExperimentClass < handle
         regionOverlay;
         %%
         timeArr;
+        rfDataArr;
     end
     
     methods
@@ -582,7 +583,7 @@ classdef ExperimentClass < handle
                 obj.numDataSets = 1; 
             end
             if(~isempty(nextDataSet))
-                %pause(3)
+                pause(3)
                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
                 %defineGridBounds(obj)
                 
@@ -988,9 +989,16 @@ classdef ExperimentClass < handle
         function setSerialOutName(obj,myname)
             obj.outSerialString = myname; 
         end
+        function setSerialInName(obj,myname)
+            obj.inSerialString = myname; 
+        end
         function setUpSerialOutConnection(obj)
             obj.outSerialObj = serial(obj.outSerialString,'BaudRate', 115200);
             fopen(obj.outSerialObj);
+        end
+        function setUpSerialInConnection(obj)
+            obj.inSerialObj = SerialClass(obj.inSerialString, 9600);
+            obj.inSerialObj = obj.inSerialObj.initSerialBlocks();
         end
         function removeSerialConnection(obj)
             fclose(obj.outSerialObj); 
@@ -1027,6 +1035,9 @@ classdef ExperimentClass < handle
                 temp = flipdim(temp,3); % flip dim from top to bottm -> bottom to top 
                 volOut(:,:,:,j) = temp; 
             end
+        end
+        function obj = setRFDataArray(obj,rfDataArr)
+            obj.rfDataArr = rfDataArr;
         end
         function outObj = saveObj(obj)
             % need inst decorr sets, scan converted volumes, imaging
