@@ -35,9 +35,10 @@ classdef SerialClass
             % Read data from serial port
             dat = obj.serialObj.read(obj.serialObj.NumBytesAvailable,'char');
             % set time 
+            oldTime = obj.startTimeData;
             obj.startTimeData = datetime();
             % parse data
-            outDat = obj.parseSerialBlock(dat, obj.startTimeData,obj.byteRate);
+            outDat = obj.parseSerialBlock(dat, oldTime,obj.byteRate);
             % add to set
             
         end
