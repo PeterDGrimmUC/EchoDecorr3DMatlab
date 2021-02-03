@@ -1,6 +1,11 @@
 function compute3DDecorr_ROI( obj )
     %COMPUTE3DDECORR Summary of this function goes here
+    %   Detailed explanation goes here
 
+ % COMPUTE3DDECORR Summary of this function goes here
+%   Detailed explanation goes here
+
+    %
     %%
     % *Define Guassian Window* 
     x_range_length = size(obj.x_range,2);

@@ -228,9 +228,14 @@ classdef ExperimentClass < handle
         
         function defineROI(obj) 
             [zGrid, yGrid, xGrid] = ndgrid(obj.initDataSet.z_range,obj.initDataSet.y_range,obj.initDataSet.x_range);
-            validPoints = find((xGrid-obj.ROIx0).^2+(yGrid-obj.ROIy0).^2+(zGrid-obj.ROIz0).^2 <= obj.ROIr0^2);
+            validPoints = find((xGrid-obj.ROIx0).^2+(xGrid-obj.ROIx0).^2+(xGrid-obj.ROIx0).^2);
             finalGrid = zeros(size(xGrid));
             finalGrid(validPoints) = 1;
+            finalGrid = reshape(finalGrid,(size(xGrid)));
+            finalGrid = imrotate3(finalGrid, obj.ROIAlpha,[1 0 0],'crop');
+            finalGrid = imrotate3(finalGrid, obj.ROIBeta,[0 1 0],'crop');
+            finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],'crop');
+            finalGrid = imtranslate(finalGrid, [(obj.ROIz0-zMid)/diffZ,(obj.ROIy0-yMid)/diffY,(obj.ROIx0-xMid)/diffX ]);
             obj.ROIMap = logical(finalGrid); 
             obj.ROIVoxelNum = sum(obj.ROIMap(:)); 
             obj.initDataSet.ROIMap = obj.ROIMap;
