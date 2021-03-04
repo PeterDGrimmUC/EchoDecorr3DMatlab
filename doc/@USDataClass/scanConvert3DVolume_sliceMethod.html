@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConvert3DVolume_sliceMethod</title>
+  <meta name="keywords" content="scanConvert3DVolume_sliceMethod">
+  <meta name="description" content="% Bilinear Scan Conversion via sequential 'slicing' of 3d data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; scanConvert3DVolume_sliceMethod.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConvert3DVolume_sliceMethod
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% Bilinear Scan Conversion via sequential 'slicing' of 3d data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function scanConvert3DVolume_sliceMethod( obj ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Bilinear Scan Conversion via sequential 'slicing' of 3d data
+ Scan converts spherical ultrasound data to cartesian with bilinear
+ interpolation.
+SCANCONVERT3DVOLUME_SLICEMETHOD Summary of this function goes here
+   Detailed explanation goes here
+ 3d scan convert multistage from 2d scan convert
+ define polar dimension arrays</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% Bilinear Scan Conversion via sequential 'slicing' of 3d data</span>
+0002 <span class="comment">% Scan converts spherical ultrasound data to cartesian with bilinear</span>
+0003 <span class="comment">% interpolation.</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function scanConvert3DVolume_sliceMethod( obj )</a>
+0005 <span class="comment">%SCANCONVERT3DVOLUME_SLICEMETHOD Summary of this function goes here</span>
+0006 <span class="comment">%   Detailed explanation goes here</span>
+0007     <span class="comment">% 3d scan convert multistage from 2d scan convert</span>
+0008     <span class="comment">% define polar dimension arrays</span>
+0009     rk = linspace(obj.rmin,obj.rmax,size(obj.rawData,1));
+0010 <span class="comment">%     thetak = asin((linspace(sin(obj.thetamin),sin(obj.thetamax),size(obj.rawData,2))));</span>
+0011 <span class="comment">%     phik = asin(linspace(sin(obj.phimin),sin(obj.phimax),size(obj.rawData,3)));</span>
+0012     thetak = (linspace((obj.thetamin),(obj.thetamax),size(obj.rawData,2)));
+0013     phik = linspace((obj.phimin),(obj.phimax),size(obj.rawData,3));
+0014     <span class="comment">% define grids</span>
+0015     [r_2d_points,theta_2d_points] = ndgrid(rk,thetak);
+0016     [x_2d_points,y_2d_points ] = pol2cart(theta_2d_points,r_2d_points);
+0017     minX = min(x_2d_points(:));
+0018     maxX = max(x_2d_points(:));
+0019     minY = min(y_2d_points(:));
+0020     maxY = max(y_2d_points(:));
+0021     obj.dr = abs(diff(rk));
+0022     obj.dr = obj.dr(1);
+0023     obj.dx = obj.dr*obj.cartScalingFactor;
+0024     obj.dy = obj.dr*obj.cartScalingFactor;
+0025     obj.dz = obj.dr*obj.cartScalingFactor;
+0026     obj.x_range = minX:obj.dx:maxX;
+0027     obj.y_range = minY:obj.dy:maxY;
+0028     obj.z_range = minY:obj.dy:maxY;
+0029     [x_2d_mat,y_2d_mat] = ndgrid(obj.x_range,obj.y_range);
+0030 
+0031     interVolume = zeros(size(x_2d_mat,1),size(x_2d_mat,2),size(obj.rawData,3),size(obj.rawData,4));
+0032     <span class="keyword">for</span> currVolume = 1:size(obj.rawData,4)
+0033         <span class="keyword">for</span> phi = 1:size(obj.rawData,3)
+0034             interVolume(:,:,phi,currVolume) = griddata(x_2d_points,y_2d_points,obj.rawData(:,:,phi,currVolume),x_2d_mat,y_2d_mat); 
+0035             <span class="comment">%imagesc(squeeze(abs(interVolume(:,:,phi,currVolume))));</span>
+0036             <span class="comment">%pause(.01);</span>
+0037         <span class="keyword">end</span>
+0038     <span class="keyword">end</span>
+0039     r_2_arr = linspace(obj.rmin,obj.rmax,size(interVolume,1));
+0040     [r_2_2d_points,phi_2d_points] = ndgrid(r_2_arr,phik);
+0041     [x_2_2d_points,y_2_2d_points ] = pol2cart(phi_2d_points,r_2_2d_points);
+0042     minX = min(x_2_2d_points(:));
+0043     maxX = max(x_2_2d_points(:));
+0044     minY = min(y_2_2d_points(:));
+0045     maxY = max(y_2_2d_points(:));
+0046     [x_2_2d_mat,y_2_2d_mat] = ndgrid(minX:obj.dx:maxX,minY:obj.dy:maxY);
+0047 
+0048     <span class="comment">% interVolume(x',y',phi)</span>
+0049     <span class="comment">% y' is the new scan line</span>
+0050     <span class="comment">%</span>
+0051     <span class="keyword">for</span> currVolume = 1:size(obj.rawData,4)
+0052         <span class="keyword">for</span> theta = 1:size(interVolume,2)
+0053             finalVolume(:,theta,:,currVolume) = griddata(x_2_2d_points,y_2_2d_points,squeeze(interVolume(:,theta,:,currVolume)),x_2_2d_mat,y_2_2d_mat);
+0054             <span class="comment">%imagesc(squeeze(abs(finalVolume(:,theta,:,currVolume))));</span>
+0055             <span class="comment">%pause(.1);</span>
+0056         <span class="keyword">end</span>
+0057     <span class="keyword">end</span>
+0058 
+0059     obj.rawData_cart_slicemethod = finalVolume;
+0060 <span class="keyword">end</span>
+0061</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

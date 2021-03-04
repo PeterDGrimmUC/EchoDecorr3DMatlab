@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConvert2DSlices</title>
+  <meta name="keywords" content="scanConvert2DSlices">
+  <meta name="description" content="% 3d scan convert multistage from 2d scan convert">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; scanConvert2DSlices.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConvert2DSlices
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% 3d scan convert multistage from 2d scan convert</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [ scan_converted_volume,x_range,y_range,z_range ] = scanConvert2DSlices( thisVolume, rmin, rmax, thetamin, thetamax,phimin,phimax) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% 3d scan convert multistage from 2d scan convert</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [ scan_converted_volume,x_range,y_range,z_range ] = scanConvert2DSlices( thisVolume, rmin, rmax, thetamin, thetamax,phimin,phimax)</a>
+0002 <span class="comment">%% 3d scan convert multistage from 2d scan convert</span>
+0003 <span class="comment">%</span>
+0004 r_arr = linspace(rmin,rmax,size(thisVolume,1));
+0005 theta_arr = linspace(thetamin,thetamax,size(thisVolume,2));
+0006 phi_arr = linspace(phimin,phimax,size(thisVolume,3));
+0007 [r_2d_points,theta_2d_points] = ndgrid(r_arr,theta_arr);
+0008 [x_2d_points,y_2d_points ] = pol2cart(theta_2d_points,r_2d_points);
+0009 minX = min(x_2d_points(:));
+0010 maxX = max(x_2d_points(:));
+0011 minY = min(y_2d_points(:));
+0012 maxY = max(y_2d_points(:));
+0013 dr = abs(diff(r_arr));
+0014 dr = dr(1);
+0015 dx = dr*3;
+0016 dy = dr*3;
+0017 [x_2d_mat,y_2d_mat] = ndgrid(minX:dx:maxX,minY:dy:maxY);
+0018 
+0019 <span class="comment">%interVolume = zeros()</span>
+0020 <span class="keyword">for</span> phi = 1:size(thisVolume,3)
+0021    interVolume(:,:,phi) = griddata(x_2d_points,y_2d_points,thisVolume(:,:,phi),x_2d_mat,y_2d_mat); 
+0022 <span class="keyword">end</span>
+0023 r_2_arr = linspace(rmin,rmax,size(interVolume,1));
+0024 [r_2_2d_points,phi_2d_points] = ndgrid(r_2_arr,phi_arr);
+0025 [x_2_2d_points,y_2_2d_points ] = pol2cart(phi_2d_points,r_2_2d_points);
+0026 minX = min(x_2_2d_points(:));
+0027 maxX = max(x_2_2d_points(:));
+0028 minY = min(y_2_2d_points(:));
+0029 maxY = max(y_2_2d_points(:));
+0030 dr = abs(diff(r_arr));
+0031 dr = dr(1);
+0032 dx = dr*5;
+0033 dy = dr*5;
+0034 [x_2_2d_mat,y_2_2d_mat] = ndgrid(minX:dx:maxX,minY:dy:maxY);
+0035 
+0036 <span class="comment">% interVolume(x',y',phi)</span>
+0037 <span class="comment">% y' is the new scan line</span>
+0038 <span class="comment">%</span>
+0039 <span class="keyword">for</span> theta = 1:size(interVolume,2)
+0040     finalVolume(:,theta,:) = griddata(x_2_2d_points,y_2_2d_points,squeeze(interVolume(:,theta,:)),x_2_2d_mat,y_2_2d_mat);
+0041 <span class="keyword">end</span>
+0042 scan_converted_volume = finalVolume;
+0043 <span class="keyword">end</span>
+0044</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

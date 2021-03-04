@@ -1,0 +1,808 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ExperimentClass</title>
+  <meta name="keywords" content="ExperimentClass">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@ExperimentClass</a> &gt; ExperimentClass.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @ExperimentClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>ExperimentClass
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="ExperimentClass.html" class="code" title="">ExperimentClass</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="ExperimentClass.html" class="code" title="">ExperimentClass</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function obj = ExperimentClass()</a></li><li><a href="#_sub2" class="code">function reset(obj)</a></li><li><a href="#_sub3" class="code">function setControlParams(obj,myThresh)</a></li><li><a href="#_sub4" class="code">function setImagingParams(obj,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thisinterFrameTime,thissigma)</a></li><li><a href="#_sub5" class="code">function setROIParams(obj,myx0,myy0,myz0,myr0,myr1,myr2,myr0_in,myr1_in,myr2_in,myalpha,mygamma,mybeta)</a></li><li><a href="#_sub6" class="code">function getInitDataSet_c(obj)</a></li><li><a href="#_sub7" class="code">function outDataSet = parseDataFromDir_c(obj,thisFileName)</a></li><li><a href="#_sub8" class="code">function defineROI2(obj)</a></li><li><a href="#_sub9" class="code">function defineROI(obj)</a></li><li><a href="#_sub10" class="code">function defineGridBounds(obj)</a></li><li><a href="#_sub11" class="code">function returnVal = addNextRawDataSet_c(obj)</a></li><li><a href="#_sub12" class="code">function nextDataSetFolder = getNextDataSetFolder(obj)</a></li><li><a href="#_sub13" class="code">function nextDataSetFolder = getNextDataSetFolder_c(obj)</a></li><li><a href="#_sub14" class="code">function dataSetList = getWaitingDataSets(obj)</a></li><li><a href="#_sub15" class="code">function obj = addNextDataSetViaFilename2(obj, thisFileName)</a></li><li><a href="#_sub16" class="code">function infoOut = getInitInfo(obj)</a></li><li><a href="#_sub17" class="code">function obj = addNextDataSetViaFilename(obj, thisFileName)</a></li><li><a href="#_sub18" class="code">function obj = initDataFolderGUI(obj)</a></li><li><a href="#_sub19" class="code">function obj = initDataFolder(obj,dirName)</a></li><li><a href="#_sub20" class="code">function newFilePresent = checkFolder(obj)</a></li><li><a href="#_sub21" class="code">function nextDataSetInFolder(obj)</a></li><li><a href="#_sub22" class="code">function boolOut = decorrExceedsThresh(obj)</a></li><li><a href="#_sub23" class="code">function sendSerialData(obj)</a></li><li><a href="#_sub24" class="code">function setSerialOutName(obj,myname)</a></li><li><a href="#_sub25" class="code">function setSerialInName(obj,myname)</a></li><li><a href="#_sub26" class="code">function setUpSerialOutConnection(obj)</a></li><li><a href="#_sub27" class="code">function setUpSerialInConnection(obj)</a></li><li><a href="#_sub28" class="code">function removeSerialConnection(obj)</a></li><li><a href="#_sub29" class="code">function updateROIDataSet(obj)</a></li><li><a href="#_sub30" class="code">function initExperiment(obj)</a></li><li><a href="#_sub31" class="code">function generateTemplateFolder(obj,dirName)</a></li><li><a href="#_sub32" class="code">function succ = checkTransfer(obj,dirName)</a></li><li><a href="#_sub33" class="code">function volOut = fixvolume(obj,vol)</a></li><li><a href="#_sub34" class="code">function obj = setRFDataArray(obj,rfDataArr)</a></li><li><a href="#_sub35" class="code">function outObj = saveObj(obj)</a></li><li><a href="#_sub36" class="code">function outObj = saveObj_withrf(obj,rfDataArr)</a></li><li><a href="#_sub37" class="code">function outDat = getTimeArr(obj)</a></li><li><a href="#_sub38" class="code">function succ = verifyFilesReady(nextDataSet)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="ExperimentClass.html" class="code" title="">ExperimentClass</a> &lt; handle
+0002     <span class="comment">%EXPERIMENTCLASS: Performs processess on data sets for an experiment</span>
+0003     <span class="comment">%  organizes decorrelation code for a simple to use and expandable</span>
+0004     <span class="comment">%  interface</span>
+0005     <span class="comment">%  designed to be easily accessed for a GUI application</span>
+0006     <span class="comment">% forms the 'Model-Controller' element in the model view controller architecture</span>
+0007     properties
+0008         <span class="comment">% machine state variables</span>
+0009         machineState;
+0010         <span class="comment">% init</span>
+0011         initDataSet; 
+0012         <span class="comment">% main arrays</span>
+0013         ultrasoundDataSeries; 
+0014         experimentalUSDataSeries; 
+0015         decorrelationMapSeries;
+0016         decorrelationMapSeriesROI;
+0017         cumulativeDecorr; 
+0018         cumulativeDecorrROI;
+0019         decorrSumSeries; 
+0020         decorrSumSeriesROI;
+0021         decorrAverageSeries;
+0022         decorrAverageSeriesROI;
+0023         decorrVolume; 
+0024         averageDecorr; 
+0025         subRegionMap;
+0026         scanConvLookup; 
+0027         templateFolder; 
+0028         <span class="comment">% ultrasound data parameters</span>
+0029         dx
+0030         dy
+0031         dz
+0032         dr
+0033         rmin;
+0034         rmax;
+0035         cartScalingFactor;
+0036         sigma; 
+0037         interFrameTime; 
+0038         thetamin;
+0039         thetamax;
+0040         phimin;
+0041         phimax; 
+0042         decorrThresh;
+0043         phiRange;
+0044         thetaRange;
+0045         framerate;
+0046         <span class="comment">% experiment parameters</span>
+0047         numDataSets;
+0048         dataFolder; 
+0049         subRegionROIMap
+0050         activeFolder;
+0051         activeFolderDir; 
+0052         numVolumes; 
+0053         defaultDataFileName;
+0054         totalThresh; 
+0055         totalThreshVolume; 
+0056         inSerialString; 
+0057         outSerialString; 
+0058         outSerialObj;
+0059         inSerialObj; 
+0060         experimentState = 0; 
+0061         ROIVoxelNum;
+0062         ROI_xRange; 
+0063         ROI_yRange; 
+0064         ROI_zRange;
+0065         ROI_ellipPoints;
+0066         ROIx0;
+0067         ROIy0;
+0068         ROIz0;
+0069         ROIr0;
+0070         ROIr1;
+0071         ROIr2;
+0072         ROIr0_in;
+0073         ROIr1_in;
+0074         ROIr2_in;
+0075         xVec;
+0076         yVec;
+0077         zVec; 
+0078         xVec_sub;
+0079         yVec_sub;
+0080         zVec_sub; 
+0081         ROIAlpha;
+0082         ROIBeta;
+0083         ROIGamma;
+0084         ROIMap; 
+0085         ROIMapSubregion; 
+0086         subRegionRbounds;
+0087         subRegionThetabounds;
+0088         subRegionPhibounds;
+0089         subRegionRboundsi;
+0090         subRegionThetaboundsi;
+0091         subRegionPhiboundsi;
+0092         subRegionXbounds;
+0093         subRegionYbounds;
+0094         subRegionZbounds;
+0095         subRegionXRange;
+0096         subRegionYRange;
+0097         subRegionZRange;
+0098         regionOverlay;        
+0099         timeArr;
+0100         rfDataArr;
+0101     <span class="keyword">end</span>
+0102     
+0103     methods
+0104         <span class="comment">% Constructor</span>
+0105         <a name="_sub0" href="#_subfunctions" class="code">function obj = ExperimentClass()</a>
+0106             <span class="comment">% construct object</span>
+0107             obj.defaultDataFileName = <span class="string">'bufApl0Out_0x0_0x0.data.dm.pmcr'</span>;
+0108         <span class="keyword">end</span>
+0109         
+0110         <a name="_sub1" href="#_subfunctions" class="code">function reset(obj)</a>
+0111             <span class="comment">% Reset object %</span>
+0112                 <span class="comment">%TODO%: Verify that this reset gets everything so the GUI</span>
+0113                 <span class="comment">%doesn't have to be restarted</span>
+0114             obj.ultrasoundDataSeries = []; 
+0115             obj.decorrelationMapSeries = [];
+0116             obj.cumulativeDecorr = []; 
+0117             obj.decorrSumSeries = []; 
+0118             obj.decorrSumSeriesROI = []; 
+0119             obj.decorrVolume = []; 
+0120             obj.averageDecorr = []; 
+0121         <span class="keyword">end</span>
+0122         
+0123         <a name="_sub2" href="#_subfunctions" class="code">function setControlParams(obj,myThresh)</a>
+0124             <span class="comment">% set threshold %</span>
+0125             obj.decorrThresh = myThresh; 
+0126         <span class="keyword">end</span>
+0127         
+0128         <a name="_sub3" href="#_subfunctions" class="code">function setImagingParams(obj,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thisinterFrameTime,thissigma)</a>
+0129             <span class="comment">% Set object's imaging parameters %</span>
+0130             obj.cartScalingFactor = thiscartScalingFactor;
+0131             obj.interFrameTime = thisinterFrameTime; 
+0132             obj.thetamin = thisthetamin;
+0133             obj.thetamax = thisthetamax;
+0134             obj.phimin = thisphimin;
+0135             obj.phimax = thisphimax; 
+0136             obj.defaultDataFileName = <span class="string">'bufApl0Out_0x0_0x0.data.dm.pmcr'</span>;
+0137             obj.sigma = thissigma; 
+0138         <span class="keyword">end</span>
+0139         
+0140         <a name="_sub4" href="#_subfunctions" class="code">function setROIParams(obj,myx0,myy0,myz0,myr0,myr1,myr2,myr0_in,myr1_in,myr2_in,myalpha,mygamma,mybeta)</a>
+0141             <span class="comment">% Set ROI parameters %</span>
+0142             obj.ROIx0 = myx0;
+0143             obj.ROIy0 = myy0;
+0144             obj.ROIz0 = myz0;
+0145             obj.ROIr0 = myr0;
+0146             obj.ROIr1 = myr1;
+0147             obj.ROIr2 = myr2;
+0148             obj.ROIr0_in = myr0_in;
+0149             obj.ROIr1_in = myr1_in;
+0150             obj.ROIr2_in = myr2_in;
+0151             obj.ROIAlpha = myalpha;
+0152             obj.ROIGamma = mygamma; 
+0153             obj.ROIBeta = mybeta; 
+0154             obj.defineROI; 
+0155         <span class="keyword">end</span>
+0156         
+0157         <a name="_sub5" href="#_subfunctions" class="code">function getInitDataSet_c(obj)</a>
+0158             <span class="comment">% get initial data set using C methods %</span>
+0159             
+0160             <span class="comment">% check for new data set</span>
+0161             nextDataSet = obj.getNextDataSetFolder_c();
+0162             <span class="comment">% If not yet arrived, keep checking in a loop</span>
+0163             <span class="keyword">while</span> isempty(nextDataSet)
+0164                 nextDataSet = obj.getNextDataSetFolder_c();
+0165             <span class="keyword">end</span>
+0166             <span class="comment">% Check that all files have been transferred</span>
+0167             <span class="keyword">while</span>(~ExperimentClass.verifyFilesReady(nextDataSet)); <span class="keyword">end</span>
+0168             <span class="comment">% Get path</span>
+0169             dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
+0170             <span class="comment">% Get data from file</span>
+0171             obj.initDataSet = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
+0172             <span class="comment">% Create precomputed lookup table for scan conversion</span>
+0173             obj.scanConvLookup = obj.initDataSet.scanConv_Generate_c();
+0174             <span class="comment">% Apply lookup table to first volume pair to generate cart data</span>
+0175             obj.initDataSet.scanConv_apply_c(obj.scanConvLookup); 
+0176             <span class="comment">% Set initial parameters</span>
+0177             obj.numVolumes = 0; 
+0178             obj.xVec = obj.initDataSet.x_range; 
+0179             obj.yVec = obj.initDataSet.y_range; 
+0180             obj.zVec = obj.initDataSet.z_range;
+0181             obj.dx = obj.initDataSet.dx;
+0182             obj.dy = obj.initDataSet.dy;
+0183             obj.dz = obj.initDataSet.dz;
+0184             obj.dr = obj.initDataSet.dr;
+0185             obj.numDataSets = 1; 
+0186         <span class="keyword">end</span>
+0187         
+0188         <a name="_sub6" href="#_subfunctions" class="code">function outDataSet = parseDataFromDir_c(obj,thisFileName)</a>
+0189             <span class="comment">% Read file/map to memory</span>
+0190             Dm = read_lbdump_wrapc(thisFileName);
+0191             obj.rmin = 0;
+0192             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
+0193             <span class="keyword">try</span> 
+0194                 obj.framerate = Dm.Info.framerate;
+0195                 obj.phiRange = Dm.Info.phiRange;
+0196                 obj.thetaRange = Dm.Info.thetaRange;
+0197                 obj.thetamax = pi/360*obj.thetaRange;
+0198                 obj.thetamin = -obj.thetamax;
+0199                 obj.phimax = pi/360*obj.phiRange;
+0200                 obj.phimin = -obj.phimax;
+0201             <span class="keyword">catch</span>
+0202                 disp(<span class="string">'Could not read additional info file!'</span>);
+0203             <span class="keyword">end</span>
+0204             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+0205         <span class="keyword">end</span>
+0206         
+0207         <a name="_sub7" href="#_subfunctions" class="code">function defineROI2(obj) </a>
+0208             xMid = obj.initDataSet.x_range(floor(end/2));
+0209             yMid = obj.initDataSet.y_range(floor(end/2));
+0210             zMid = obj.initDataSet.z_range(floor(end/2));
+0211             diffX = abs(obj.initDataSet.x_range(1) - obj.initDataSet.x_range(2));
+0212             diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
+0213             diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
+0214             [zGrid, yGrid, xGrid] = ndgrid(obj.initDataSet.z_range-zMid,obj.initDataSet.y_range-yMid,obj.initDataSet.x_range-xMid);
+0215             validPoints = find(((xGrid).^2./obj.ROIr0^2 + (yGrid).^2./obj.ROIr1^2 + (zGrid).^2./obj.ROIr2^2)&lt;1);
+0216             finalGrid = zeros(size(xGrid));
+0217             finalGrid(validPoints) = 1;
+0218             finalGrid = reshape(finalGrid,(size(xGrid)));
+0219             finalGrid = imrotate3(finalGrid, obj.ROIAlpha,[1 0 0],<span class="string">'crop'</span>);
+0220             finalGrid = imrotate3(finalGrid, obj.ROIBeta,[0 1 0],<span class="string">'crop'</span>);
+0221             finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],<span class="string">'crop'</span>);
+0222             finalGrid = imtranslate(finalGrid, [(obj.ROIz0-zMid)/diffZ,(obj.ROIy0-yMid)/diffY,(obj.ROIx0-xMid)/diffX ]);
+0223             obj.ROIMap = logical(finalGrid); 
+0224             obj.ROIVoxelNum = sum(obj.ROIMap(:)); 
+0225             obj.initDataSet.ROIMap = obj.ROIMap;
+0226             obj.initDataSet.compute3DDecorr_ROI();
+0227         <span class="keyword">end</span>
+0228         
+0229         <a name="_sub8" href="#_subfunctions" class="code">function defineROI(obj) </a>
+0230             [zGrid, yGrid, xGrid] = ndgrid(obj.initDataSet.z_range,obj.initDataSet.y_range,obj.initDataSet.x_range);
+0231             validPoints = find((xGrid-obj.ROIx0).^2+(yGrid-obj.ROIy0).^2+(zGrid-obj.ROIz0).^2 &lt;= obj.ROIr0^2);
+0232             finalGrid = zeros(size(xGrid));
+0233             finalGrid(validPoints) = 1;
+0234             obj.ROIMap = logical(finalGrid); 
+0235             obj.ROIVoxelNum = sum(obj.ROIMap(:)); 
+0236             obj.initDataSet.ROIMap = obj.ROIMap;
+0237             obj.initDataSet.compute3DDecorr_ROI();
+0238         <span class="keyword">end</span>
+0239         
+0240         <a name="_sub9" href="#_subfunctions" class="code">function defineGridBounds(obj)</a>
+0241             xMid = obj.initDataSet.x_range(floor(end/2));
+0242             yMid = obj.initDataSet.y_range(floor(end/2));
+0243             zMid = obj.initDataSet.z_range(floor(end/2));
+0244             diffX = abs(obj.initDataSet.x_range(1) - obj.initDataSet.x_range(2));
+0245             diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
+0246             diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
+0247             [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range-xMid,obj.initDataSet.y_range-yMid,obj.initDataSet.z_range-zMid);
+0248             validPoints = find(((xGrid).^2./((obj.ROIr0+6*obj.sigma)^2) + (yGrid).^2./((obj.ROIr1+6*obj.sigma)^2) + (zGrid).^2./((obj.ROIr2+6*obj.sigma)^2))&lt;1);
+0249             finalGrid = zeros(size(xGrid));
+0250             finalGrid(validPoints) = 1;
+0251             finalGrid = reshape(finalGrid,(size(xGrid)));
+0252             finalGrid = imrotate3(finalGrid, obj.ROIAlpha,[1 0 0],<span class="string">'crop'</span>);
+0253             finalGrid = imrotate3(finalGrid, obj.ROIBeta,[0 1 0],<span class="string">'crop'</span>);
+0254             finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],<span class="string">'crop'</span>);
+0255             finalGrid = imtranslate(finalGrid, [(obj.ROIx0-xMid)/diffX,(obj.ROIy0-yMid)/diffY,(obj.ROIz0-zMid)/diffZ ]);
+0256             finalGrid = logical(finalGrid);
+0257             pts = find(finalGrid == 1); 
+0258             [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range,obj.initDataSet.y_range,obj.initDataSet.z_range);
+0259            
+0260             R = sqrt(xGrid.^2 + yGrid.^2 + zGrid.^2);
+0261             Theta = yGrid./(sqrt(zGrid.^2 + yGrid.^2));
+0262             Phi = xGrid./(sqrt(R.^2 - yGrid.^2));
+0263             ROIR = R(pts); maxR = max(ROIR); minR = min(ROIR);
+0264             ROITheta = Theta(pts); maxTheta = max(ROITheta); minTheta = min(ROITheta);
+0265             ROIPhi = Phi(pts); maxPhi = max(ROIPhi); minPhi = min(ROIPhi);
+0266             
+0267             sizeAz = size(obj.initDataSet.rawData,2);
+0268             sizeEl = size(obj.initDataSet.rawData,3);
+0269             obj.dr = 1/obj.initDataSet.InfoFile.NumSamplesPerMm;         <span class="comment">% range (mm)</span>
+0270             obj.rmin = obj.initDataSet.rmin;
+0271             obj.rmax = obj.initDataSet.rmax;
+0272             RVec = obj.rmin:obj.dr:obj.rmax;
+0273             muVec = linspace(sin(obj.thetamin),sin(obj.thetamax), sizeAz);
+0274             nuVec = linspace(sin(obj.phimin),sin(obj.phimax), sizeEl);
+0275            
+0276             
+0277             obj.subRegionRbounds = [minR,maxR];
+0278             obj.subRegionThetabounds = [minTheta,maxTheta];
+0279             obj.subRegionPhibounds = [minPhi,maxPhi];
+0280             [~,minRi] = min(abs(minR-RVec));
+0281             [~,maxRi] = min(abs(maxR-RVec));
+0282             [~,minThetai] = min(abs(minTheta-muVec));
+0283             [~,maxThetai] = min(abs(maxTheta-muVec));
+0284             [~,minPhii] = min(abs(minPhi-nuVec));
+0285             [~,maxPhii] = min(abs(maxPhi-nuVec));
+0286             
+0287             obj.subRegionRboundsi = [minRi,maxRi];
+0288             obj.subRegionThetaboundsi = [minThetai,maxThetai];
+0289             obj.subRegionPhiboundsi = [minPhii,maxPhii];
+0290             <span class="comment">%obj.ROIMap = obj.ROIMap(xMini:xMaxi,yMini:yMaxi,zMini:zMaxi);</span>
+0291             <span class="comment">%obj.subRegionROIMap = obj.ROIMap(minRi:maxRi,minThetai,maxThetai,minPhii,maxPhii);</span>
+0292             <span class="comment">%obj.subRegionMap = zeros(size(obj.ROIMap));</span>
+0293             <span class="comment">%obj.subRegionMap(minRi:maxRi,minThetai,maxThetai,minPhii,maxPhii) = 1;</span>
+0294             rmin = obj.subRegionRbounds(1);
+0295             rmax = obj.subRegionRbounds(2);
+0296             thetamin = obj.subRegionThetabounds(1);
+0297             thetamax = obj.subRegionThetabounds(2);
+0298             phimin = obj.subRegionPhibounds(1);
+0299             phimax = obj.subRegionPhibounds(2);
+0300             rV = obj.subRegionRboundsi(1):obj.subRegionRboundsi(2);
+0301             thetaV = obj.subRegionThetaboundsi(1):obj.subRegionThetaboundsi(2);
+0302             phiV = obj.subRegionPhiboundsi(1):obj.subRegionPhiboundsi(2);
+0303             tempDataSet = USDataClass(obj.initDataSet.rawData,obj.initDataSet.time, obj.initDataSet.InfoFile,rmin,rmax,thetamin,thetamax,phimin,phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+0304             tempDataSet.scanConv_Frust(); 
+0305             [~,xMini] = min(abs(tempDataSet.x_range(1)-obj.initDataSet.x_range));
+0306             [~,yMini] = min(abs(tempDataSet.y_range(1)-obj.initDataSet.y_range));
+0307             [~,zMini] = min(abs(tempDataSet.z_range(1)-obj.initDataSet.z_range));
+0308             xRa = xMini:xMini+numel(tempDataSet.x_range)-1;
+0309             yRa = yMini:yMini+numel(tempDataSet.y_range)-1;
+0310             zRa = zMini:zMini+numel(tempDataSet.z_range)-1;
+0311             obj.ROIMapSubregion = obj.ROIMap(xRa,yRa,zRa);
+0312             obj.regionOverlay = zeros(size(obj.ROIMap)); 
+0313             obj.regionOverlay(xRa,yRa,zRa) = 1; 
+0314             obj.subRegionXRange = xRa; 
+0315             obj.subRegionYRange = yRa; 
+0316             obj.subRegionZRange = zRa; 
+0317             obj.subRegionXbounds = [xRa(1), xRa(end)];
+0318             obj.subRegionYbounds = [yRa(1), yRa(end)];
+0319             obj.subRegionZbounds = [zRa(1), zRa(end)];
+0320             obj.xVec_sub = tempDataSet.x_range;
+0321             obj.yVec_sub = tempDataSet.y_range;
+0322             obj.zVec_sub = tempDataSet.z_range;
+0323         <span class="keyword">end</span>
+0324 
+0325         <a name="_sub10" href="#_subfunctions" class="code">function returnVal = addNextRawDataSet_c(obj)</a>
+0326             nextDataSet = obj.getNextDataSetFolder();
+0327             <span class="keyword">if</span> obj.numDataSets == []
+0328                 obj.numDataSets = 1; 
+0329             <span class="keyword">end</span>
+0330             <span class="keyword">if</span>(~isempty(nextDataSet))
+0331                 <span class="comment">%pause(3)</span>
+0332                 dataFolderPath = fullfile(obj.dataFolder,nextDataSet.name);
+0333                 <span class="comment">%defineGridBounds(obj)</span>
+0334                 
+0335                 dataObj = obj.parseDataFromDir_c(fullfile(dataFolderPath,obj.defaultDataFileName));
+0336                 dataObj.folderName = dataFolderPath;
+0337                 <span class="comment">%toc</span>
+0338                 newPath = fullfile(obj.dataFolder,<span class="string">'Complete'</span>,nextDataSet.name);
+0339                 fclose all;
+0340                 movefile(dataFolderPath,newPath);
+0341                 <span class="comment">%tic</span>
+0342                 dataObj.scanConv_apply_c(obj.scanConvLookup);
+0343                 dataObj.ROIMap = obj.ROIMap;
+0344                 dataObj.compute3DDecorr_ROI(); 
+0345                 <span class="comment">%toc</span>
+0346                 dataObj.decorrThresh = obj.decorrThresh;
+0347                 <span class="keyword">if</span>(isempty(obj.cumulativeDecorr))
+0348                     obj.cumulativeDecorr = (dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr);
+0349                     <span class="comment">%obj.cumulativeDecorr = dataObj.decorr;</span>
+0350                     obj.cumulativeDecorrROI = obj.cumulativeDecorr.*obj.ROIMap;
+0351                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
+0352                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
+0353                 <span class="keyword">else</span>
+0354                     obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr));
+0355                     <span class="comment">%obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr));</span>
+0356                     obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,obj.cumulativeDecorr.*obj.ROIMap);
+0357                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
+0358                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
+0359                 <span class="keyword">end</span>
+0360                 <span class="keyword">if</span>(isempty(obj.ultrasoundDataSeries))
+0361                     obj.ultrasoundDataSeries = dataObj;
+0362                 <span class="keyword">else</span>
+0363                     obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries,dataObj]; 
+0364                 <span class="keyword">end</span>
+0365                 obj.numDataSets = obj.numDataSets +1;
+0366                 returnVal = 1;
+0367             <span class="keyword">else</span>
+0368                 returnVal = -1;  
+0369             <span class="keyword">end</span>
+0370         <span class="keyword">end</span>
+0371         
+0372         <a name="_sub11" href="#_subfunctions" class="code">function nextDataSetFolder = getNextDataSetFolder(obj)</a>
+0373             <span class="comment">% getNextDataSetFolder</span>
+0374             <span class="comment">% gets next (chronologically) data set inside of the target</span>
+0375             <span class="comment">% folder.</span>
+0376             <span class="comment">% Returns a dir struct of next data set folder</span>
+0377             dataSetsReady = obj.getWaitingDataSets();
+0378             timeCells = arrayfun(@(x) regexp(x.name,<span class="string">'\d+'</span>,<span class="string">'match'</span>),dataSetsReady,<span class="string">'UniformOutput'</span>,false);
+0379             dateTimeArr = cellfun(@(y) posixtime(datetime(str2num(y{3}),str2num(y{1}),str2num(y{2}),str2num(y{4}),str2num(y{5}),str2num(y{6}),str2num(y{7}))),timeCells,<span class="string">'UniformOutput'</span>,false);
+0380             dateTimeArr = [dateTimeArr{:}];
+0381             <span class="keyword">if</span>(~isempty(dataSetsReady))
+0382                 [~,minInd] = min(dateTimeArr);
+0383                 nextDataSetFolder = dataSetsReady(minInd);
+0384             <span class="keyword">else</span>
+0385                 nextDataSetFolder = [];
+0386             <span class="keyword">end</span>
+0387         <span class="keyword">end</span>
+0388         
+0389         <a name="_sub12" href="#_subfunctions" class="code">function nextDataSetFolder = getNextDataSetFolder_c(obj)</a>
+0390             <span class="comment">% getNextDataSetFolder</span>
+0391             <span class="comment">% gets next (chronologically) data set inside of the target</span>
+0392             <span class="comment">% folder.</span>
+0393             <span class="comment">% Returns a dir struct of next data set folder</span>
+0394             dataSetsReady = obj.getWaitingDataSets();
+0395             timeCells = arrayfun(@(x) regexp(x.name,<span class="string">'\d+'</span>,<span class="string">'match'</span>),dataSetsReady,<span class="string">'UniformOutput'</span>,false);
+0396             dateTimeArr = cellfun(@(y) posixtime(datetime(str2num(y{3}),str2num(y{1}),str2num(y{2}),str2num(y{4}),str2num(y{5}),str2num(y{6}),str2num(y{7}))),timeCells,<span class="string">'UniformOutput'</span>,false);
+0397             dateTimeArr = [dateTimeArr{:}];
+0398             <span class="keyword">if</span>(~isempty(dataSetsReady))
+0399                 [~,minInd] = min(dateTimeArr);
+0400                 nextDataSetFolder = dataSetsReady(minInd);
+0401             <span class="keyword">else</span>
+0402                 nextDataSetFolder = [];
+0403             <span class="keyword">end</span>
+0404         <span class="keyword">end</span>
+0405         
+0406         <a name="_sub13" href="#_subfunctions" class="code">function dataSetList = getWaitingDataSets(obj)</a>
+0407             folderDir = dir(obj.dataFolder);
+0408             folderDir = folderDir([folderDir.isdir]);
+0409             invalidFolders = {<span class="string">'.'</span>,<span class="string">'..'</span>,<span class="string">'Complete'</span>,<span class="string">'ready'</span>};
+0410             binOut = ones(1,numel(folderDir));
+0411             <span class="keyword">for</span> invalidFoldN = 1:numel(invalidFolders)
+0412                 binOut = ~arrayfun(@(x) strcmp(x.name,invalidFolders(invalidFoldN)),folderDir)' &amp; binOut;
+0413             <span class="keyword">end</span>
+0414             dataSetList = folderDir(binOut); 
+0415         <span class="keyword">end</span>
+0416         
+0417         <a name="_sub14" href="#_subfunctions" class="code">function obj = addNextDataSetViaFilename2(obj, thisFileName) </a>
+0418             Dm = read_lbdump(thisFileName);
+0419             obj.rmin = 0;
+0420             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
+0421             <span class="keyword">try</span> 
+0422                 obj.framerate = Dm.Info.framerate;
+0423                 obj.phiRange = Dm.Info.phiRange;
+0424                 obj.thetaRange = Dm.Info.thetaRange;
+0425                 obj.thetamax = pi/360*obj.thetaRange;
+0426                 obj.thetamin = -obj.thetamax;
+0427                 obj.phimax = pi/360*obj.phiRange;
+0428                 obj.phimin = -obj.phimax;
+0429             <span class="keyword">catch</span>
+0430                 display(<span class="string">'Could not read additional info file'</span>);
+0431             <span class="keyword">end</span>
+0432             tempDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+0433             tempDataSet.scanConv_Frust();
+0434             
+0435             tempDataSet.compute3DDecorr(); 
+0436             tempDataSet.decorrThresh = obj.decorrThresh;
+0437             
+0438             <span class="keyword">if</span>(isempty(obj.cumulativeDecorr))
+0439                 obj.cumulativeDecorr = tempDataSet.decorr;
+0440             <span class="keyword">else</span>
+0441                 obj.cumulativeDecorr = max(obj.cumulativeDecorr,tempDataSet.decorr);
+0442             <span class="keyword">end</span>
+0443             obj.decorrSumSeries(obj.numVolumes) = sum(obj.cumulativeDecorr(:)/numel(obj.cumlativeDecorr));
+0444             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries tempDataSet];
+0445         <span class="keyword">end</span>
+0446         
+0447         <a name="_sub15" href="#_subfunctions" class="code">function infoOut = getInitInfo(obj)</a>
+0448             infoOut = ones(1,4);
+0449             folderDir = dir(obj.dataFolder);
+0450             folderDir = folderDir([folderDir.isdir]);
+0451             invalidFolders = {<span class="string">'.'</span>,<span class="string">'..'</span>,<span class="string">'Complete'</span>,<span class="string">'ready'</span>};
+0452             binOut = ones(1,numel(folderDir));
+0453             <span class="keyword">for</span> invalidFoldN = 1:numel(invalidFolders)
+0454                 binOut = ~arrayfun(@(x) strcmp(x.name,invalidFolders(invalidFoldN)),folderDir)' &amp; binOut;
+0455             <span class="keyword">end</span>
+0456             dataSetList = folderDir(binOut); 
+0457             chosenfile = dataSetList(1).name;
+0458             fileName = fullfile(obj.dataFolder,chosenfile,<span class="string">'addParamFile.txt'</span>);
+0459             fidAdd = fopen(fileName);
+0460             endOfFile = 0;
+0461             <span class="keyword">while</span> ~endOfFile
+0462                 lineText=fgetl(fidAdd);
+0463                 regexString = <span class="string">'(\w+)\W+=\W+(\w+)'</span>;
+0464                 <span class="keyword">if</span> lineText==-1
+0465                     endOfFile=1;
+0466                 <span class="keyword">else</span>
+0467                     [mat, tok, ~ ] = regexp(lineText,regexString,<span class="string">'match'</span>,<span class="string">'tokens'</span>, <span class="string">'tokenExtents'</span>);
+0468                     <span class="keyword">if</span> ~isempty(mat)
+0469                         varName = tok{1};
+0470                         varName = varName{1};
+0471                         varVal = tok{1};
+0472                         varVal = varVal{2};
+0473                         <span class="keyword">switch</span> varName
+0474                             <span class="keyword">case</span> <span class="string">'frameRate'</span>
+0475                                 infoOut(1) = str2num(varVal);
+0476                             <span class="keyword">case</span> <span class="string">'depth'</span>
+0477                                 infoOut(2) = str2num(varVal);
+0478                             <span class="keyword">case</span> <span class="string">'phiRange'</span>
+0479                                 infoOut(3) = str2num(varVal);
+0480                             <span class="keyword">case</span> <span class="string">'thetaRange'</span>
+0481                                 infoOut(4) = str2num(varVal);
+0482                             <span class="keyword">otherwise</span>
+0483                                 error(<span class="string">'Variable name not valid'</span>);
+0484                         <span class="keyword">end</span>
+0485                     <span class="keyword">end</span>
+0486                 <span class="keyword">end</span>
+0487             <span class="keyword">end</span>
+0488             
+0489         <span class="keyword">end</span>
+0490         
+0491         <a name="_sub16" href="#_subfunctions" class="code">function obj = addNextDataSetViaFilename(obj, thisFileName)</a>
+0492             <span class="comment">% Compute decorr of data set</span>
+0493             Dm = read_lbdump(thisFileName);
+0494             obj.rmin = 0;
+0495             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
+0496             <span class="keyword">try</span> 
+0497                 obj.framerate = Dm.Info.framerate;
+0498                 obj.phiRange = Dm.Info.phiRange;
+0499                 obj.thetaRange = Dm.Info.thetaRange;
+0500                 obj.thetamax = pi/360*obj.thetaRange;
+0501                 obj.thetamin = -obj.thetamax;
+0502                 obj.phimax = pi/360*obj.phiRange;
+0503                 obj.phimin = -obj.phimax;
+0504             <span class="keyword">catch</span>
+0505                 display(<span class="string">'Could not read additional info file'</span>)
+0506             <span class="keyword">end</span>
+0507             tempDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
+0508             tempDataSet.scanConv_Frust();
+0509             tempDataSet.compute3DDecorr(); 
+0510             tempDataSet.decorrThresh = obj.decorrThresh;
+0511             <span class="comment">% compute ablated volume</span>
+0512             
+0513             <span class="keyword">if</span>(isempty(obj.cumulativeDecorr))
+0514                 <span class="comment">% set initial cumulative decorrelation to the result of the</span>
+0515                 <span class="comment">% first volume's decorr</span>
+0516                 obj.cumulativeDecorr(1).decorr = tempDataSet.decorr; 
+0517                 <span class="comment">% compute decorrelation sum</span>
+0518                 sizeOfVol = size(tempDataSet.decorr);
+0519                 obj.decorrSumSeries = sum(obj.cumulativeDecorr(1).decorr(:))/prod(sizeOfVol(1:3)); 
+0520                 <span class="comment">% create mask of pixels which exceed the threshold</span>
+0521                 obj.decorrelationMapSeries(1).decorrMap = tempDataSet.decorr;
+0522                 <span class="comment">% remove elements below the threshold</span>
+0523                 tempAblatedPoints = find(obj.decorrelationMapSeries(1).decorrMap &gt;= obj.decorrThresh);
+0524                 obj.decorrelationMapSeries(1).decorrMap(tempAblatedPoints) = 1;
+0525                 <span class="comment">%set elements above threshold to 1</span>
+0526                 obj.decorrelationMapSeries(1).decorrMap(find(obj.decorrelationMapSeries(1).decorrMap ~= 1)) = 0;   
+0527                 <span class="comment">% each point above the threshold has a volume of dx^3, so</span>
+0528                 <span class="comment">% the number of points * dx^3 gives the volume of ablated</span>
+0529                 <span class="comment">% tissue</span>
+0530                 obj.averageDecorr(1) = log10(mean(obj.cumulativeDecorr(1).decorr(:)));
+0531                 obj.decorrVolume(1) = .001*(length(tempAblatedPoints))*tempDataSet.dx^3; 
+0532             <span class="keyword">else</span>
+0533                 <span class="comment">% find max value between current decorrelation and previous</span>
+0534                 <span class="comment">% cumulative decorrelation</span>
+0535                 obj.cumulativeDecorr(obj.numVolumes).decorr = max(obj.cumulativeDecorr(obj.numVolumes-1).decorr,tempDataSet.decorr);
+0536                 <span class="comment">% compute sum</span>
+0537                 sizeOfVol = size(tempDataSet.decorr);
+0538                 obj.decorrSumSeries(obj.numVolumes) = sum(obj.cumulativeDecorr(obj.numVolumes).decorr(:))/prod(sizeOfVol(1:3)); 
+0539                 <span class="comment">% create decorrelation map for current volume</span>
+0540                 obj.decorrelationMapSeries(obj.numVolumes).decorrMap = obj.cumulativeDecorr(obj.numVolumes).decorr;
+0541                 tempAblatedPoints = find(obj.decorrelationMapSeries(obj.numVolumes).decorrMap &gt;= obj.decorrThresh);
+0542                 obj.decorrelationMapSeries(obj.numVolumes).decorrMap(tempAblatedPoints) = 1;
+0543                 obj.decorrelationMapSeries(obj.numVolumes).decorrMap(find(obj.decorrelationMapSeries(obj.numVolumes).decorrMap ~= 1)) = 0;
+0544                 <span class="comment">% each point above the threshold has a volume of dx^3, so</span>
+0545                 <span class="comment">% the number of points * dx^3 gives the volume of ablated</span>
+0546                 <span class="comment">% tissue</span>
+0547                 interVal = obj.cumulativeDecorr(obj.numVolumes).decorr(obj.ROI_zRange(1):obj.ROI_zRange(2),obj.ROI_yRange(1):obj.ROI_yRange(2),obj.ROI_xRange(1):obj.ROI_xRange(2));
+0548                 obj.decorrSumSeriesROI(obj.numVolumes) = mean(interVal(:));
+0549                 obj.averageDecorr(obj.numVolumes) = log10(mean(obj.cumulativeDecorr(obj.numVolumes).decorr(:)));
+0550                 
+0551                 obj.decorrVolume(obj.numVolumes) = .001*(length(tempAblatedPoints))*tempDataSet.dx^3; <span class="comment">% in cm^3</span>
+0552             <span class="keyword">end</span>
+0553             <span class="comment">% append ultrasound data to internal data struct</span>
+0554             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries tempDataSet];
+0555         
+0556         <span class="keyword">end</span>
+0557         
+0558         <a name="_sub17" href="#_subfunctions" class="code">function obj = initDataFolderGUI(obj)</a>
+0559             <span class="keyword">try</span> 
+0560                 <span class="keyword">if</span> ispc
+0561                     basePath = strcat(<span class="string">'C:\Users\'</span>,getenv(<span class="string">'username'</span>),<span class="string">'\Box\SiemensSC2000IQData'</span>);
+0562                 <span class="keyword">elseif</span> ismac
+0563                     basePath = strcat(<span class="string">'/Users/'</span>,getenv(<span class="string">'USER'</span>),<span class="string">'/box'</span>);
+0564                 <span class="keyword">end</span>
+0565             <span class="keyword">catch</span>
+0566                 basePath = matlabroot;
+0567             <span class="keyword">end</span>
+0568             obj.activeFolder =  uigetdir(basePath);
+0569             obj.dataFolder = obj.activeFolder; 
+0570             mkdir(fullfile(obj.dataFolder,<span class="string">'Complete'</span>));
+0571             fullDirectory  = dir(obj.activeFolder);
+0572             obj.activeFolderDir = fullDirectory(3:end);
+0573             obj.numVolumes = 1; 
+0574         <span class="keyword">end</span>
+0575         
+0576         <a name="_sub18" href="#_subfunctions" class="code">function obj = initDataFolder(obj,dirName)</a>
+0577             
+0578             obj.activeFolder =  dirName;
+0579             obj.dataFolder = obj.activeFolder; 
+0580             mkdir(fullfile(obj.dataFolder,<span class="string">'Complete'</span>));
+0581             fullDirectory  = dir(obj.activeFolder);
+0582             obj.activeFolderDir = fullDirectory(3:end);
+0583             obj.numVolumes = 1; 
+0584         <span class="keyword">end</span>
+0585         
+0586         <a name="_sub19" href="#_subfunctions" class="code">function newFilePresent = checkFolder(obj)</a>
+0587             obj.activeFolderDir  = dir(obj.activeFolder);
+0588             <span class="keyword">if</span> ismac
+0589                 obj.activeFolderDir = obj.activeFolderDir(3:end); 
+0590             <span class="keyword">else</span>
+0591                 obj.activeFolderDir = obj.activeFolderDir(3:end); 
+0592             <span class="keyword">end</span>
+0593             <span class="keyword">if</span>(length(obj.activeFolderDir) &gt;= obj.numVolumes)
+0594                 newFilePresent = 1; 
+0595             <span class="keyword">else</span>
+0596                 newFilePresent = 0;
+0597             <span class="keyword">end</span>
+0598         <span class="keyword">end</span>
+0599         
+0600         <a name="_sub20" href="#_subfunctions" class="code">function nextDataSetInFolder(obj)</a>
+0601             <span class="keyword">if</span> ispc
+0602                 fullPath =strcat(obj.activeFolder,<span class="string">'\'</span>,{obj.activeFolderDir(obj.numVolumes).name},<span class="string">'\'</span>,obj.defaultDataFileName);
+0603             <span class="keyword">elseif</span> ismac
+0604                 fullPath =strcat(obj.activeFolder,<span class="string">'/'</span>,{obj.activeFolderDir(obj.numVolumes).name},<span class="string">'/'</span>,obj.defaultDataFileName);
+0605             <span class="keyword">end</span>
+0606             <span class="keyword">while</span>(~exist(fullPath{1},<span class="string">'file'</span>))
+0607                pause(.01); 
+0608                display(<span class="string">'waiting for file'</span>); 
+0609             <span class="keyword">end</span>
+0610             obj.addNextDataSetViaFilename2(fullPath{1});
+0611             obj.numVolumes = obj.numVolumes+1; 
+0612         <span class="keyword">end</span>
+0613         
+0614         <a name="_sub21" href="#_subfunctions" class="code">function boolOut = decorrExceedsThresh(obj) </a>
+0615             <span class="keyword">if</span>((obj.decorrThresh) &lt;= log10(obj.decorrAverageSeriesROI(obj.numDataSets-1)))
+0616                 boolOut =  1; 
+0617             <span class="keyword">else</span>
+0618                 boolOut =  0; 
+0619             <span class="keyword">end</span>
+0620         <span class="keyword">end</span>
+0621 
+0622         <a name="_sub22" href="#_subfunctions" class="code">function sendSerialData(obj)</a>
+0623             fprintf(obj.outSerialObj,<span class="string">'S'</span>);
+0624         <span class="keyword">end</span>
+0625         
+0626         <a name="_sub23" href="#_subfunctions" class="code">function setSerialOutName(obj,myname)</a>
+0627             obj.outSerialString = myname; 
+0628         <span class="keyword">end</span>
+0629         
+0630         <a name="_sub24" href="#_subfunctions" class="code">function setSerialInName(obj,myname)</a>
+0631             obj.inSerialString = myname; 
+0632         <span class="keyword">end</span>
+0633         
+0634         <a name="_sub25" href="#_subfunctions" class="code">function setUpSerialOutConnection(obj)</a>
+0635             obj.outSerialObj = serial(obj.outSerialString,<span class="string">'BaudRate'</span>, 115200);
+0636             fopen(obj.outSerialObj);
+0637         <span class="keyword">end</span>
+0638         
+0639         <a name="_sub26" href="#_subfunctions" class="code">function setUpSerialInConnection(obj)</a>
+0640             obj.inSerialObj = SerialClass(obj.inSerialString, 9600);
+0641             obj.inSerialObj = obj.inSerialObj.initSerialBlocks();
+0642         <span class="keyword">end</span>
+0643         
+0644         <a name="_sub27" href="#_subfunctions" class="code">function removeSerialConnection(obj)</a>
+0645             fclose(obj.outSerialObj); 
+0646         <span class="keyword">end</span>
+0647         
+0648         <a name="_sub28" href="#_subfunctions" class="code">function updateROIDataSet(obj)</a>
+0649             <span class="keyword">for</span> currN = 1:length(obj.ultrasoundDataSeries) 
+0650                 interVal = obj.cumulativeDecorr(currN).decorr(obj.ROI_zRange(1):obj.ROI_zRange(2),obj.ROI_yRange(1):obj.ROI_yRange(2),obj.ROI_xRange(1):obj.ROI_xRange(2));
+0651                 obj.decorrSumSeriesROI(currN) = mean(interVal(:));
+0652             <span class="keyword">end</span>
+0653         <span class="keyword">end</span>
+0654         
+0655         <a name="_sub29" href="#_subfunctions" class="code">function initExperiment(obj)</a>
+0656             interVal = obj.cumulativeDecorr(1).decorr(obj.ROI_zRange(1):obj.ROI_zRange(2),obj.ROI_yRange(1):obj.ROI_yRange(2),obj.ROI_xRange(1):obj.ROI_xRange(2));
+0657             obj.decorrSumSeriesROI(1) = mean(interVal(:));
+0658         <span class="keyword">end</span>
+0659         
+0660         <a name="_sub30" href="#_subfunctions" class="code">function generateTemplateFolder(obj,dirName)</a>
+0661             myDir = dir(dirName);
+0662             obj.templateFolder = myDir;
+0663         <span class="keyword">end</span>
+0664         
+0665         <a name="_sub31" href="#_subfunctions" class="code">function succ = checkTransfer(obj,dirName)</a>
+0666             currDir = dir(dirName);
+0667             succ = true;
+0668             <span class="keyword">for</span> n = 1:numel(obj.templateFolder)
+0669                 <span class="keyword">if</span> currDir(n).name ~= obj.templateFolder(n).name
+0670                     <span class="keyword">if</span> abs(currDir(n).bytes - obj.templateFolder(n).bytes) &gt; .01 * currDir(n).bytes
+0671                         succ = false; 
+0672                     <span class="keyword">end</span>
+0673                 <span class="keyword">end</span>
+0674             <span class="keyword">end</span>
+0675         <span class="keyword">end</span>
+0676         
+0677         <a name="_sub32" href="#_subfunctions" class="code">function volOut = fixvolume(obj,vol)</a>
+0678             <span class="keyword">for</span> j = 1:size(vol,4)
+0679                 temp = permute(squeeze(vol(:,:,:,j)),[3,2,1]); <span class="comment">% permute to same layout as mask data</span>
+0680                 temp = flipdim(temp,2); <span class="comment">% flip dim from right to left -&gt; left to right</span>
+0681                 temp = flipdim(temp,3); <span class="comment">% flip dim from top to bottm -&gt; bottom to top</span>
+0682                 volOut(:,:,:,j) = temp; 
+0683             <span class="keyword">end</span>
+0684         <span class="keyword">end</span>
+0685         
+0686         <a name="_sub33" href="#_subfunctions" class="code">function obj = setRFDataArray(obj,rfDataArr)</a>
+0687             obj.rfDataArr = rfDataArr;
+0688         <span class="keyword">end</span>
+0689         
+0690         <a name="_sub34" href="#_subfunctions" class="code">function outObj = saveObj(obj)</a>
+0691             <span class="comment">% need inst decorr sets, scan converted volumes, imaging</span>
+0692             <span class="comment">% settings, timestamp</span>
+0693             outObj.dx = obj.initDataSet.dx;
+0694             outObj.dy = obj.initDataSet.dy;
+0695             outObj.dz = obj.initDataSet.dz;
+0696             outObj.rmax = obj.initDataSet.rmax;
+0697             outObj.rmin = obj.initDataSet.rmin;
+0698             outObj.thetamax = obj.initDataSet.thetamax;
+0699             outObj.thetamin = obj.initDataSet.thetamin;
+0700             outObj.phimax = obj.initDataSet.phimax;
+0701             outObj.phimin = obj.initDataSet.phimin;
+0702             outObj.xmin = obj.initDataSet.xMin;
+0703             outObj.xmax = obj.initDataSet.xMax;
+0704             outObj.ymin = obj.initDataSet.yMin;
+0705             outObj.ymax = obj.initDataSet.yMax;
+0706             outObj.zmin = obj.initDataSet.zMin;
+0707             outObj.zmax = obj.initDataSet.zMax;
+0708             outObj.timeArr = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0709             outObj.instibs = arrayfun(@(x)obj.fixvolume(x.ibs), obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0710             outObj.instdecorr = arrayfun(@(x)obj.fixvolume(x.decorr), obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0711             outObj.Bmode = arrayfun(@(x)obj.fixvolume(x.rawData_cart), obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0712             outObj.decorr = obj.fixvolume(obj.cumulativeDecorr); 
+0713             outObj.decorrThresh = obj.decorrThresh; 
+0714             outObj.folderNames = arrayfun(@(x)x.folderName, obj.ultrasoundDataSeries, <span class="string">'UniformOutput'</span>, false); 
+0715         <span class="keyword">end</span>
+0716         
+0717         <a name="_sub35" href="#_subfunctions" class="code">function outObj = saveObj_withrf(obj,rfDataArr)</a>
+0718             <span class="comment">% need inst decorr sets, scan converted volumes, imaging</span>
+0719             <span class="comment">% settings, timestamp</span>
+0720             outObj.dx = obj.initDataSet.dx;
+0721             outObj.dy = obj.initDataSet.dy;
+0722             outObj.dz = obj.initDataSet.dz;
+0723             outObj.rmax = obj.initDataSet.rmax;
+0724             outObj.rmin = obj.initDataSet.rmin;
+0725             outObj.thetamax = obj.initDataSet.thetamax;
+0726             outObj.thetamin = obj.initDataSet.thetamin;
+0727             outObj.phimax = obj.initDataSet.phimax;
+0728             outObj.phimin = obj.initDataSet.phimin;
+0729             outObj.xmin = obj.initDataSet.xMin;
+0730             outObj.xmax = obj.initDataSet.xMax;
+0731             outObj.ymin = obj.initDataSet.yMin;
+0732             outObj.ymax = obj.initDataSet.yMax;
+0733             outObj.zmin = obj.initDataSet.zMin;
+0734             outObj.zmax = obj.initDataSet.zMax;
+0735             outObj.timeArr = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0736             outObj.instibs = arrayfun(@(x)obj.fixvolume(x.ibs), obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0737             outObj.instdecorr = arrayfun(@(x)obj.fixvolume(x.decorr), obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0738             outObj.Bmode = arrayfun(@(x)obj.fixvolume(x.rawData_cart), obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0739             outObj.decorr = obj.fixvolume(obj.cumulativeDecorr); 
+0740             outObj.decorrThresh = obj.decorrThresh; 
+0741             outObj.folderNames = arrayfun(@(x)x.folderName, obj.ultrasoundDataSeries, <span class="string">'UniformOutput'</span>, false); 
+0742             outObj.rfDataArr = rfDataArr;
+0743         <span class="keyword">end</span>
+0744         
+0745         <a name="_sub36" href="#_subfunctions" class="code">function outDat = getTimeArr(obj)</a>
+0746             outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,<span class="string">'UniformOutput'</span>,false);
+0747         <span class="keyword">end</span>
+0748     <span class="keyword">end</span>
+0749     methods (Static)
+0750         <a name="_sub37" href="#_subfunctions" class="code">function succ = verifyFilesReady(nextDataSet)</a>
+0751             temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
+0752             tempInd = arrayfun(@(x) x.name(1) == <span class="string">'.'</span>,temp,<span class="string">'UniformOutput'</span>,false);
+0753             tempInd = [tempInd{:}];
+0754             temp(tempInd) = [];
+0755             succ = length(temp) == 21 || length(temp) == 23;
+0756         <span class="keyword">end</span>
+0757     <span class="keyword">end</span>
+0758 <span class="keyword">end</span>
+0759</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConvert3DVolume</title>
+  <meta name="keywords" content="scanConvert3DVolume">
+  <meta name="description" content="scanConvert3DVolume: Scan converts volumetric ultrasound data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; scanConvert3DVolume.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConvert3DVolume
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>scanConvert3DVolume: Scan converts volumetric ultrasound data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function scanConvert3DVolume(obj) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">scanConvert3DVolume: Scan converts volumetric ultrasound data
+   Example call: scanConvert3D(myVolume)
+   Parameters: 
+       thisVolume: Volume taken from 3D curved array transducer in polar
+       format where the first dimension is r, second is azimuth angle,
+       third is elevation angle
+       rmin,rmax: minimum and maximum bounds of the radius in the dataset,
+       assumes all successive radii are equally spaced
+       thetamin,thetamax: minimum and maximum azimuth angle, assumes all
+       angles are evently spaced
+       phimin,phimax: minimum and maximum elevation angle, assumes all
+       angles are evently spaced
+% Define polar dimension arrays</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function scanConvert3DVolume(obj)</a>
+0002 <span class="comment">%scanConvert3DVolume: Scan converts volumetric ultrasound data</span>
+0003 <span class="comment">%   Example call: scanConvert3D(myVolume)</span>
+0004 <span class="comment">%   Parameters:</span>
+0005 <span class="comment">%       thisVolume: Volume taken from 3D curved array transducer in polar</span>
+0006 <span class="comment">%       format where the first dimension is r, second is azimuth angle,</span>
+0007 <span class="comment">%       third is elevation angle</span>
+0008 <span class="comment">%       rmin,rmax: minimum and maximum bounds of the radius in the dataset,</span>
+0009 <span class="comment">%       assumes all successive radii are equally spaced</span>
+0010 <span class="comment">%       thetamin,thetamax: minimum and maximum azimuth angle, assumes all</span>
+0011 <span class="comment">%       angles are evently spaced</span>
+0012 <span class="comment">%       phimin,phimax: minimum and maximum elevation angle, assumes all</span>
+0013 <span class="comment">%       angles are evently spaced</span>
+0014     <span class="comment">%% Define polar dimension arrays</span>
+0015     rk = linspace(obj.rmin,obj.rmax,size(obj.rawData,1));
+0016     thetak = asin((linspace(sin(obj.thetamin),sin(obj.thetamax),size(obj.rawData,2))));
+0017     phik = asin(linspace(sin(obj.phimin),sin(obj.phimax),size(obj.rawData,3)));
+0018     <span class="comment">%% define grids, image data</span>
+0019     [r_mat, steering_angles_mat,depth_angle_mat] = ndgrid(rk,thetak,phik);
+0020     [cart_x,cart_y,cart_z] = sph2cart(steering_angles_mat,depth_angle_mat,r_mat);
+0021     obj.xMin = min(cart_x(:));
+0022     obj.xMax = max(cart_x(:));
+0023     obj.yMin = min(cart_y(:));
+0024     obj.yMax = max(cart_y(:));
+0025     obj.zMin = min(cart_z(:));
+0026     obj.zMax = max(cart_z(:));
+0027     obj.dr = abs(diff(rk));
+0028     obj.dr = obj.dr(1);
+0029     <span class="comment">% compute cartesian plane</span>
+0030     obj.dx = obj.dr*obj.cartScalingFactor;
+0031     obj.dy = obj.dr*obj.cartScalingFactor;
+0032     obj.dz = obj.dr*obj.cartScalingFactor;
+0033     obj.x_range = obj.xMin:obj.dx:obj.xMax;
+0034     obj.y_range = obj.yMin:obj.dy:obj.yMax;
+0035     obj.z_range = obj.zMin:obj.dz:obj.zMax;
+0036     [pos_mat_x,pos_mat_y,pos_mat_z] = ndgrid(obj.x_range,obj.y_range,obj.z_range);
+0037     obj.rawData_cart = zeros(size(pos_mat_x,1),size(pos_mat_x,2),size(pos_mat_x,3),size(obj.rawData,4));
+0038     <span class="comment">%% interpolate 3D data</span>
+0039     <span class="comment">% loop through volumes</span>
+0040     <span class="keyword">for</span> currVolume = 1:size(obj.rawData,4) 
+0041         obj.rawData_cart(:,:,:,currVolume)  = griddata(cart_x,cart_y,cart_z,obj.rawData(:,:,:,currVolume),pos_mat_x,pos_mat_y,pos_mat_z,<span class="string">'linear'</span>);
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

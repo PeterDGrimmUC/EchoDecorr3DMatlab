@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConversionMethodTest</title>
+  <meta name="keywords" content="scanConversionMethodTest">
+  <meta name="description" content="% Define parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">TestScripts</a> &gt; scanConversionMethodTest.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for TestScripts&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConversionMethodTest
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% Define parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Define parameters</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% Define parameters</span>
+0002 <span class="keyword">if</span> ~exist(<span class="string">'Dm'</span>)
+0003     readIQData;
+0004 <span class="keyword">end</span>
+0005 Dm.data = Dm.data(:,:,:,1:2)
+0006 <span class="comment">%user defined</span>
+0007 azimuthAngle = pi/2;<span class="comment">%90;</span>
+0008 rangeAngle = pi/2;
+0009 rmin = 0;
+0010 cartScalingFactor = 3; <span class="comment">% dx/dr</span>
+0011 sigma = .1; <span class="comment">%cm</span>
+0012 frameRate = 20; <span class="comment">% hz</span>
+0013 <span class="comment">%computed from existing parameters/infofile</span>
+0014 rmax = (size(Dm.data,1)/Dm.Info.NumSamplesPerMm)/10;
+0015 thetamin= -azimuthAngle/2;
+0016 thetamax = azimuthAngle/2;
+0017 phimin=-rangeAngle/2;
+0018 phimax=rangeAngle/2; 
+0019 
+0020 interFrameTime = 1/frameRate;
+0021 <span class="comment">%% get pre procedure decorrelation for artifactual decorrelation</span>
+0022 usData = USDataClass(Dm.data,Dm.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,interFrameTime);
+0023 <span class="comment">%%</span>
+0024 tic
+0025 usData.scanConvert3DVolume;
+0026 toc
+0027 tic
+0028 usData.compute3DDecorr;
+0029 toc
+0030 usData.computeDecorrelationAverage(<span class="string">'ensemble'</span>);
+0031 <span class="comment">%%</span>
+0032 disp(<span class="string">'slice method'</span>);
+0033 tic
+0034 usData.scanConvert3DVolume_sliceMethod;
+0035 toc
+0036 tic
+0037 usData.compute3DDecorr_sliceMethod;
+0038 toc
+0039 
+0040 <span class="comment">%%</span>
+0041 <span class="comment">% % roi in the center of the volume, 2cm each way</span>
+0042 <span class="comment">% minX_ROI = preProcedureData.x_range(end/2) -1;</span>
+0043 <span class="comment">% minY_ROI = preProcedureData.y_range(end/2) -1;</span>
+0044 <span class="comment">% minZ_ROI = preProcedureData.z_range(end/2) -1;</span>
+0045 <span class="comment">% maxX_ROI = preProcedureData.x_range(end/2) +1;</span>
+0046 <span class="comment">% maxY_ROI = preProcedureData.y_range(end/2) +1;</span>
+0047 <span class="comment">% maxZ_ROI = preProcedureData.z_range(end/2) +1;</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% ROI = [minX_ROI,maxX_ROI,minY_ROI,maxY_ROI,minZ_ROI,maxZ_ROI]</span>
+0050 <span class="comment">% preProcedureData.setROI(ROI)</span>
+0051 <span class="comment">%%</span>
+0052 
+0053 
+0054 <span class="comment">%% variable phi trilinear</span>
+0055 <span class="comment">% for n = 1:size(preProcedureData.rawData_cart,3)</span>
+0056 <span class="comment">%    figure(1)</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%    imagesc(abs(preProcedureData.rawData_cart(:,:,n,1)))</span>
+0059 <span class="comment">%    title('raw data');</span>
+0060 <span class="comment">%    figure(2)</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">%    imagesc(preProcedureData.ibs(:,:,n,1))</span>
+0063 <span class="comment">%    title('integrated back scatter');</span>
+0064 <span class="comment">%    figure(3)</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%    imagesc(abs(preProcedureData.decorr(:,:,n,1)))</span>
+0067 <span class="comment">%    title('decorrelation');</span>
+0068 <span class="comment">%    pause(.1);</span>
+0069 <span class="comment">%    clf(1)</span>
+0070 <span class="comment">%    clf(2)</span>
+0071 <span class="comment">%    clf(3)</span>
+0072 <span class="comment">% end</span>
+0073 <span class="comment">%% variable phi trilinear vs bilinear raw data</span>
+0074 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,3)
+0075 
+0076     figure(1)
+0077     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],abs(usData.rawData_cart_slicemethod(:,:,n,1)))
+0078     title(<span class="string">'raw data 2d slices'</span>);
+0079     figure(2)
+0080     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],abs(usData.rawData_cart(:,:,n,1)))
+0081     title(<span class="string">'raw data'</span>);
+0082     figure(3)
+0083 <span class="comment">%     diffMatrix = (abs(usData.rawData_cart(:,:,n,1))-abs(usData.rawData_cart_slicemethod(:,:,n,1)))./abs(usData.rawData_cart(:,:,n,1));</span>
+0084 <span class="comment">%     %testcorr = xcorr2(abs(preProcedureData.ibs(:,:,n,1)),abs(preProcedureData.ibs_slicemethod(:,:,n,1)));</span>
+0085 <span class="comment">%     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],diffMatrix)</span>
+0086 <span class="comment">%     title('difference raw data');</span>
+0087 
+0088     pause(.1);
+0089     
+0090 
+0091 <span class="keyword">end</span>
+0092 <span class="comment">%% variable theta trilinear vs bilinear raw data</span>
+0093 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,2)
+0094 
+0095     figure(1)
+0096     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(abs(usData.rawData_cart_slicemethod(:,n,:,1))))
+0097     title(<span class="string">'raw data 2d slices'</span>);
+0098     figure(2)
+0099     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(abs(usData.rawData_cart(:,n,:,1))))
+0100     title(<span class="string">'raw data'</span>);
+0101     figure(3)
+0102     diffMatrix = (abs(usData.rawData_cart(:,n,:,1))-abs(usData.rawData_cart_slicemethod(:,n,:,1)))./abs(usData.rawData_cart(:,n,:,1));
+0103     <span class="comment">%testcorr = xcorr2(squeeze(abs(preProcedureData.ibs(:,n,:,1))),squeeze(abs(preProcedureData.ibs_slicemethod(:,n,:,1))));</span>
+0104     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(diffMatrix))
+0105     title(<span class="string">'difference raw data'</span>);
+0106 
+0107     pause(.5);
+0108     clf(1)
+0109     clf(2)
+0110     clf(3)
+0111 
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">%% variable phi trilinear vs bilinear convolved with gaussian</span>
+0115 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,2)
+0116     figure(1)
+0117     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(abs(usData.ibs_slicemethod(:,n,:,1))))
+0118     title(<span class="string">'raw data 2d slices'</span>);
+0119     figure(2)
+0120     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(abs(usData.ibs(:,n,:,1))))
+0121     title(<span class="string">'raw data'</span>);
+0122     figure(3)
+0123     <span class="comment">%diffMatrix = abs((abs(usData.ibs(:,n,:,1))-abs(usData.ibs_slicemethod(:,n,:,1)))./abs(usData.ibs(:,n,:,1)));</span>
+0124     <span class="comment">%diffMatrix(find(abs(diffMatrix) &gt; 10)) = 0;</span>
+0125     <span class="comment">%testcorr = xcorr2(squeeze(abs(usData.ibs(:,n,:,1))),squeeze(abs(usData.ibs_slicemethod(:,n,:,1))));</span>
+0126     <span class="comment">%imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(diffMatrix))</span>
+0127     title(<span class="string">'difference raw data'</span>);
+0128 
+0129     pause(.5);
+0130     clf(1)
+0131     clf(2)
+0132     clf(3)
+0133 
+0134 <span class="keyword">end</span>
+0135 <span class="comment">%% variable theta trilinear vs bilinear convolved with gaussian</span>
+0136 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,2)
+0137 
+0138     figure(1)
+0139     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(abs(usData.ibs_slicemethod(:,n,:,1))))
+0140     title(<span class="string">'raw data 2d slices'</span>);
+0141     figure(2)
+0142     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(abs(usData.ibs(:,n,:,1))))
+0143     title(<span class="string">'raw data'</span>);
+0144     figure(3)
+0145     diffMatrix = abs((abs(usData.ibs(:,n,:,1))-abs(usData.ibs_slicemethod(:,n,:,1)))./abs(usData.ibs(:,n,:,1)));
+0146     diffMatrix(find(abs(diffMatrix) &gt; 10)) = 0;
+0147     testcorr = xcorr2(squeeze(abs(usData.ibs(:,n,:,1))),squeeze(abs(usData.ibs_slicemethod(:,n,:,1))));
+0148     imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],squeeze(diffMatrix))
+0149     title(<span class="string">'difference raw data'</span>);
+0150 
+0151     pause(.5);
+0152     clf(1)
+0153     clf(2)
+0154     clf(3)
+0155 
+0156 <span class="keyword">end</span>
+0157 
+0158 <span class="comment">%%</span>
+0159 
+0160 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,3)
+0161    figure(1)
+0162    
+0163    imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],abs(usData.rawData_cart_slicemethod(:,:,n,1)))
+0164    title(<span class="string">'raw data'</span>);
+0165    figure(2)
+0166    
+0167    imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],usData.autocorr01_slicemethod(:,:,n,1))
+0168    title(<span class="string">'integrated back scatter'</span>);
+0169    figure(3)
+0170    
+0171    imagesc([usData.yMin,usData.yMax],[usData.xMin,usData.xMax],abs(usData.decorr_slicemethod(:,:,n,1)))
+0172    title(<span class="string">'decorrelation'</span>);
+0173    pause(.1);
+0174    clf(1)
+0175    clf(2)
+0176    clf(3)
+0177 <span class="keyword">end</span>
+0178 <span class="comment">%%</span>
+0179 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,2)
+0180    figure(1)
+0181    
+0182    imagesc(squeeze(abs(usData.rawData_cart(:,n,:,1))))
+0183    title(<span class="string">'raw data'</span>);
+0184    figure(2)
+0185    imagesc(squeeze(abs(usData.rawData_cart_slicemethod(:,n,:,1))))
+0186    title(<span class="string">'raw data slice method'</span>);
+0187    figure(2)
+0188    
+0189    imagesc(usData.ibs_slicemethod(:,:,n,1))
+0190    title(<span class="string">'integrated back scatter'</span>);
+0191    figure(3)
+0192    
+0193    imagesc(abs(usData.decorr_slicemethod(:,:,n,1)))
+0194    title(<span class="string">'decorrelation'</span>);
+0195    pause(.1);
+0196    clf(1)
+0197    clf(2)
+0198    clf(3)
+0199 <span class="keyword">end</span>
+0200 <span class="comment">%%</span>
+0201 <span class="keyword">for</span> n = 1:size(usData.rawData_cart_slicemethod,3)
+0202    figure(1)
+0203    
+0204    imagesc(squeeze(abs(usData.ibs(:,:,n,1))))
+0205    title(<span class="string">'raw data'</span>);
+0206    figure(2)
+0207    imagesc(squeeze(abs(usData.ibs_slicemethod(:,:,n,1))))
+0208    title(<span class="string">'raw data slice method'</span>);
+0209    figure(2)
+0210    
+0211    imagesc(usData.ibs_slicemethod(:,:,n,1))
+0212    title(<span class="string">'integrated back scatter'</span>);
+0213    figure(3)
+0214    
+0215    imagesc(abs(usData.decorr_slicemethod(:,:,n,1)))
+0216    title(<span class="string">'decorrelation'</span>);
+0217    pause(.1);
+0218    clf(1)
+0219    clf(2)
+0220    clf(3)
+0221 <span class="keyword">end</span>
+0222 <span class="comment">%%</span>
+0223 normalIbs = abs(usData.ibs)/ sum(abs(usData.ibs(:)));
+0224 normalIbs_slices = (abs(usData.ibs_slicemethod))/(sum(abs(usData.ibs_slicemethod(:))));
+0225 <span class="comment">%errormatrix = (abs(preProcedureData.ibs)/(sum(abs(preProcedureData.ibs(:)))) - (abs(preProcedureData.ibs_slicemethod))/(sum(abs(preProcedureData.ibs_slicemethod(:))))) ./((sum(abs(preProcedureData.ibs_slicemethod(:)))));</span>
+0226 errormatrix = (normalIbs -normalIbs_slices)./normalIbs;
+0227 errormatrix(find(abs(errormatrix) &gt; 1)) = 1;
+0228 imagesc(abs(errormatrix(:,:,45,1)))</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

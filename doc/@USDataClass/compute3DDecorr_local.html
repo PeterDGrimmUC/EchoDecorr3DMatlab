@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of compute3DDecorr_local</title>
+  <meta name="keywords" content="compute3DDecorr_local">
+  <meta name="description" content="COMPUTE3DDECORR Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; compute3DDecorr_local.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>compute3DDecorr_local
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>COMPUTE3DDECORR Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function compute3DDecorr( obj ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">COMPUTE3DDECORR Summary of this function goes here
+   Detailed explanation goes here</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function compute3DDecorr( obj )</a>
+0002 <span class="comment">%COMPUTE3DDECORR Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 
+0005  <span class="comment">% COMPUTE3DDECORR Summary of this function goes here</span>
+0006 <span class="comment">%   Detailed explanation goes here</span>
+0007 
+0008     <span class="comment">%</span>
+0009     <span class="comment">%%</span>
+0010     <span class="comment">% *Define Guassian Window*</span>
+0011     x_range_length = size(obj.x_range,2);
+0012     y_range_length = size(obj.y_range,2);
+0013     z_range_length = size(obj.z_range,2);
+0014     sigx = obj.windowSigma/obj.dx;
+0015     sigy = obj.windowSigma/obj.dy;
+0016     sigz = obj.windowSigma/obj.dz;
+0017     x_mid = ceil(x_range_length/2 + 1);
+0018     y_mid = ceil(y_range_length/2 + 1);
+0019     z_mid = ceil(z_range_length/2 + 1);
+0020     sigfaz = x_range_length/(2*pi*sigx);
+0021     sigfra = y_range_length/(2*pi*sigy);
+0022     sigfel = z_range_length/(2*pi*sigz); 
+0023 
+0024     xmask = exp(-(((1:x_range_length)-x_mid).^2)/2/sigfaz^2);
+0025     ymask = exp(-(((1:y_range_length)-y_mid).^2)/2/sigfra^2);
+0026     zmask = exp(-(((1:z_range_length)-z_mid).^2)/2/sigfel^2); 
+0027 
+0028     [x_mask_mat,y_mask_mat,z_mask_mat] = ndgrid(xmask,ymask,zmask); 
+0029 
+0030     maskfilt = (fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat)); 
+0031     maskfilt = maskfilt/sum(maskfilt(:));
+0032     
+0033     <span class="comment">% *compute windowed ibs and autocorr01*</span>
+0034     <span class="comment">%compute ibs and autocorr before windowing</span>
+0035     obj.ibs = abs(obj.rawData_cart).^2;
+0036     obj.autocorr01 = obj.rawData_cart(:,:,:,1:(end-1)).*conj(obj.rawData_cart(:,:,:,2:end));
+0037     <span class="comment">% set NaN values to small number</span>
+0038     obj.autocorr01(find(isnan(obj.autocorr01))) = realmin(<span class="string">'double'</span>);
+0039     obj.ibs(find(isnan(obj.ibs))) = realmin(<span class="string">'double'</span>);
+0040     <span class="comment">%compute windowed ibs</span>
+0041     <span class="keyword">for</span> currVolume = 1:size(obj.ibs,4)
+0042       obj.ibs(:,:,:,currVolume) = abs(ifftn(fftn(obj.ibs(:,:,:,currVolume)).*maskfilt));
+0043     <span class="keyword">end</span>
+0044     <span class="comment">%compute autcorrelation and decorrelation</span>
+0045     <span class="keyword">for</span> currVolume = 1:(size(obj.ibs,4)-1)
+0046         obj.autocorr01(:,:,:,currVolume) = abs(ifftn(fftn(obj.autocorr01(:,:,:,currVolume)).*maskfilt));
+0047     <span class="keyword">end</span>
+0048     <span class="keyword">for</span> currVolume = 1:(size(obj.ibs,4)-1)
+0049         R00 = obj.ibs(:,:,:,currVolume);
+0050         R11 = obj.ibs(:,:,:,currVolume+1);
+0051         B2 = R00.*R11;
+0052         R01 = abs(obj.autocorr01(:,:,:,currVolume)).^2;
+0053         tau = 10^3/(obj.interFrameTime);
+0054         obj.decorr(:,:,:,currVolume) = 2*(B2-R01)./(B2 + mean(B2(:)))/tau;
+0055         <span class="comment">% try without B2 local term</span>
+0056     <span class="keyword">end</span>
+0057     <span class="comment">% set values outside of volume to small number</span>
+0058     obj.autocorr01(find(isnan(obj.rawData_cart(:,:,:,1:(end-1))))) = realmin(<span class="string">'double'</span>);
+0059     obj.ibs(find(isnan(obj.rawData_cart))) = realmin(<span class="string">'double'</span>);
+0060     obj.decorr(find(isnan(obj.rawData_cart(:,:,:,1:(end-1))))) = realmin(<span class="string">'double'</span>);
+0061 <span class="keyword">end</span>
+0062</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

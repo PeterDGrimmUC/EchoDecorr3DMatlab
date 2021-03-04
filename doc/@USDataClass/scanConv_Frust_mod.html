@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConv_Frust_mod</title>
+  <meta name="keywords" content="scanConv_Frust_mod">
+  <meta name="description" content="This script reads IQ data in the first section (SIEMENS Scripts), then">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; scanConv_Frust_mod.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConv_Frust_mod
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This script reads IQ data in the first section (SIEMENS Scripts), then</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [qOut, p, sz] = scanConv_Frust_mod( obj ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This script reads IQ data in the first section (SIEMENS Scripts), then
+ does the 3D interpolation on spherical IQ data with function named
+ &quot;frustumInterp&quot;. In the last section the spherical and
+ interpolated data in cartesian system are displayed.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [qOut, p, sz] = scanConv_Frust_mod( obj )</a>
+0002 <span class="comment">% This script reads IQ data in the first section (SIEMENS Scripts), then</span>
+0003 <span class="comment">% does the 3D interpolation on spherical IQ data with function named</span>
+0004 <span class="comment">% &quot;frustumInterp&quot;. In the last section the spherical and</span>
+0005 <span class="comment">% interpolated data in cartesian system are displayed.</span>
+0006 
+0007 <span class="comment">% Writers: Elmira Ghahramani Z., Dr. Douglas Mast</span>
+0008 <span class="comment">% Image-guided Ultrasound Therapeutics Laboratories</span>
+0009 <span class="comment">% University of Cincinnati</span>
+0010 <span class="comment">% Contacts: ghahraea@mail.uc.edu</span>
+0011 <span class="comment">%           masttd@UCMAIL.UC.EDU</span>
+0012 <span class="comment">% Date last updated: 02/19/2019</span>
+0013 
+0014 <span class="comment">%% Read IQ data</span>
+0015 
+0016 <span class="comment">%for volIndex = 1:size(obj.rawData,4)</span>
+0017     Isph = squeeze(obj.rawData(:,:,:,1));
+0018     
+0019     <span class="comment">%% set up the parameters</span>
+0020     <span class="comment">%tic</span>
+0021     <span class="comment">%global p LR Lmu Lnu iR imu inu R0</span>
+0022     sizeR = size(Isph,1);
+0023     sizeAz = size(Isph,2);
+0024     sizeEl = size(Isph,3);
+0025     
+0026     <span class="comment">% define coordinates on pyramidal grid</span>
+0027     obj.dr = 1/obj.InfoFile.NumSamplesPerMm;         <span class="comment">% range (mm)</span>
+0028     Rvec = obj.rmin:obj.dr:obj.rmax;
+0029     
+0030     <span class="comment">% sin theta (azimuth)</span>
+0031     mumax = sin(obj.thetamax); mumin = sin(obj.thetamin);
+0032     muvec = linspace(mumin,mumax,sizeAz);
+0033     dmu = muvec(2)-muvec(1);
+0034     
+0035     <span class="comment">% sin phi (elevation)</span>
+0036     numax = sin(obj.phimax); numin=sin(obj.phimin);
+0037     nuvec = linspace(numin,numax,sizeEl);
+0038     dnu = nuvec(2)-nuvec(1);
+0039     
+0040     [R,mu,nu] = ndgrid(Rvec,muvec,nuvec);
+0041     
+0042     <span class="comment">% Cartesian grid, onto which we're scan-converting (interpolating)</span>
+0043     <span class="comment">%obj.cartScalingFactor =2;</span>
+0044     obj.dz = obj.cartScalingFactor*obj.dr;<span class="comment">%0.5;  % spatial step</span>
+0045     obj.dx = obj.dz;
+0046     obj.dy = obj.dz;
+0047     maxY = obj.rmax*sin(obj.phimax);
+0048     minY = obj.rmax*sin(obj.phimin);
+0049     maxX = obj.rmax*sin(obj.thetamax);
+0050     minX = obj.rmax*sin(obj.thetamin);
+0051     obj.z_range = obj.rmin:obj.dz:obj.rmax;  <span class="comment">% depth</span>
+0052     obj.y_range = minY:obj.dz:maxY; <span class="comment">%-32:obj.dz:32;  % azimuth</span>
+0053     obj.x_range = minX:obj.dz:maxX; <span class="comment">%-31:obj.dz:31;  % elevation;</span>
+0054     [x,y,z] = ndgrid(obj.x_range,obj.y_range,obj.z_range);
+0055     obj.xMax = obj.x_range(end);
+0056     obj.xMin = obj.x_range(1); 
+0057     obj.yMax = obj.y_range(end);
+0058     obj.yMin = obj.y_range(1); 
+0059     obj.zMax = obj.z_range(end);
+0060     obj.zMin = obj.z_range(1); 
+0061     <span class="comment">%defining image cross sections (default: half range, az., el.)</span>
+0062 <span class="comment">%     ixmid = find(abs(obj.x_range)==min(abs(obj.x_range)));</span>
+0063 <span class="comment">%     iymid = find(abs(obj.y_range)==min(abs(obj.y_range)));</span>
+0064 <span class="comment">%     izmid = ceil(size(obj.z_range,2)/2);</span>
+0065     
+0066     <span class="comment">% pyramidal coordinates of Cartesian grid points</span>
+0067     R0 = sqrt(x.^2+y.^2+z.^2);
+0068     mu0 = y./sqrt(z.^2+y.^2);
+0069     nu0 = x./(sqrt(R0.^2-y.^2));
+0070     
+0071     <span class="comment">% find Cartesian points inside pyramid to interpolate</span>
+0072     p = find(R0&gt;=obj.rmin &amp; R0&lt;=obj.rmax-obj.dr &amp; mu0&gt;=mumin &amp; mu0&lt;=mumax-dmu &amp; <span class="keyword">...</span>
+0073         nu0&gt;=numin &amp; nu0&lt;=numax-dnu); <span class="comment">% points for valid interpolation</span>
+0074     
+0075     <span class="comment">%image_initialization_time = toc</span>
+0076     
+0077     <span class="comment">%tic;</span>
+0078     <span class="comment">% for each point to interpolate, find nearest previous neighbors, and</span>
+0079     <span class="comment">%  distances from them along R, mu, nu directions</span>
+0080     imu = zeros(size(R0));
+0081     Lmu = zeros(size(R0));
+0082     imu(p) = floor((mu0(p) - mumin)/dmu) + 1;
+0083     Lmu(p) = mu0(p) - muvec(imu(p))';
+0084     
+0085     inu = zeros(size(R0));
+0086     Lnu = zeros(size(R0));
+0087     inu(p) = floor((nu0(p) - numin)/dnu) + 1;
+0088     Lnu(p) = nu0(p) - nuvec(inu(p))';
+0089     
+0090     iR = zeros(size(R0));
+0091     LR = zeros(size(R0));
+0092     iR(p) = floor((R0(p) - obj.rmin)/obj.dr) + 1;
+0093     LR(p) = R0(p) - Rvec(iR(p))';
+0094     
+0095     <span class="comment">%interpolation_initialization_time = toc</span>
+0096     <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0097     <span class="comment">%tic;</span>
+0098     <span class="comment">%qOut = zeros(1,length(p));</span>
+0099     sz = size(R0); 
+0100     <span class="comment">%void generatePyramidalCoordinates(const mxArray * p,const mxArray * Lmu, const mxArray * Lnu, const mxArray * LR, double dmu, double dnu, double dr, long int pSize){</span>
+0101     <span class="comment">%tic;</span>
+0102     [test] = scanConv_Frust_c(p,Lmu,Lnu,LR,dmu,dnu,obj.dr,length(p));
+0103     <span class="comment">%tic</span>
+0104    [test2] = scanConv_Frust_apply_c(p,Isph,test,iR,inu,imu,length(p),length(obj.x_range),length(obj.y_range),length(obj.z_range),size(Isph));
+0105     <span class="comment">%toc</span>
+0106     qOut = reshape(test2,length(obj.x_range),length(obj.y_range),length(obj.z_range))/(obj.dr*dmu*dnu);
+0107     <span class="comment">%toc</span>
+0108 <span class="comment">%     qOut = zeros(1,8*length(p));</span>
+0109 <span class="comment">%         for ip = 1:length(p)</span>
+0110 <span class="comment">%         q = p(ip);</span>
+0111 <span class="comment">%</span>
+0112 <span class="comment">%         % differences to be used below, trying to save a few flops</span>
+0113 <span class="comment">%         drmLR = obj.dr-LR(q);</span>
+0114 <span class="comment">%         dmumLmu = dmu-Lmu(q);</span>
+0115 <span class="comment">%         dnumLnu = dnu-Lnu(q);</span>
+0116 <span class="comment">%         %</span>
+0117 <span class="comment">%         %n = drmLR * dmumLmu * dnumLnu;</span>
+0118 <span class="comment">%         qOut((ip-1)*8 + 1) = drmLR * dmumLmu * dnumLnu;</span>
+0119 <span class="comment">%         qOut((ip-1)*8 + 2) = LR(q) * dmumLmu * dnumLnu;</span>
+0120 <span class="comment">%         qOut((ip-1)*8 + 3) = drmLR * Lmu(q) * dnumLnu;</span>
+0121 <span class="comment">%         qOut((ip-1)*8 + 4) = drmLR * dmumLmu * Lnu(q);</span>
+0122 <span class="comment">%         qOut((ip-1)*8 + 5) = LR(q) * dmumLmu * Lnu(q);</span>
+0123 <span class="comment">%         qOut((ip-1)*8 + 6) = drmLR * Lmu(q) * Lnu(q);</span>
+0124 <span class="comment">%         qOut((ip-1)*8 + 7) = LR(q) * Lmu(q) * dnumLnu;</span>
+0125 <span class="comment">%         qOut((ip-1)*8 + 8) = LR(q) * Lmu(q) * Lnu(q);</span>
+0126 <span class="comment">%         Icart(q) = Isph(iR(q),imu(q),inu(q)) ...</span>
+0127 <span class="comment">%             * qOut((ip-1)*8 + 1) + ...</span>
+0128 <span class="comment">%             Isph(iR(q)+1,imu(q),inu(q)) ...</span>
+0129 <span class="comment">%             * qOut((ip-1)*8 + 2) + ...</span>
+0130 <span class="comment">%             Isph(iR(q),imu(q)+1,inu(q)) ...</span>
+0131 <span class="comment">%             * qOut((ip-1)*8 + 3) + ...</span>
+0132 <span class="comment">%             Isph(iR(q),imu(q),inu(q)+1) ...</span>
+0133 <span class="comment">%             * qOut((ip-1)*8 + 4) + ...</span>
+0134 <span class="comment">%             Isph(iR(q)+1,imu(q),inu(q)+1) ...</span>
+0135 <span class="comment">%             * qOut((ip-1)*8 + 5) + ...</span>
+0136 <span class="comment">%             Isph(iR(q),imu(q)+1,inu(q)+1) ...</span>
+0137 <span class="comment">%             * qOut((ip-1)*8 + 6) + ...</span>
+0138 <span class="comment">%             Isph(iR(q)+1,imu(q)+1,inu(q)) ...</span>
+0139 <span class="comment">%             * qOut((ip-1)*8 + 7) + ...</span>
+0140 <span class="comment">%             Isph(iR(q)+1,imu(q)+1,inu(q)) ...</span>
+0141 <span class="comment">%             * qOut((ip-1)*8 + 8);</span>
+0142 <span class="comment">%         %qOut(q) = drmLR * dmumLmu * dnumLnu;</span>
+0143 <span class="comment">%         %qOut(q,2) = LR(q) * dmumLmu * dnumLnu;</span>
+0144 <span class="comment">%         %qOut(q,3) = drmLR * Lmu(q) * dnumLnu;</span>
+0145 <span class="comment">%         %qOut(q,4) = drmLR * dmumLmu * Lnu(q);</span>
+0146 <span class="comment">%         %qOut(q,5) = LR(q) * dmumLmu * Lnu(q);</span>
+0147 <span class="comment">%         %qOut(q,6) = drmLR * Lmu(q) * Lnu(q);</span>
+0148 <span class="comment">%         %qOut(q,7) = LR(q) * Lmu(q) * dnumLnu;</span>
+0149 <span class="comment">%         %qOut(q,8) = LR(q) * Lmu(q) * Lnu(q);</span>
+0150 <span class="comment">% % %         Icart(q) = Isph(iR(q),imu(q),inu(q)) ...</span>
+0151 <span class="comment">% % %</span>
+0152 <span class="comment">% % %             Isph(iR(q),imu(q)+1,inu(q)+1) ...</span>
+0153 <span class="comment">% % %             * drmLR * Lmu(q) * Lnu(q) + ...</span>
+0154 <span class="comment">% % %             Isph(iR(q)+1,imu(q)+1,inu(q)) ...</span>
+0155 <span class="comment">% % %             * LR(q) * Lmu(q) * dnumLnu + ...</span>
+0156 <span class="comment">% % %             Isph(iR(q)+1,imu(q)+1,inu(q)) ...</span>
+0157 <span class="comment">% % %             * LR(q) * Lmu(q) * Lnu(q);</span>
+0158 <span class="comment">%      end</span>
+0159     
+0160 <span class="comment">%end</span>
+0161 <span class="keyword">end</span>
+0162</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

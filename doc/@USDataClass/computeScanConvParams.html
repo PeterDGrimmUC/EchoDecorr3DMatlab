@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of computeScanConvParams</title>
+  <meta name="keywords" content="computeScanConvParams">
+  <meta name="description" content="COMPUTESCANCONVPARAMS Summary of this function goes here">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; computeScanConvParams.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>computeScanConvParams
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>COMPUTESCANCONVPARAMS Summary of this function goes here</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function computeScanConvParams( obj ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">COMPUTESCANCONVPARAMS Summary of this function goes here
+   Detailed explanation goes here
+ obj.dnu, obj.dmu, obj.Lmu, obj.Lnu, obj.iR, obj.imu, obj.inu, obj.LR</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function computeScanConvParams( obj )</a>
+0002 <span class="comment">%COMPUTESCANCONVPARAMS Summary of this function goes here</span>
+0003 <span class="comment">%   Detailed explanation goes here</span>
+0004 <span class="comment">% obj.dnu, obj.dmu, obj.Lmu, obj.Lnu, obj.iR, obj.imu, obj.inu, obj.LR</span>
+0005     Isph = obj.rawData;
+0006     sizeR = size(Isph,1);
+0007     sizeAz = size(Isph,2);
+0008     sizeEl = size(Isph,3);
+0009     
+0010     <span class="comment">% define coordinates on pyramidal grid</span>
+0011     
+0012     obj.dr = obj.rmax / (sizeR-1);         <span class="comment">% range (mm)</span>
+0013     Rvec = obj.rmin:obj.dr:obj.rmax;
+0014     
+0015     <span class="comment">% sin theta (azobj.imuth)</span>
+0016     mumax = sin(obj.thetamax); mumin=-mumax;
+0017     muvec = linspace(mumin,mumax,sizeAz);
+0018     obj.dmu = muvec(2)-muvec(1);
+0019     
+0020     <span class="comment">% sin phi (elevation)</span>
+0021     numax = sin(obj.phimax); numin=-numax;
+0022     nuvec = linspace(numin,numax,sizeEl);
+0023     obj.dnu = nuvec(2)-nuvec(1);
+0024     
+0025     <span class="comment">% Cartesian grid, onto which we're scan-converting (interpolating)</span>
+0026     obj.cartScalingFactor =2;
+0027     obj.dz = obj.cartScalingFactor*obj.dr;<span class="comment">%0.5;  % spatial step</span>
+0028     obj.dx = obj.dz;
+0029     obj.dy = obj.dz;
+0030     maxY = obj.rmax*sin(obj.thetamax); maxZ = obj.rmax*sin(obj.phimax);
+0031     obj.z_range = 0:obj.dz:obj.rmax;  <span class="comment">% depth</span>
+0032     obj.y_range = -maxY:obj.dz:maxY; <span class="comment">%-32:obj.dz:32;  % azobj.imuth</span>
+0033     obj.x_range = -maxZ:obj.dz:maxZ; <span class="comment">%-31:obj.dz:31;  % elevation;</span>
+0034     [z,y,x] = ndgrid(obj.z_range,obj.y_range,obj.x_range);
+0035     
+0036     <span class="comment">%defining image cross sections (default: half range, az., el.)</span>
+0037 <span class="comment">%     ixmid = find(abs(obj.x_range)==min(abs(obj.x_range)));</span>
+0038 <span class="comment">%     iymid = find(abs(obj.y_range)==min(abs(obj.y_range)));</span>
+0039 <span class="comment">%     izmid = ceil(size(obj.z_range,2)/2);</span>
+0040     
+0041     <span class="comment">% pyramidal coordinates of Cartesian grid points</span>
+0042     obj.R0 = sqrt(x.^2+y.^2+z.^2);
+0043     obj.mu0 = y./sqrt(z.^2+y.^2);
+0044     obj.nu0 = x./(sqrt(obj.R0.^2-y.^2));
+0045     
+0046     <span class="comment">% find Cartesian points inside pyramid to interpolate</span>
+0047     obj.frustumPoints = find(obj.R0&gt;=obj.rmin &amp; obj.R0&lt;=obj.rmax-obj.dr &amp; obj.mu0&gt;=mumin &amp; obj.mu0&lt;=mumax-obj.dmu &amp; <span class="keyword">...</span>
+0048         obj.nu0&gt;=numin &amp; obj.nu0&lt;=numax-obj.dnu); <span class="comment">% points for valid interpolation</span>
+0049     
+0050     <span class="comment">%image_initialization_time = toc</span>
+0051     
+0052     <span class="comment">%tic;</span>
+0053     <span class="comment">% for each point to interpolate, find nearest previous neighbors, and</span>
+0054     <span class="comment">%  distances from them along R, mu, nu dobj.iRections</span>
+0055     obj.imu = zeros(size(obj.R0));
+0056     obj.Lmu = zeros(size(obj.R0));
+0057     obj.imu(obj.frustumPoints) = floor((obj.mu0(obj.frustumPoints) - mumin)/obj.dmu) + 1;
+0058     obj.Lmu(obj.frustumPoints) = obj.mu0(obj.frustumPoints) - muvec(obj.imu(obj.frustumPoints))';
+0059     
+0060     obj.inu = zeros(size(obj.R0));
+0061     obj.Lnu = zeros(size(obj.R0));
+0062     obj.inu(obj.frustumPoints) = floor((obj.nu0(obj.frustumPoints) - numin)/obj.dnu) + 1;
+0063     obj.Lnu(obj.frustumPoints) = obj.nu0(obj.frustumPoints) - nuvec(obj.inu(obj.frustumPoints))';
+0064     
+0065     obj.iR = zeros(size(obj.R0));
+0066     obj.LR = zeros(size(obj.R0));
+0067     obj.iR(obj.frustumPoints) = floor((obj.R0(obj.frustumPoints) - obj.rmin)/obj.dr) + 1;
+0068     obj.LR(obj.frustumPoints) = obj.R0(obj.frustumPoints) - Rvec(obj.iR(obj.frustumPoints))';
+0069     
+0070     <span class="comment">%interpolation_initialization_time = toc</span>
+0071     
+0072 
+0073 <span class="keyword">end</span>
+0074</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of USDataClass</title>
+  <meta name="keywords" content="USDataClass">
+  <meta name="description" content="% USDataClass: Data class for computation of echo decorrelation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; USDataClass.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>USDataClass
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% USDataClass: Data class for computation of echo decorrelation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% USDataClass: Data class for computation of echo decorrelation</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="USDataClass.html" class="code" title="">USDataClass</a>	% USDataClass: Data class for computation of echo decorrelation</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="USDataClass.html" class="code" title="">USDataClass</a>	% USDataClass: Data class for computation of echo decorrelation</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function obj = USDataClass(thisRawData,startTime,thisInfoFile,thisrmin,thisrmax,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thiswindowSigma,thisinterFrameTime,decorrThresh)</a></li><li><a href="#_sub2" class="code">function scanConv_apply_c( obj, scanMap )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% USDataClass: Data class for computation of echo decorrelation</span>
+0002 classdef <a href="USDataClass.html" class="code" title="">USDataClass</a> &lt; handle 
+0003     <span class="comment">% USDataClass: Data class for computation of echo decorrelation</span>
+0004     <span class="comment">%   each set of data has is an object of type USDataClass</span>
+0005     <span class="comment">%   contains the data parameters, raw spherical data, cartesian scan converted data, ibs,</span>
+0006     <span class="comment">%   and decorrelation</span>
+0007     <span class="comment">% Author: Peter Grimm 12/21/2019</span>
+0008     properties
+0009         <span class="comment">% data properties</span>
+0010         rawData;           <span class="comment">% raw spherical volume data for one data set export</span>
+0011         rawData_cart;      <span class="comment">% scan converted cartesian data from spherical data</span>
+0012         ROICart;  
+0013         ROIMask; 
+0014         ROIMap;
+0015         ibs;               <span class="comment">% Integrated backscatter for every (cartesian) volume</span>
+0016         decorr;            <span class="comment">% decorr (cartesian) between volume at t and t+tau</span>
+0017         autocorr01;        <span class="comment">% autocorr between volume at t and t+tau</span>
+0018         decorrAvg;         <span class="comment">% average of decorrelation in entire data set, either ensemble or running</span>
+0019         time;
+0020         cumulativeDecorr;
+0021         cumulativeDecorrSum;
+0022         decorrThresh;
+0023         decorrMap; 
+0024         decorrSumPixels; 
+0025         decorrVolEstimate; 
+0026         <span class="comment">% bounds</span>
+0027         ROIBounds;         <span class="comment">% bounds of region of interest [xMin xMax yMin yMax zMin zMax]</span>
+0028         ROIBounds_spherical; <span class="comment">%TODO, minimum bounds in spherical coordinates</span>
+0029         folderName;
+0030         <span class="comment">% bounded data properties</span>
+0031         rawData_cart_ROI;
+0032         ibs_ROI;
+0033         decorr_ROI;
+0034         autocorr01_ROI;
+0035         decorrAvg_ROI;
+0036         <span class="comment">% parameters</span>
+0037         <span class="comment">%The following would ideally be part of InfoFile in the future</span>
+0038         InfoFile;          <span class="comment">% Info file provided by siemens SC2000 scanner</span>
+0039         rmax,rmin,thetamax,thetamin,phimax,phimin; <span class="comment">% bounds in cm of the spherical data</span>
+0040         xMin,xMax,yMin,yMax,zMin,zMax; <span class="comment">% bounds in cm of cartesian data</span>
+0041         x_range,y_range,z_range; <span class="comment">% range in cartesian plane</span>
+0042         windowSigma;       <span class="comment">% sigma of gaussian smoothing kernel</span>
+0043         dPhi;              <span class="comment">% angular difference between successive phi</span>
+0044         dTheta;            <span class="comment">% angular difference between successive theta</span>
+0045         dr;                <span class="comment">% distance in cm in the radius direction(cm/pixel)</span>
+0046         dx;                <span class="comment">% distance in cm in the x direction (cm/pixel)</span>
+0047         dy;                <span class="comment">% distance in cm in the x direction (cm/pixel)</span>
+0048         dz;                <span class="comment">% distance in cm in the x direction (cm/pixel)</span>
+0049         interFrameTime;    <span class="comment">% time between volume recordings (cm/pixel)</span>
+0050         cartScalingFactor; <span class="comment">% Factor to scale cartesian distances by (dx/dr)</span>
+0051                            <span class="comment">% e.g Given dr, to find dx take</span>
+0052                            <span class="comment">% dr*cartScalingFactor = dx</span>
+0053                            <span class="comment">% reduces resolution by a factor of</span>
+0054                            <span class="comment">% cartScalingFactor for faster scan conversion</span>
+0055         maskfilt;          <span class="comment">% Gaussian Mask, for FFT based filtering</span>
+0056         rawData_cart_slicemethod;
+0057         ibs_slicemethod;               <span class="comment">% Integrated backscatter for every (cartesian) volume</span>
+0058         decorr_slicemethod;            <span class="comment">% decorr (cartesian) between volume at t and t+tau</span>
+0059         autocorr01_slicemethod;        <span class="comment">% autocorr between volume at t and t+tau</span>
+0060         decorrAvg_slicemethod;         <span class="comment">% average of decorrelation in entire data set, either ensemble or running</span>
+0061         <span class="comment">% scan conversion properties</span>
+0062         dmu;
+0063         dnu;
+0064         frustumPoints;
+0065         imu;
+0066         Lmu;
+0067         inu;
+0068         Lnu;
+0069         iR;
+0070         LR;
+0071         R0;
+0072         mu0;
+0073         nu0;
+0074     <span class="keyword">end</span>
+0075     
+0076     methods
+0077         <span class="comment">%% Constructor method</span>
+0078         <a name="_sub0" href="#_subfunctions" class="code">function obj = USDataClass(thisRawData,startTime,thisInfoFile,thisrmin,thisrmax,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thiswindowSigma,thisinterFrameTime,decorrThresh)</a>
+0079            obj.rawData = thisRawData;   
+0080            obj.InfoFile = thisInfoFile;
+0081            obj.rmax = thisrmax;
+0082            obj.rmin = thisrmin;
+0083            obj.thetamax = thisthetamax;
+0084            obj.thetamin = thisthetamin;
+0085            obj.phimax = thisphimax;
+0086            obj.phimin = thisphimin;
+0087            obj.cartScalingFactor = thiscartScalingFactor;
+0088            obj.windowSigma = thiswindowSigma;
+0089            obj.interFrameTime = thisinterFrameTime;
+0090            obj.time = startTime;
+0091         <span class="keyword">end</span>
+0092         <a name="_sub1" href="#_subfunctions" class="code">function scanConv_apply_c( obj, scanMap )</a>
+0093             <span class="comment">%% set up the parameters</span>
+0094             <span class="comment">%global p LR Lmu Lnu iR imu inu R0</span>
+0095             Isph = squeeze(obj.rawData(:,:,:,1));
+0096             sizeR = size(Isph,1);
+0097             sizeAz = size(Isph,2);
+0098             sizeEl = size(Isph,3);
+0099 
+0100             <span class="comment">% define coordinates on pyramidal grid</span>
+0101             obj.dr = 1/obj.InfoFile.NumSamplesPerMm;         <span class="comment">% range (mm)</span>
+0102             Rvec = obj.rmin:obj.dr:obj.rmax;
+0103 
+0104             <span class="comment">% sin theta (azimuth)</span>
+0105             mumax = sin(obj.thetamax); mumin = sin(obj.thetamin);
+0106             muvec = linspace(mumin,mumax,sizeAz);
+0107             dmu = muvec(2)-muvec(1);
+0108 
+0109             <span class="comment">% sin phi (elevation)</span>
+0110             numax = sin(obj.phimax); numin=sin(obj.phimin);
+0111             nuvec = linspace(numin,numax,sizeEl);
+0112             dnu = nuvec(2)-nuvec(1);
+0113 
+0114             [R,mu,nu] = ndgrid(Rvec,muvec,nuvec);
+0115 
+0116             <span class="comment">% Cartesian grid, onto which we're scan-converting (interpolating)</span>
+0117             <span class="comment">%obj.cartScalingFactor =2;</span>
+0118             obj.dz = obj.cartScalingFactor*obj.dr;<span class="comment">%0.5;  % spatial step</span>
+0119             obj.dx = obj.dz;
+0120             obj.dy = obj.dz;
+0121             maxY = obj.rmax*sin(obj.phimax);
+0122             minY = obj.rmax*sin(obj.phimin);
+0123             maxX = obj.rmax*sin(obj.thetamax);
+0124             minX = obj.rmax*sin(obj.thetamin);
+0125             obj.z_range = obj.rmin:obj.dz:obj.rmax;  <span class="comment">% depth</span>
+0126             obj.y_range = minY:obj.dz:maxY; <span class="comment">%-32:obj.dz:32;  % azimuth</span>
+0127             obj.x_range = minX:obj.dz:maxX; <span class="comment">%-31:obj.dz:31;  % elevation;</span>
+0128             [x,y,z] = ndgrid(obj.x_range,obj.y_range,obj.z_range);
+0129             obj.xMax = obj.x_range(end);
+0130             obj.xMin = obj.x_range(1); 
+0131             obj.yMax = obj.y_range(end);
+0132             obj.yMin = obj.y_range(1); 
+0133             obj.zMax = obj.z_range(end);
+0134             obj.zMin = obj.z_range(1); 
+0135             <span class="comment">% pyramidal coordinates of Cartesian grid points</span>
+0136             R0 = sqrt(x.^2+y.^2+z.^2);
+0137             mu0 = y./sqrt(z.^2+y.^2);
+0138             nu0 = x./(sqrt(R0.^2-y.^2));
+0139 
+0140             <span class="comment">% find Cartesian points inside pyramid to interpolate</span>
+0141             p = find(R0&gt;=obj.rmin &amp; R0&lt;=obj.rmax-obj.dr &amp; mu0&gt;=mumin &amp; mu0&lt;=mumax-dmu &amp; <span class="keyword">...</span>
+0142                 nu0&gt;=numin &amp; nu0&lt;=numax-dnu); <span class="comment">% points for valid interpolation</span>
+0143 
+0144             <span class="comment">%image_initialization_time = toc</span>
+0145 
+0146             <span class="comment">%tic;</span>
+0147             <span class="comment">% for each point to interpolate, find nearest previous neighbors, and</span>
+0148             <span class="comment">%  distances from them along R, mu, nu directions</span>
+0149             imu = zeros(size(R0));
+0150             Lmu = zeros(size(R0));
+0151             imu(p) = floor((mu0(p) - mumin)/dmu) + 1;
+0152             Lmu(p) = mu0(p) - muvec(imu(p))';
+0153 
+0154             inu = zeros(size(R0));
+0155             Lnu = zeros(size(R0));
+0156             inu(p) = floor((nu0(p) - numin)/dnu) + 1;
+0157             Lnu(p) = nu0(p) - nuvec(inu(p))';
+0158 
+0159             iR = zeros(size(R0));
+0160             LR = zeros(size(R0));
+0161             iR(p) = floor((R0(p) - obj.rmin)/obj.dr) + 1;
+0162             <span class="keyword">for</span> volIndex = 1:size(obj.rawData,4)
+0163                 Isph = squeeze(obj.rawData(:,:,:,volIndex));
+0164                 [cOut] = scanConv_Frust_apply_c(p,Isph,scanMap,iR,inu,imu,length(p),length(obj.x_range),length(obj.y_range),length(obj.z_range),size(Isph));
+0165                 obj.rawData_cart(:,:,:,volIndex) = reshape(cOut,length(obj.x_range),length(obj.y_range),length(obj.z_range))/(obj.dr*dmu*dnu);
+0166             <span class="keyword">end</span>
+0167             <span class="keyword">for</span> j = 1:size(obj.rawData_cart,4)
+0168                 temp = permute(squeeze(obj.rawData_cart(:,:,:,j)),[3,2,1]); <span class="comment">% permute to same layout as mask data</span>
+0169                 temp = flipdim(temp,2); <span class="comment">% flip dim from right to left -&gt; left to right</span>
+0170                 temp = flipdim(temp,3); <span class="comment">% flip dim from top to bottm -&gt; bottom to top</span>
+0171                 volOut(:,:,:,j) = temp; 
+0172             <span class="keyword">end</span>
+0173             obj.rawData_cart = volOut; 
+0174         <span class="keyword">end</span>
+0175 
+0176 
+0177     <span class="keyword">end</span>
+0178     
+0179     
+0180 <span class="keyword">end</span>
+0181</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

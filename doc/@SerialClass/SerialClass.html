@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SerialClass</title>
+  <meta name="keywords" content="SerialClass">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@SerialClass</a> &gt; SerialClass.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @SerialClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>SerialClass
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="SerialClass.html" class="code" title="">SerialClass</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="SerialClass.html" class="code" title="">SerialClass</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function obj = SerialClass(targetSerialPort,baudRate)</a></li><li><a href="#_sub2" class="code">function obj = resetSerial(obj,targetSerialPort, baudRate)</a></li><li><a href="#_sub3" class="code">function obj = cleanUp(obj)</a></li><li><a href="#_sub4" class="code">function obj = initSerialBlocks(obj)</a></li><li><a href="#_sub5" class="code">function [obj,outDat] = getSerialBlock(obj)</a></li><li><a href="#_sub6" class="code">function outDat = parseSerialBlock_dummy(datIn,startTimeData,byteRate)</a></li><li><a href="#_sub7" class="code">function outDat = parseSerialBlock(obj,datIn,startTimeData,byteRate)</a></li><li><a href="#_sub8" class="code">function outs=parseOutput(obj,inputLine,tStamp)</a></li><li><a href="#_sub9" class="code">function outs = createDummyDat(obj,tStamp)</a></li><li><a href="#_sub10" class="code">function outs = parseOutputDisconnected(obj,inputLine,tStamp)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="SerialClass.html" class="code" title="">SerialClass</a>
+0002     <span class="comment">%SERIALCLASS Summary of this class goes here</span>
+0003     <span class="comment">%   Detailed explanation goes here</span>
+0004     
+0005     properties
+0006         serialObj; 
+0007         RFGenData; 
+0008         byteRate;
+0009         startTimeData;
+0010     <span class="keyword">end</span>
+0011     
+0012     methods
+0013         <a name="_sub0" href="#_subfunctions" class="code">function obj = SerialClass(targetSerialPort,baudRate)</a>
+0014             <span class="comment">%SERIALCLASS Construct an instance of this class</span>
+0015             <span class="comment">%   wrapper for rf generator serial interface</span>
+0016             obj.serialObj = serialport(targetSerialPort,baudRate);
+0017             obj.byteRate = obj.serialObj.BaudRate/2/8; 
+0018             obj.RFGenData = [];
+0019         <span class="keyword">end</span>
+0020         
+0021         <a name="_sub1" href="#_subfunctions" class="code">function obj = resetSerial(obj,targetSerialPort, baudRate)</a>
+0022             delete(obj.serialObj);
+0023             obj.serialObj = serialport(targetSerialPort,baudRate);
+0024             obj.byteRate = obj.serialObj.BaudRate/2/8; 
+0025         <span class="keyword">end</span>
+0026         <a name="_sub2" href="#_subfunctions" class="code">function obj = cleanUp(obj)</a>
+0027             obj.serialObj.delete();
+0028         <span class="keyword">end</span>
+0029         <a name="_sub3" href="#_subfunctions" class="code">function obj = initSerialBlocks(obj)</a>
+0030             obj.serialObj.flush(); 
+0031             obj.startTimeData = datetime();
+0032         <span class="keyword">end</span>
+0033         
+0034         <a name="_sub4" href="#_subfunctions" class="code">function [obj,outDat] = getSerialBlock(obj)</a>
+0035             <span class="comment">% Read data from serial port</span>
+0036             dat = obj.serialObj.read(obj.serialObj.NumBytesAvailable,<span class="string">'char'</span>);
+0037             <span class="comment">% set time</span>
+0038             oldTime = obj.startTimeData;
+0039             obj.startTimeData = datetime();
+0040             <span class="comment">% parse data</span>
+0041             outDat = obj.parseSerialBlock(dat, oldTime,obj.byteRate);
+0042             <span class="comment">% add to set</span>
+0043             
+0044         <span class="keyword">end</span>
+0045     
+0046     
+0047         <a name="_sub5" href="#_subfunctions" class="code">function outDat = parseSerialBlock_dummy(datIn,startTimeData,byteRate)</a>
+0048             packetStartInds = find(datIn==127);
+0049             packetLengths = diff(packetStartInds);
+0050             currTime = startTimeData + seconds(packetStartInds(1)/byteRate);
+0051             <span class="keyword">for</span> currPacket = 1:length(packetStartInds)-1
+0052                 <span class="keyword">if</span> packetLengths(currPacket) == 60
+0053                     outDat(currPacket) = serialClass.parseOutput(datIn(packetStartInds+1:packetStartInds+60),currTime);
+0054                 <span class="keyword">else</span>
+0055                     outDat(currPacket) = serialClass.createDummyDat(currTime);
+0056                 <span class="keyword">end</span>
+0057                 currTime = currTime + seconds(packetLengths(currPacket)/byteRate);
+0058             <span class="keyword">end</span>
+0059             outDat(end) = <a href="#_sub9" class="code" title="subfunction outs = createDummyDat(obj,tStamp)">createDummyDat</a>(currTime);
+0060         <span class="keyword">end</span>
+0061         
+0062         <a name="_sub6" href="#_subfunctions" class="code">function outDat = parseSerialBlock(obj,datIn,startTimeData,byteRate)</a>
+0063             packetStartInds = find(datIn==127);
+0064             packetLengths = diff(packetStartInds);
+0065             currTime = startTimeData + seconds(packetStartInds(1)/byteRate);
+0066             n = 1; 
+0067             <span class="keyword">for</span> currPacket = 1:length(packetStartInds)-1
+0068                 <span class="keyword">if</span> packetLengths(currPacket) == 60 
+0069                     outDat(n) = obj.parseOutput(datIn(packetStartInds(currPacket)+1:packetStartInds(currPacket)+60),currTime)
+0070                     n = n+1;
+0071                 <span class="keyword">elseif</span> packetLengths(currPacket) == 59
+0072                     outDat(n) = obj.parseOutputDisconnected(datIn(packetStartInds(currPacket)+1:packetStartInds(currPacket)+59),currTime)
+0073                     n = n+1;
+0074                 <span class="keyword">end</span>
+0075                 currTime = currTime + seconds(packetLengths(currPacket)/byteRate);
+0076             <span class="keyword">end</span>
+0077             <span class="keyword">if</span> ~exist(<span class="string">'outDat'</span>,<span class="string">'var'</span>)
+0078                 outDat = false;
+0079             <span class="keyword">end</span>
+0080         <span class="keyword">end</span>
+0081         
+0082         <a name="_sub7" href="#_subfunctions" class="code">function outs=parseOutput(obj,inputLine,tStamp)</a>
+0083             inputLine = convertStringsToChars(inputLine);
+0084             outs.t1 = numto14(inputLine(21),inputLine(22))/10;
+0085             outs.t2 = numto14(inputLine(23),inputLine(24))/10;
+0086             outs.t3 = numto14(inputLine(25),inputLine(26))/10;
+0087             outs.t4 = numto14(inputLine(27),inputLine(28))/10;
+0088             <span class="keyword">if</span> outs.t1 &gt; 150
+0089                 <span class="comment">% invalid data reading, happens when probe is first plugged</span>
+0090                 <span class="comment">% in for some reason</span>
+0091                 outs.t1 = -1; 
+0092                 outs.t2 = -1;
+0093                 outs.t3 = -1;
+0094                 outs.t4 = -1;
+0095             <span class="keyword">end</span>
+0096             
+0097             outs.targetPower = numto14(inputLine(11),inputLine(12))/10;
+0098             outs.currentPower = numto14(inputLine(15),inputLine(16))/10;
+0099             outs.targetTemp = numto14(inputLine(39),inputLine(40))/10;
+0100             outs.impedance = numto14(inputLine(19),inputLine(20))/10;
+0101             <span class="keyword">if</span> outs.impedance == 1000
+0102                 <span class="comment">% open circuit</span>
+0103                 outs.impedance = -1;
+0104             <span class="keyword">end</span>
+0105             outs.time = tStamp; 
+0106         <span class="keyword">end</span>
+0107         
+0108         <a name="_sub8" href="#_subfunctions" class="code">function outs = createDummyDat(obj,tStamp)</a>
+0109             outs.t1 = NaN;
+0110             outs.t2 = NaN;
+0111             outs.t3 = NaN;
+0112             outs.t4 = NaN;
+0113             outs.targetPower = NaN;
+0114             outs.currentPower = NaN;
+0115             outs.targetTemp = NaN;
+0116             outs.impedance = NaN;
+0117             outs.time = tStamp; 
+0118         <span class="keyword">end</span>
+0119         <a name="_sub9" href="#_subfunctions" class="code">function outs = parseOutputDisconnected(obj,inputLine,tStamp)</a>
+0120             inputLine = convertStringsToChars(inputLine);
+0121             outs.t1 = -1;
+0122             outs.t2 = -1;
+0123             outs.t3 = -1;
+0124             outs.t4 = -1;
+0125             outs.targetPower = numto14(inputLine(11),inputLine(12))/10;
+0126             outs.currentPower = -1;
+0127             outs.targetTemp = numto14(inputLine(39),inputLine(40))/10;
+0128             outs.impedance = -1;
+0129             outs.time = tStamp; 
+0130         <span class="keyword">end</span>
+0131     <span class="keyword">end</span>
+0132 <span class="keyword">end</span>
+0133</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

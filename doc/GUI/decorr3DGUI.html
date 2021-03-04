@@ -1,0 +1,1941 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of decorr3DGUI</title>
+  <meta name="keywords" content="decorr3DGUI">
+  <meta name="description" content="DECORR3DGUI MATLAB code for decorr3DGUI.fig">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">GUI</a> &gt; decorr3DGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for GUI&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>decorr3DGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>DECORR3DGUI MATLAB code for decorr3DGUI.fig</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = decorr3DGUI(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DECORR3DGUI MATLAB code for decorr3DGUI.fig
+      DECORR3DGUI, by itself, creates a new DECORR3DGUI or raises the existing
+      singleton*.
+
+      H = DECORR3DGUI returns the handle to a new DECORR3DGUI or the handle to
+      the existing singleton*.
+
+      DECORR3DGUI('CALLBACK',hObject,eventData,handles,...) calls the local
+      function named CALLBACK in DECORR3DGUI.M with the given input arguments.
+
+      DECORR3DGUI('Property','Value',...) creates a new DECORR3DGUI or raises the
+      existing singleton*.  Starting from the left, property value pairs are
+      applied to the GUI before decorr3DGUI_OpeningFcn gets called.  An
+      unrecognized property name or invalid value makes property application
+      stop.  All inputs are passed to decorr3DGUI_OpeningFcn via varargin.
+
+      *See GUI Options on GUIDE's Tools menu.  Choose 'GUI allows only one
+      instance to run (singleton)'.
+
+ See also: GUIDE, GUIDATA, GUIHANDLES</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function decorr3DGUI_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = decorr3DGUI_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function dataSelect_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function ySlider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function ySlider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function updateSettingsButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function rangeAngle_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub8" class="code">function rangeAngle_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub9" class="code">function xSlider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub10" class="code">function xSlider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub11" class="code">function zSlider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub12" class="code">function zSlider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub13" class="code">function beginButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub14" class="code">function azimuthAngle_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub15" class="code">function azimuthAngle_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub16" class="code">function windowSigma_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub17" class="code">function windowSigma_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub18" class="code">function rMax_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub19" class="code">function rMax_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub20" class="code">function cartScalingFactor_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub21" class="code">function cartScalingFactor_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub22" class="code">function framerate_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub23" class="code">function framerate_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub24" class="code">function frameSlider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub25" class="code">function frameSlider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub26" class="code">function computeNextVol_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub27" class="code">function computeNextVol_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub28" class="code">function cycleDisplayVol_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub29" class="code">function cycleDisplayVol_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub30" class="code">function runVols_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub31" class="code">function runVols_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub32" class="code">function backVol_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub33" class="code">function forwardVol_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub34" class="code">function selectVolPopup_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub35" class="code">function selectVolPopup_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub36" class="code">function realTimeButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub37" class="code">function prerecordButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub38" class="code">function threshVal_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub39" class="code">function threshVal_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub40" class="code">function pauseExperiment_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub41" class="code">function EndButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub42" class="code">function continueButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub43" class="code">function resetButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub44" class="code">function totalThresh_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub45" class="code">function totalThresh_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub46" class="code">function updateSliceImage(hObject,eventdata,handles,direction)</a></li><li><a href="#_sub47" class="code">function resetAll(hObject,eventdata,handles,direction)</a></li><li><a href="#_sub48" class="code">function updateFrameDropDown(hObject,eventdata,handles)</a></li><li><a href="#_sub49" class="code">function updateDecorrPlot(hObject,eventdata,handles)</a></li><li><a href="#_sub50" class="code">function recomputeDecorr_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub51" class="code">function sendSerialData(hObject,eventdata, handles)</a></li><li><a href="#_sub52" class="code">function inSerialPopUp_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub53" class="code">function inSerialPopUp_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub54" class="code">function outSerialPopUp_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub55" class="code">function outSerialPopUp_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub56" class="code">function setSerialPopUps(hObject, eventdata,handles)</a></li><li><a href="#_sub57" class="code">function dynRangeDecorrSlider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub58" class="code">function dynRangeDecorrSlider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub59" class="code">function dynRangeBScanSlider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub60" class="code">function dynRangeBScanSlider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub61" class="code">function disableButtonsForStart(hObject, eventdata, handles)</a></li><li><a href="#_sub62" class="code">function enableButtonsForStart(hObject,eventdata,handles)</a></li><li><a href="#_sub63" class="code">function enableButtonsControlPanel(hObject, eventdata, handles)</a></li><li><a href="#_sub64" class="code">function pauseButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub65" class="code">function dynRangeMin_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub66" class="code">function dynRangeMin_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub67" class="code">function sendButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub68" class="code">function serialSetupButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub69" class="code">function roiSelectButton_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub70" class="code">function xroiSlider_1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub71" class="code">function xroiSlider_1_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub72" class="code">function xroiSlider_2_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub73" class="code">function xroiSlider_2_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub74" class="code">function yroiSlider_1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub75" class="code">function yroiSlider_1_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub76" class="code">function yroiSlider_2_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub77" class="code">function yroiSlider_2_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub78" class="code">function zroiSlider_1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub79" class="code">function zroiSlider_1_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub80" class="code">function slider19_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub81" class="code">function slider19_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub82" class="code">function updateSliceImage_ROICorrected(hObject,eventdata,handles,direction)</a></li><li><a href="#_sub83" class="code">function xroiSlider_3_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub84" class="code">function xroiSlider_3_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub85" class="code">function xroiSlider_4_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub86" class="code">function xroiSlider_4_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub87" class="code">function setROIRange_sliders(hObject, eventdata, handles)</a></li><li><a href="#_sub88" class="code">function rectInput = drawRect(p1,p2,p3,p4)</a></li><li><a href="#_sub89" class="code">function ROIE_z0_slider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub90" class="code">function ROIE_z0_slider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub91" class="code">function ROIE_x0_slider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub92" class="code">function ROIE_x0_slider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub93" class="code">function ROIE_y0_slider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub94" class="code">function ROIE_y0_slider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub95" class="code">function ROIE_z0_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub96" class="code">function ROIE_z0_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub97" class="code">function ROIE_y0_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub98" class="code">function ROIE_y0_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub99" class="code">function ROIE_x0_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub100" class="code">function ROIE_x0_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub101" class="code">function ROIE_r0_slider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub102" class="code">function ROIE_r0_slider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub103" class="code">function ROIE_r2_slider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub104" class="code">function ROIE_r2_slider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub105" class="code">function ROIE_r1_slider_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub106" class="code">function ROIE_r1_slider_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub107" class="code">function ROIE_r0_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub108" class="code">function ROIE_r0_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub109" class="code">function ROIE_r1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub110" class="code">function ROIE_r1_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub111" class="code">function ROIE_r2_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub112" class="code">function ROIE_r2_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub113" class="code">function drawEllipse(x0,y0,r0,r1)</a></li><li><a href="#_sub114" class="code">function  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)</a></li><li><a href="#_sub115" class="code">function updateSliceImage_ROICorrected_all(hObject,eventdata,handles)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = decorr3DGUI(varargin)</a>
+0002 <span class="comment">% DECORR3DGUI MATLAB code for decorr3DGUI.fig</span>
+0003 <span class="comment">%      DECORR3DGUI, by itself, creates a new DECORR3DGUI or raises the existing</span>
+0004 <span class="comment">%      singleton*.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%      H = DECORR3DGUI returns the handle to a new DECORR3DGUI or the handle to</span>
+0007 <span class="comment">%      the existing singleton*.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%      DECORR3DGUI('CALLBACK',hObject,eventData,handles,...) calls the local</span>
+0010 <span class="comment">%      function named CALLBACK in DECORR3DGUI.M with the given input arguments.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      DECORR3DGUI('Property','Value',...) creates a new DECORR3DGUI or raises the</span>
+0013 <span class="comment">%      existing singleton*.  Starting from the left, property value pairs are</span>
+0014 <span class="comment">%      applied to the GUI before decorr3DGUI_OpeningFcn gets called.  An</span>
+0015 <span class="comment">%      unrecognized property name or invalid value makes property application</span>
+0016 <span class="comment">%      stop.  All inputs are passed to decorr3DGUI_OpeningFcn via varargin.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%      *See GUI Options on GUIDE's Tools menu.  Choose 'GUI allows only one</span>
+0019 <span class="comment">%      instance to run (singleton)'.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also: GUIDE, GUIDATA, GUIHANDLES</span>
+0022 
+0023 <span class="comment">% Edit the above text to modify the response to help decorr3DGUI</span>
+0024 
+0025 <span class="comment">% Last Modified by GUIDE v2.5 18-May-2019 17:41:21</span>
+0026 
+0027 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0028 gui_Singleton = 1;
+0029 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0030                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0031                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction decorr3DGUI_OpeningFcn(hObject, eventdata, handles, varargin)">decorr3DGUI_OpeningFcn</a>, <span class="keyword">...</span>
+0032                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = decorr3DGUI_OutputFcn(hObject, eventdata, handles)">decorr3DGUI_OutputFcn</a>, <span class="keyword">...</span>
+0033                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0034                    <span class="string">'gui_Callback'</span>,   []);
+0035 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0036     gui_State.gui_Callback = str2func(varargin{1});
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> nargout
+0040     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0041 <span class="keyword">else</span>
+0042     gui_mainfcn(gui_State, varargin{:});
+0043 <span class="keyword">end</span>
+0044 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0045 
+0046 
+0047 <span class="comment">% --- Executes just before decorr3DGUI is made visible.</span>
+0048 <a name="_sub1" href="#_subfunctions" class="code">function decorr3DGUI_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0049 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0050 <span class="comment">% hObject    handle to figure</span>
+0051 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0052 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0053 <span class="comment">% varargin   command line arguments to decorr3DGUI (see VARARGIN)</span>
+0054 
+0055 <span class="comment">% Choose default command line output for decorr3DGUI</span>
+0056 handles.output = hObject;
+0057 
+0058 <span class="comment">% Update handles structure</span>
+0059 <span class="keyword">try</span>
+0060     <a href="#_sub56" class="code" title="subfunction setSerialPopUps(hObject, eventdata,handles)">setSerialPopUps</a>(hObject, eventdata,handles);
+0061 <span class="keyword">catch</span>
+0062     display(<span class="string">'matlab version does not support serial lookup,TODO'</span>)
+0063 <span class="keyword">end</span>
+0064 handles.currComputationTime = 0; 
+0065 handles.maxbscan = 1; 
+0066 handles.maxdecorr = 1;
+0067 guidata(hObject, handles);
+0068 axes(handles.axes12);
+0069 <a href="#_sub61" class="code" title="subfunction disableButtonsForStart(hObject, eventdata, handles)">disableButtonsForStart</a>(hObject, eventdata, handles);
+0070 
+0071 imshow(<span class="string">'index.png'</span>);
+0072 <span class="comment">% UIWAIT makes decorr3DGUI wait for user response (see UIRESUME)</span>
+0073 <span class="comment">% uiwait(handles.figure1);</span>
+0074 
+0075 
+0076 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0077 <a name="_sub2" href="#_subfunctions" class="code">function varargout = decorr3DGUI_OutputFcn(hObject, eventdata, handles) </a>
+0078 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0079 <span class="comment">% hObject    handle to figure</span>
+0080 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0081 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0082 
+0083 <span class="comment">% Get default command line output from handles structure</span>
+0084 varargout{1} = handles.output;
+0085 
+0086 
+0087 <span class="comment">% --- Executes on button press in dataSelect.</span>
+0088 <a name="_sub3" href="#_subfunctions" class="code">function dataSelect_Callback(hObject, eventdata, handles)</a>
+0089 <span class="comment">% hObject    handle to dataSelect (see GCBO)</span>
+0090 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0091 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0092 handles.activeExperiment = ExperimentClass();
+0093 handles.activeExperiment.initDataFolderGUI(); 
+0094 handles.myString = sprintf(handles.activeExperiment.activeFolder);
+0095 set(handles.dataSelectionString, <span class="string">'String'</span>, handles.myString);
+0096 <a href="#_sub62" class="code" title="subfunction enableButtonsForStart(hObject,eventdata,handles)">enableButtonsForStart</a>(hObject,eventdata,handles)
+0097 <a href="#_sub6" class="code" title="subfunction updateSettingsButton_Callback(hObject, eventdata, handles)">updateSettingsButton_Callback</a>(hObject, eventdata, handles)
+0098 guidata( hObject, handles);
+0099 <span class="comment">% --- Executes on slider movement.</span>
+0100 <a name="_sub4" href="#_subfunctions" class="code">function ySlider_Callback(hObject, eventdata, handles)</a>
+0101 <span class="comment">% hObject    handle to ySlider (see GCBO)</span>
+0102 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0103 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0104 
+0105 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0106 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles)
+0107 
+0108 
+0109 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0110 <a name="_sub5" href="#_subfunctions" class="code">function ySlider_CreateFcn(hObject, eventdata, handles)</a>
+0111 <span class="comment">% hObject    handle to ySlider (see GCBO)</span>
+0112 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0113 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0114 
+0115 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+0116 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0117     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+0118 <span class="keyword">end</span>
+0119 
+0120 
+0121 <span class="comment">% --- Executes on button press in updateSettingsButton.</span>
+0122 <a name="_sub6" href="#_subfunctions" class="code">function updateSettingsButton_Callback(hObject, eventdata, handles)</a>
+0123 <span class="comment">% hObject    handle to updateSettingsButton (see GCBO)</span>
+0124 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0125 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0126 handles.sigmaLocal = (str2double(get(handles.windowSigma, <span class="string">'String'</span>)));
+0127 handles.azimuthAngleLocal = 2*pi*(str2double(get(handles.azimuthAngle, <span class="string">'String'</span>)))/360;
+0128 handles.elevationAngleLocal = 2*pi*(str2double(get(handles.rangeAngle, <span class="string">'String'</span>)))/360;
+0129 handles.cartScalingFactorLocal = (str2double(get(handles.cartScalingFactor, <span class="string">'String'</span>)));
+0130 handles.frameRate = (str2double(get(handles.framerate, <span class="string">'String'</span>)));
+0131 handles.decorrthreshLocal = 10^(str2double(get(handles.threshVal, <span class="string">'String'</span>)));
+0132 handles.thetaminLocal = -handles.azimuthAngleLocal/2;
+0133 handles.thetamaxLocal = handles.azimuthAngleLocal/2;
+0134 handles.phiminLocal = -handles.elevationAngleLocal/2;
+0135 handles.phimaxLocal = handles.elevationAngleLocal/2;
+0136 handles.interFrameTimeLocal = 1/handles.frameRate;
+0137 handles.totalThreshLocal = (str2double(get(handles.totalThresh, <span class="string">'String'</span>)));
+0138 handles.activeExperiment.ExperimentClassSetParams(handles.thetaminLocal,handles.thetamaxLocal,handles.phiminLocal,handles.phimaxLocal,handles.cartScalingFactorLocal,handles.sigmaLocal,handles.interFrameTimeLocal,handles.decorrthreshLocal,handles.totalThreshLocal);
+0139 guidata( hObject, handles);
+0140 <a name="_sub7" href="#_subfunctions" class="code">function rangeAngle_Callback(hObject, eventdata, handles)</a>
+0141 <span class="comment">% hObject    handle to rangeAngle (see GCBO)</span>
+0142 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0143 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0144 
+0145 <span class="comment">% Hints: get(hObject,'String') returns contents of rangeAngle as text</span>
+0146 <span class="comment">%        str2double(get(hObject,'String')) returns contents of rangeAngle as a double</span>
+0147 
+0148 
+0149 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0150 <a name="_sub8" href="#_subfunctions" class="code">function rangeAngle_CreateFcn(hObject, eventdata, handles)</a>
+0151 <span class="comment">% hObject    handle to rangeAngle (see GCBO)</span>
+0152 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0153 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0154 
+0155 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0156 <span class="comment">%       See ISPC and COMPUTER.</span>
+0157 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0158     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0159 <span class="keyword">end</span>
+0160 
+0161 
+0162 <span class="comment">% --- Executes on slider movement.</span>
+0163 <a name="_sub9" href="#_subfunctions" class="code">function xSlider_Callback(hObject, eventdata, handles)</a>
+0164 <span class="comment">% hObject    handle to xSlider (see GCBO)</span>
+0165 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0166 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0167 
+0168 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+0169 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+0170 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0171 
+0172 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0173 <a name="_sub10" href="#_subfunctions" class="code">function xSlider_CreateFcn(hObject, eventdata, handles)</a>
+0174 <span class="comment">% hObject    handle to xSlider (see GCBO)</span>
+0175 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0176 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0177 
+0178 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+0179 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0180     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+0181 <span class="keyword">end</span>
+0182 
+0183 
+0184 <span class="comment">% --- Executes on slider movement.</span>
+0185 <a name="_sub11" href="#_subfunctions" class="code">function zSlider_Callback(hObject, eventdata, handles)</a>
+0186 <span class="comment">% hObject    handle to zSlider (see GCBO)</span>
+0187 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0188 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0189 
+0190 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+0191 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+0192 
+0193 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0194 
+0195 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0196 <a name="_sub12" href="#_subfunctions" class="code">function zSlider_CreateFcn(hObject, eventdata, handles)</a>
+0197 <span class="comment">% hObject    handle to zSlider (see GCBO)</span>
+0198 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0199 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0200 
+0201 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+0202 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0203     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+0204 <span class="keyword">end</span>
+0205 
+0206 
+0207 <span class="comment">% --- Executes on button press in beginButton.</span>
+0208 <a name="_sub13" href="#_subfunctions" class="code">function beginButton_Callback(hObject, eventdata, handles)</a>
+0209 <span class="comment">% hObject    handle to beginButton (see GCBO)</span>
+0210 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0211 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0212 set(handles.beginButton, <span class="string">'String'</span>, <span class="string">'Processing...'</span>);
+0213 drawnow;
+0214 handles.activeN = 1; 
+0215 <span class="keyword">if</span>(handles.activeExperiment.checkFolder())
+0216     handles.activeExperiment.nextDataSetInFolder();
+0217     
+0218     set(handles.azimuthAngle, <span class="string">'String'</span>,num2str(handles.activeExperiment.thetaRange));
+0219     set(handles.rangeAngle, <span class="string">'String'</span>,num2str(handles.activeExperiment.phiRange));
+0220     set(handles.framerate, <span class="string">'String'</span>,num2str(handles.activeExperiment.framerate));
+0221     <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0222     <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0223     <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0224     set(handles.beginButton, <span class="string">'String'</span>, <span class="string">'Ready'</span>);
+0225     <a href="#_sub48" class="code" title="subfunction updateFrameDropDown(hObject,eventdata,handles)">updateFrameDropDown</a>(hObject,eventdata,handles)
+0226     set(handles.beginButton,<span class="string">'Enable'</span>,<span class="string">'off'</span>)
+0227     <a href="#_sub63" class="code" title="subfunction enableButtonsControlPanel(hObject, eventdata, handles)">enableButtonsControlPanel</a>(hObject, eventdata, handles);
+0228     <a href="#_sub87" class="code" title="subfunction setROIRange_sliders(hObject, eventdata, handles)">setROIRange_sliders</a>(hObject, eventdata, handles);
+0229     handles.activeExperiment.initExperiment();
+0230 <span class="keyword">else</span>
+0231     set(handles.beginButton, <span class="string">'String'</span>, <span class="string">'The folder is empty'</span>);
+0232 <span class="keyword">end</span>
+0233 guidata( hObject, handles);
+0234 <a name="_sub14" href="#_subfunctions" class="code">function azimuthAngle_Callback(hObject, eventdata, handles)</a>
+0235 <span class="comment">% hObject    handle to azimuthAngle (see GCBO)</span>
+0236 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0237 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0238 
+0239 <span class="comment">% Hints: get(hObject,'String') returns contents of azimuthAngle as text</span>
+0240 <span class="comment">%        str2double(get(hObject,'String')) returns contents of azimuthAngle as a double</span>
+0241 
+0242 
+0243 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0244 <a name="_sub15" href="#_subfunctions" class="code">function azimuthAngle_CreateFcn(hObject, eventdata, handles)</a>
+0245 <span class="comment">% hObject    handle to azimuthAngle (see GCBO)</span>
+0246 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0247 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0248 
+0249 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0250 <span class="comment">%       See ISPC and COMPUTER.</span>
+0251 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0252     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0253 <span class="keyword">end</span>
+0254 
+0255 
+0256 
+0257 <a name="_sub16" href="#_subfunctions" class="code">function windowSigma_Callback(hObject, eventdata, handles)</a>
+0258 <span class="comment">% hObject    handle to windowSigma (see GCBO)</span>
+0259 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0260 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0261 
+0262 <span class="comment">% Hints: get(hObject,'String') returns contents of windowSigma as text</span>
+0263 <span class="comment">%        str2double(get(hObject,'String')) returns contents of windowSigma as a double</span>
+0264 
+0265 
+0266 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0267 <a name="_sub17" href="#_subfunctions" class="code">function windowSigma_CreateFcn(hObject, eventdata, handles)</a>
+0268 <span class="comment">% hObject    handle to windowSigma (see GCBO)</span>
+0269 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0270 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0271 
+0272 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0273 <span class="comment">%       See ISPC and COMPUTER.</span>
+0274 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0275     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0276 <span class="keyword">end</span>
+0277 
+0278 
+0279 <a name="_sub18" href="#_subfunctions" class="code">function rMax_Callback(hObject, eventdata, handles)</a>
+0280 <span class="comment">% hObject    handle to rMax (see GCBO)</span>
+0281 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0282 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0283 
+0284 <span class="comment">% Hints: get(hObject,'String') returns contents of rMax as text</span>
+0285 <span class="comment">%        str2double(get(hObject,'String')) returns contents of rMax as a double</span>
+0286 
+0287 
+0288 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0289 <a name="_sub19" href="#_subfunctions" class="code">function rMax_CreateFcn(hObject, eventdata, handles)</a>
+0290 <span class="comment">% hObject    handle to rMax (see GCBO)</span>
+0291 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0292 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0293 
+0294 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0295 <span class="comment">%       See ISPC and COMPUTER.</span>
+0296 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0297     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0298 <span class="keyword">end</span>
+0299 
+0300 
+0301 
+0302 <a name="_sub20" href="#_subfunctions" class="code">function cartScalingFactor_Callback(hObject, eventdata, handles)</a>
+0303 <span class="comment">% hObject    handle to cartScalingFactor (see GCBO)</span>
+0304 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0305 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0306 
+0307 <span class="comment">% Hints: get(hObject,'String') returns contents of cartScalingFactor as text</span>
+0308 <span class="comment">%        str2double(get(hObject,'String')) returns contents of cartScalingFactor as a double</span>
+0309 
+0310 
+0311 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0312 <a name="_sub21" href="#_subfunctions" class="code">function cartScalingFactor_CreateFcn(hObject, eventdata, handles)</a>
+0313 <span class="comment">% hObject    handle to cartScalingFactor (see GCBO)</span>
+0314 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0315 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0316 
+0317 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0318 <span class="comment">%       See ISPC and COMPUTER.</span>
+0319 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0320     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0321 <span class="keyword">end</span>
+0322 
+0323 
+0324 
+0325 <a name="_sub22" href="#_subfunctions" class="code">function framerate_Callback(hObject, eventdata, handles)</a>
+0326 <span class="comment">% hObject    handle to framerate (see GCBO)</span>
+0327 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0328 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0329 
+0330 <span class="comment">% Hints: get(hObject,'String') returns contents of framerate as text</span>
+0331 <span class="comment">%        str2double(get(hObject,'String')) returns contents of framerate as a double</span>
+0332 
+0333 
+0334 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0335 <a name="_sub23" href="#_subfunctions" class="code">function framerate_CreateFcn(hObject, eventdata, handles)</a>
+0336 <span class="comment">% hObject    handle to framerate (see GCBO)</span>
+0337 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0338 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0339 
+0340 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0341 <span class="comment">%       See ISPC and COMPUTER.</span>
+0342 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0343     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0344 <span class="keyword">end</span>
+0345 
+0346 
+0347 <span class="comment">% --- Executes on slider movement.</span>
+0348 <a name="_sub24" href="#_subfunctions" class="code">function frameSlider_Callback(hObject, eventdata, handles)</a>
+0349 <span class="comment">% hObject    handle to frameSlider (see GCBO)</span>
+0350 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0351 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0352 
+0353 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+0354 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+0355 
+0356 
+0357 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0358 <a name="_sub25" href="#_subfunctions" class="code">function frameSlider_CreateFcn(hObject, eventdata, handles)</a>
+0359 <span class="comment">% hObject    handle to frameSlider (see GCBO)</span>
+0360 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0361 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0362 
+0363 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+0364 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0365     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+0366 <span class="keyword">end</span>
+0367 
+0368 
+0369 
+0370 <a name="_sub26" href="#_subfunctions" class="code">function computeNextVol_Callback(hObject, eventdata, handles)</a>
+0371 <span class="comment">% hObject    handle to computeNextVol (see GCBO)</span>
+0372 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0373 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0374 
+0375 <span class="comment">% Hints: get(hObject,'String') returns contents of computeNextVol as text</span>
+0376 <span class="comment">%        str2double(get(hObject,'String')) returns contents of computeNextVol as a double</span>
+0377     <span class="comment">%tic</span>
+0378 set(handles.computeNextVol, <span class="string">'String'</span>, <span class="string">'Processing...'</span>);
+0379 drawnow;
+0380 <span class="keyword">if</span>(handles.activeExperiment.checkFolder())
+0381     handles.activeExperiment.nextDataSetInFolder(); 
+0382     handles.activeN = handles.activeExperiment.numVolumes-1;
+0383     set(handles.computeNextVol, <span class="string">'String'</span>, <span class="string">'Compute Next Volume'</span>);
+0384 <span class="keyword">else</span>
+0385     set(handles.computeNextVol, <span class="string">'String'</span>, <span class="string">'No more volumes remain'</span>);
+0386     drawnow;
+0387 <span class="keyword">end</span>
+0388 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0389 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0390 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0391 <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0392 <a href="#_sub48" class="code" title="subfunction updateFrameDropDown(hObject,eventdata,handles)">updateFrameDropDown</a>(hObject,eventdata,handles);
+0393 drawnow;
+0394 guidata( hObject, handles);
+0395 
+0396 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0397 <a name="_sub27" href="#_subfunctions" class="code">function computeNextVol_CreateFcn(hObject, eventdata, handles)</a>
+0398 <span class="comment">% hObject    handle to computeNextVol (see GCBO)</span>
+0399 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0400 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0401 
+0402 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0403 <span class="comment">%       See ISPC and COMPUTER.</span>
+0404 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0405     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0406 <span class="keyword">end</span>
+0407 
+0408 
+0409 
+0410 <a name="_sub28" href="#_subfunctions" class="code">function cycleDisplayVol_Callback(hObject, eventdata, handles)</a>
+0411 <span class="comment">% hObject    handle to cycleDisplayVol (see GCBO)</span>
+0412 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0413 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0414 
+0415 <span class="comment">% Hints: get(hObject,'String') returns contents of cycleDisplayVol as text</span>
+0416 <span class="comment">%        str2double(get(hObject,'String')) returns contents of cycleDisplayVol as a double</span>
+0417 
+0418 
+0419 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0420 <a name="_sub29" href="#_subfunctions" class="code">function cycleDisplayVol_CreateFcn(hObject, eventdata, handles)</a>
+0421 <span class="comment">% hObject    handle to cycleDisplayVol (see GCBO)</span>
+0422 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0423 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0424 
+0425 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0426 <span class="comment">%       See ISPC and COMPUTER.</span>
+0427 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0428     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0429 <span class="keyword">end</span>
+0430 
+0431 
+0432 
+0433 <a name="_sub30" href="#_subfunctions" class="code">function runVols_Callback(hObject, eventdata, handles)</a>
+0434 <span class="comment">% hObject    handle to runVols (see GCBO)</span>
+0435 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0436 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0437 
+0438 <span class="comment">% Hints: get(hObject,'String') returns contents of runVols as text</span>
+0439 <span class="comment">%        str2double(get(hObject,'String')) returns contents of runVols as a double</span>
+0440 set(handles.computeNextVol, <span class="string">'String'</span>, <span class="string">'Processing...'</span>);
+0441 drawnow;
+0442 <span class="keyword">while</span>(handles.activeExperiment.checkFolder())
+0443     handles.activeExperiment.nextDataSetInFolder(); 
+0444     handles.activeN = handles.activeExperiment.numVolumes-1;
+0445     set(handles.computeNextVol, <span class="string">'String'</span>, <span class="string">'Compute Next Volume'</span>);
+0446     <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0447     <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0448     <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0449     <a href="#_sub48" class="code" title="subfunction updateFrameDropDown(hObject,eventdata,handles)">updateFrameDropDown</a>(hObject,eventdata,handles);
+0450     <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0451     drawnow;
+0452 <span class="keyword">end</span>
+0453 set(handles.computeNextVol, <span class="string">'String'</span>, <span class="string">'No more volumes remain'</span>);
+0454 drawnow;
+0455 
+0456 guidata( hObject, handles);
+0457 
+0458 
+0459 
+0460 
+0461 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0462 <a name="_sub31" href="#_subfunctions" class="code">function runVols_CreateFcn(hObject, eventdata, handles)</a>
+0463 <span class="comment">% hObject    handle to runVols (see GCBO)</span>
+0464 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0465 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0466 
+0467 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0468 <span class="comment">%       See ISPC and COMPUTER.</span>
+0469 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0470     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0471 <span class="keyword">end</span>
+0472 
+0473 
+0474 <span class="comment">% --- Executes on button press in backVol.</span>
+0475 <a name="_sub32" href="#_subfunctions" class="code">function backVol_Callback(hObject, eventdata, handles)</a>
+0476 <span class="comment">% hObject    handle to backVol (see GCBO)</span>
+0477 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0478 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0479 handles.activeN = handles.activeN - 1; 
+0480 <span class="keyword">if</span>(handles.activeN &lt;= 1)
+0481     handles.activeN =  1; 
+0482 <span class="keyword">end</span>
+0483 set(handles.selectVolPopup, <span class="string">'Value'</span>,handles.activeN);
+0484 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0485 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0486 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0487 <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0488 guidata( hObject, handles);
+0489 <span class="comment">% --- Executes on button press in forwardVol.</span>
+0490 <a name="_sub33" href="#_subfunctions" class="code">function forwardVol_Callback(hObject, eventdata, handles)</a>
+0491 <span class="comment">% hObject    handle to forwardVol (see GCBO)</span>
+0492 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0493 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0494 handles.activeN = handles.activeN + 1; 
+0495 <span class="keyword">if</span>(handles.activeN &gt; handles.activeExperiment.numVolumes-1)
+0496     handles.activeN =  handles.activeExperiment.numVolumes-1; 
+0497 <span class="keyword">end</span>
+0498 set(handles.selectVolPopup, <span class="string">'Value'</span>,handles.activeN);
+0499 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0500 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0501 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0502 <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0503 guidata( hObject, handles);
+0504 
+0505 <span class="comment">% --- Executes on selection change in selectVolPopup.</span>
+0506 <a name="_sub34" href="#_subfunctions" class="code">function selectVolPopup_Callback(hObject, eventdata, handles)</a>
+0507 <span class="comment">% hObject    handle to selectVolPopup (see GCBO)</span>
+0508 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0509 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0510 
+0511 <span class="comment">% Hints: contents = cellstr(get(hObject,'String')) returns selectVolPopup contents as cell array</span>
+0512 <span class="comment">%        contents{get(hObject,'Value')} returns selected item from selectVolPopup</span>
+0513 <span class="comment">%handles.sigma = (str2double(get(handles.selectVolPopup, 'Value')));</span>
+0514 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0515 handles.activeN = get(handles.selectVolPopup, <span class="string">'Value'</span>);
+0516 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0517 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0518 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0519 <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0520 guidata( hObject, handles);
+0521 <a name="_sub35" href="#_subfunctions" class="code">function selectVolPopup_CreateFcn(hObject, eventdata, handles)</a>
+0522 <span class="comment">% hObject    handle to selectVolPopup (see GCBO)</span>
+0523 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0524 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0525 
+0526 <span class="comment">% Hint: popupmenu controls usually have a white background on Windows.</span>
+0527 <span class="comment">%       See ISPC and COMPUTER.</span>
+0528 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0529     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0530 <span class="keyword">end</span>
+0531 
+0532 
+0533 <span class="comment">% --- Executes on button press in realTimeButton.</span>
+0534 <a name="_sub36" href="#_subfunctions" class="code">function realTimeButton_Callback(hObject, eventdata, handles)</a>
+0535 <span class="comment">% hObject    handle to realTimeButton (see GCBO)</span>
+0536 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0537 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0538 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of realTimeButton</span>
+0539 
+0540 
+0541 <span class="comment">% --- Executes on button press in prerecordButton.</span>
+0542 <a name="_sub37" href="#_subfunctions" class="code">function prerecordButton_Callback(hObject, eventdata, handles)</a>
+0543 <span class="comment">% hObject    handle to prerecordButton (see GCBO)</span>
+0544 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0545 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0546 
+0547 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of prerecordButton</span>
+0548 
+0549 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0550 <a name="_sub38" href="#_subfunctions" class="code">function threshVal_CreateFcn(hObject, eventdata, handles)</a>
+0551 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0552     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0553 <span class="keyword">end</span>
+0554 
+0555 <a name="_sub39" href="#_subfunctions" class="code">function threshVal_Callback(hObject, eventdata, handles)</a>
+0556 
+0557 <span class="comment">% --- Executes on button press in pauseExperiment.</span>
+0558 <a name="_sub40" href="#_subfunctions" class="code">function pauseExperiment_Callback(hObject, eventdata, handles)</a>
+0559 <span class="comment">% hObject    handle to pauseExperiment (see GCBO)</span>
+0560 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0561 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0562 
+0563 
+0564 <span class="comment">% --- Executes on button press in EndButton.</span>
+0565 <a name="_sub41" href="#_subfunctions" class="code">function EndButton_Callback(hObject, eventdata, handles)</a>
+0566 <span class="comment">% hObject    handle to EndButton (see GCBO)</span>
+0567 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0568 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0569 
+0570 
+0571 <span class="comment">% --- Executes on button press in continueButton.</span>
+0572 <a name="_sub42" href="#_subfunctions" class="code">function continueButton_Callback(hObject, eventdata, handles)</a>
+0573 <span class="comment">% hObject    handle to continueButton (see GCBO)</span>
+0574 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0575 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0576 set(handles.continueButton,<span class="string">'value'</span>,0);
+0577 set(handles.continueButton,<span class="string">'enable'</span>,<span class="string">'off'</span>);
+0578 set(handles.pauseButton,<span class="string">'enable'</span>,<span class="string">'on'</span>);
+0579 handles.activeExperiment.totalThresh =  str2double(get(handles.totalThresh,<span class="string">'String'</span>));
+0580 <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0581 set(handles.currentStatusString,<span class="string">'String'</span>,<span class="string">'Waiting for volumes'</span>);
+0582 drawnow; 
+0583 <span class="keyword">if</span> (handles.activeExperiment.decorrExceedsThresh())
+0584     set(handles.currentStatusString,<span class="string">'String'</span>,<span class="string">'Threshold Reached'</span>);
+0585     set(handles.continueButton,<span class="string">'enable'</span>,<span class="string">'on'</span>);
+0586     set(handles.pauseButton,<span class="string">'enable'</span>,<span class="string">'off'</span>);
+0587 <span class="keyword">else</span>
+0588     <span class="keyword">try</span>
+0589         handles.activeExperiment.sendSerialData();
+0590     <span class="keyword">catch</span>
+0591         display(<span class="string">'could not send serial data'</span>)
+0592     <span class="keyword">end</span>
+0593     <span class="keyword">while</span>(~get(handles.pauseButton,<span class="string">'value'</span>) &amp;&amp; ~handles.activeExperiment.decorrExceedsThresh())
+0594         <span class="keyword">if</span>(handles.activeExperiment.checkFolder())
+0595             set(handles.currentStatusString,<span class="string">'String'</span>,<span class="string">'Processing Volume'</span>);
+0596             drawnow; 
+0597             tic;
+0598             handles.activeExperiment.nextDataSetInFolder();
+0599             handles.currComputationTime = toc; 
+0600             handles.activeN = handles.activeExperiment.numVolumes-1;
+0601             <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0602             <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0603             <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0604             <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0605             <a href="#_sub48" class="code" title="subfunction updateFrameDropDown(hObject,eventdata,handles)">updateFrameDropDown</a>(hObject,eventdata,handles);
+0606             computationTimeString = strcat(num2str(handles.currComputationTime),{<span class="string">' '</span>},<span class="string">'s'</span>);
+0607             set(handles.compTimeString,<span class="string">'String'</span>,computationTimeString)
+0608             drawnow
+0609             <span class="comment">%pause(.01);</span>
+0610         <span class="keyword">else</span>
+0611             set(handles.currentStatusString,<span class="string">'String'</span>,<span class="string">'Waiting for volumes'</span>);
+0612             drawnow;
+0613         <span class="keyword">end</span>
+0614 
+0615         pause(.01); 
+0616     <span class="keyword">end</span>
+0617 <span class="keyword">end</span>
+0618 <span class="keyword">if</span>(get(handles.pauseButton,<span class="string">'value'</span>))
+0619     set(handles.currentStatusString,<span class="string">'String'</span>,<span class="string">'Paused'</span>);
+0620     <span class="keyword">try</span>
+0621         handles.activeExperiment.sendSerialData();
+0622     <span class="keyword">catch</span>
+0623         display(<span class="string">'could not send serial data'</span>);
+0624     <span class="keyword">end</span>
+0625 <span class="keyword">end</span>
+0626 set(handles.pauseButton,<span class="string">'value'</span>,0)
+0627 <span class="keyword">if</span> (handles.activeExperiment.decorrExceedsThresh())
+0628     set(handles.currentStatusString,<span class="string">'String'</span>,<span class="string">'Threshold Reached'</span>);
+0629     set(handles.continueButton,<span class="string">'enable'</span>,<span class="string">'on'</span>);
+0630     set(handles.pauseButton,<span class="string">'enable'</span>,<span class="string">'off'</span>);
+0631     <span class="keyword">try</span>
+0632         handles.activeExperiment.sendSerialData();
+0633     <span class="keyword">catch</span>
+0634         display(<span class="string">'could not send serial data'</span>);
+0635     <span class="keyword">end</span>
+0636 <span class="keyword">end</span>
+0637 
+0638 drawnow; 
+0639 guidata( hObject, handles);
+0640 
+0641 <span class="comment">% --- Executes on button press in resetButton.</span>
+0642 <a name="_sub43" href="#_subfunctions" class="code">function resetButton_Callback(hObject, eventdata, handles)</a>
+0643 <span class="comment">% hObject    handle to resetButton (see GCBO)</span>
+0644 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0645 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0646 <a href="#_sub61" class="code" title="subfunction disableButtonsForStart(hObject, eventdata, handles)">disableButtonsForStart</a>(hObject, eventdata, handles)
+0647 cla(handles.xCartVol);
+0648 cla(handles.yCartVol);
+0649 cla(handles.zCartVol);
+0650 cla(handles.xDecorrVol);
+0651 cla(handles.yDecorrVol);
+0652 cla(handles.zDecorrVol);
+0653 cla(handles.decorrPlot);
+0654 set(handles.selectVolPopup,<span class="string">'String'</span>,{<span class="string">' '</span>});
+0655 set(handles.beginButton, <span class="string">'String'</span>, <span class="string">'Initialize'</span>);
+0656 removeSerialConnection(); 
+0657 guidata(hObject,handles); 
+0658 
+0659 
+0660 <a name="_sub44" href="#_subfunctions" class="code">function totalThresh_Callback(hObject, eventdata, handles)</a>
+0661 <span class="comment">% hObject    handle to totalThresh (see GCBO)</span>
+0662 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0663 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0664 
+0665 <span class="comment">% Hints: get(hObject,'String') returns contents of totalThresh as text</span>
+0666 <span class="comment">%        str2double(get(hObject,'String')) returns contents of totalThresh as a double</span>
+0667 
+0668 
+0669 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0670 <a name="_sub45" href="#_subfunctions" class="code">function totalThresh_CreateFcn(hObject, eventdata, handles)</a>
+0671 <span class="comment">% hObject    handle to totalThresh (see GCBO)</span>
+0672 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0673 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0674 
+0675 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0676 <span class="comment">%       See ISPC and COMPUTER.</span>
+0677 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0678     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0679 <span class="keyword">end</span>
+0680 <a name="_sub46" href="#_subfunctions" class="code">function updateSliceImage(hObject,eventdata,handles,direction)</a>
+0681 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+0682 decorrSliderValue = .1*(.0001+get(handles.dynRangeDecorrSlider,<span class="string">'Value'</span>));
+0683 bscanSliderValue = 10*(.0001+get(handles.dynRangeBScanSlider,<span class="string">'Value'</span>));
+0684 <span class="keyword">switch</span> direction
+0685     <span class="keyword">case</span> <span class="string">'x'</span>
+0686         SliderValue = floor((tempSize(1)-1)*get(handles.xSlider,<span class="string">'Value'</span>))+1;
+0687         
+0688         <span class="comment">% x axis</span>
+0689         axes(handles.xCartVol);
+0690 
+0691         imagesc(abs(log10(handles.activeExperiment.getDataSlice_cart(direction,handles.activeN,1,SliderValue))),[0 bscanSliderValue]);
+0692         colormap(handles.xCartVol,gray);
+0693   
+0694         edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(direction,handles.activeN,1,SliderValue))));
+0695         alphamask(edgeVals,[256 0 0],.3);
+0696         <span class="comment">% decorr plots</span>
+0697         <span class="comment">% x axis</span>
+0698         axes(handles.xDecorrVol);
+0699         imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr(direction,handles.activeN,1,SliderValue))),[0, decorrSliderValue]);
+0700         set(handles.xDecorrVol,<span class="string">'XTicklabel'</span>,[]);
+0701         set(handles.xDecorrVol,<span class="string">'YTicklabel'</span>,[]);
+0702         colormap(handles.xDecorrVol,hot(20));
+0703     <span class="keyword">case</span> <span class="string">'y'</span>
+0704         SliderValue = floor((tempSize(2)-1)*get(handles.ySlider,<span class="string">'Value'</span>))+1;
+0705         <span class="comment">% x axis</span>
+0706         axes(handles.yCartVol);
+0707         
+0708         imagesc(abs(log10(handles.activeExperiment.getDataSlice_cart(direction,handles.activeN,1,SliderValue))),[0 bscanSliderValue]);
+0709         colormap(handles.yCartVol,gray);
+0710         edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(direction,handles.activeN,1,SliderValue))));
+0711         alphamask(edgeVals,[256 0 0],.3);
+0712         <span class="comment">% decorr plots</span>
+0713         <span class="comment">% x axis</span>
+0714         axes(handles.yDecorrVol);
+0715         imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr(direction,handles.activeN,1,SliderValue))),[0, decorrSliderValue]);
+0716         set(handles.yDecorrVol,<span class="string">'XTicklabel'</span>,[]);
+0717         set(handles.yDecorrVol,<span class="string">'YTicklabel'</span>,[]);
+0718         colormap(handles.yDecorrVol,hot(20));
+0719     <span class="keyword">case</span> <span class="string">'z'</span>
+0720         SliderValue = floor((tempSize(3)-1)*get(handles.zSlider,<span class="string">'Value'</span>))+1;
+0721         <span class="comment">% x axis</span>
+0722         axes(handles.zCartVol);
+0723        
+0724         imagesc(abs(log10(handles.activeExperiment.getDataSlice_cart(direction,handles.activeN,1,SliderValue))),[0 bscanSliderValue]);
+0725         colormap(handles.zCartVol,gray);
+0726         edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(direction,handles.activeN,1,SliderValue))));
+0727         alphamask(edgeVals,[256 0 0],.3);
+0728         <span class="comment">% decorr plots</span>
+0729         axes(handles.zDecorrVol);
+0730         imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr(direction,handles.activeN,1,SliderValue))),[0, decorrSliderValue]);
+0731         set(handles.zDecorrVol,<span class="string">'XTicklabel'</span>,[]);
+0732         set(handles.zDecorrVol,<span class="string">'YTicklabel'</span>,[]);
+0733         colormap(handles.zDecorrVol,hot(20));
+0734     <span class="keyword">otherwise</span>
+0735 <span class="keyword">end</span>
+0736 
+0737 <a name="_sub47" href="#_subfunctions" class="code">function resetAll(hObject,eventdata,handles,direction)</a>
+0738     set(handles.beginButton,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0739     set(handles.beginButton,<span class="string">'String'</span>,<span class="string">'Initialize'</span>);
+0740 
+0741 <a name="_sub48" href="#_subfunctions" class="code">function updateFrameDropDown(hObject,eventdata,handles)</a>
+0742     numFrameCell = {};
+0743     <span class="keyword">for</span> currCell = 1:handles.activeExperiment.numVolumes-1
+0744         numFrameCell{currCell} = currCell; 
+0745     <span class="keyword">end</span>
+0746     set(handles.selectVolPopup, <span class="string">'String'</span>,numFrameCell);
+0747     set(handles.selectVolPopup, <span class="string">'Value'</span>,handles.activeExperiment.numVolumes-1);
+0748 <a name="_sub49" href="#_subfunctions" class="code">function updateDecorrPlot(hObject,eventdata,handles)</a>
+0749     threshValue = str2double(get(handles.totalThresh,<span class="string">'String'</span>));
+0750     currLength  = length(handles.activeExperiment.decorrSumSeries); 
+0751     threshSeries = threshValue*ones(currLength,1);
+0752     axes(handles.decorrPlot);
+0753     set(handles.decorrPlot, <span class="string">'YScale'</span>, <span class="string">'log'</span>)
+0754     plot(1:currLength,handles.activeExperiment.averageDecorr,1:currLength,threshSeries,1:currLength,log10(handles.activeExperiment.decorrSumSeriesROI));
+0755     hold on; 
+0756     plot(handles.activeN, handles.activeExperiment.averageDecorr(handles.activeN),<span class="string">'r*'</span>);
+0757     plot(handles.activeN, log10(handles.activeExperiment.decorrSumSeriesROI(handles.activeN)),<span class="string">'r*'</span>);
+0758     hold off; 
+0759     drawnow; 
+0760     legend(<span class="string">'Cumulative Decorrelation Sum'</span>,<span class="string">'target'</span>)
+0761 
+0762 
+0763 <span class="comment">% --- Executes on button press in recomputeDecorr.</span>
+0764 <a name="_sub50" href="#_subfunctions" class="code">function recomputeDecorr_Callback(hObject, eventdata, handles)</a>
+0765 <span class="comment">% hObject    handle to recomputeDecorr (see GCBO)</span>
+0766 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0767 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0768 set(handles.recomputeDecorr, <span class="string">'String'</span>, <span class="string">'Processing...'</span>);
+0769 drawnow; 
+0770 handles.activeExperiment.recomputeDecorr(); 
+0771 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0772 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0773 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0774 <a href="#_sub49" class="code" title="subfunction updateDecorrPlot(hObject,eventdata,handles)">updateDecorrPlot</a>(hObject,eventdata,handles);
+0775 set(handles.recomputeDecorr, <span class="string">'String'</span>, <span class="string">'Recompute Decorr'</span>);
+0776 drawnow; 
+0777 guidata(hObject, handles);
+0778 <a name="_sub51" href="#_subfunctions" class="code">function sendSerialData(hObject,eventdata, handles) </a>
+0779 
+0780 
+0781 <span class="comment">% --- Executes on selection change in inSerialPopUp.</span>
+0782 <a name="_sub52" href="#_subfunctions" class="code">function inSerialPopUp_Callback(hObject, eventdata, handles)</a>
+0783 <span class="comment">% hObject    handle to inSerialPopUp (see GCBO)</span>
+0784 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0785 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0786 
+0787 <span class="comment">% Hints: contents = cellstr(get(hObject,'String')) returns inSerialPopUp contents as cell array</span>
+0788 <span class="comment">%        contents{get(hObject,'Value')} returns selected item from inSerialPopUp</span>
+0789 
+0790 
+0791 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0792 <a name="_sub53" href="#_subfunctions" class="code">function inSerialPopUp_CreateFcn(hObject, eventdata, handles)</a>
+0793 <span class="comment">% hObject    handle to inSerialPopUp (see GCBO)</span>
+0794 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0795 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0796 
+0797 <span class="comment">% Hint: popupmenu controls usually have a white background on Windows.</span>
+0798 <span class="comment">%       See ISPC and COMPUTER.</span>
+0799 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0800     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0801 <span class="keyword">end</span>
+0802 
+0803 
+0804 <span class="comment">% --- Executes on selection change in outSerialPopUp.</span>
+0805 <a name="_sub54" href="#_subfunctions" class="code">function outSerialPopUp_Callback(hObject, eventdata, handles)</a>
+0806 <span class="comment">% hObject    handle to outSerialPopUp (see GCBO)</span>
+0807 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0808 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0809 
+0810 <span class="comment">% Hints: contents = cellstr(get(hObject,'String')) returns outSerialPopUp contents as cell array</span>
+0811 <span class="comment">%        contents{get(hObject,'Value')} returns selected item from outSerialPopUp</span>
+0812 
+0813 
+0814 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0815 <a name="_sub55" href="#_subfunctions" class="code">function outSerialPopUp_CreateFcn(hObject, eventdata, handles)</a>
+0816 <span class="comment">% hObject    handle to outSerialPopUp (see GCBO)</span>
+0817 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0818 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0819 
+0820 <span class="comment">% Hint: popupmenu controls usually have a white background on Windows.</span>
+0821 <span class="comment">%       See ISPC and COMPUTER.</span>
+0822 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0823     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0824 <span class="keyword">end</span>
+0825 
+0826 <a name="_sub56" href="#_subfunctions" class="code">function setSerialPopUps(hObject, eventdata,handles)</a>
+0827 tempDir = seriallist; 
+0828 tempArr = {}; 
+0829 <span class="keyword">for</span> n = 1:length(tempDir)
+0830     tempArr{n} = tempDir(n);
+0831 <span class="keyword">end</span>
+0832 set(handles.inSerialPopUp, <span class="string">'String'</span>,tempArr);
+0833 set(handles.outSerialPopUp, <span class="string">'String'</span>,tempArr);
+0834 
+0835 
+0836 <span class="comment">% --- Executes on slider movement.</span>
+0837 <a name="_sub57" href="#_subfunctions" class="code">function dynRangeDecorrSlider_Callback(hObject, eventdata, handles)</a>
+0838 <span class="comment">% hObject    handle to dynRangeDecorrSlider (see GCBO)</span>
+0839 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0840 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0841 
+0842 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+0843 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+0844 <span class="comment">%handles.dynRangeMaxDecorr = handles.dynRangeMinVal+4*(handles.dynRangeMinVal)*((get(handles.dynRangeDecorrSlider,'Value')));</span>
+0845 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0846 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0847 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0848 drawnow; 
+0849 guidata(hObject, handles);
+0850 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0851 <a name="_sub58" href="#_subfunctions" class="code">function dynRangeDecorrSlider_CreateFcn(hObject, eventdata, handles)</a>
+0852 <span class="comment">% hObject    handle to dynRangeDecorrSlider (see GCBO)</span>
+0853 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0854 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0855 
+0856 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+0857 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0858     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+0859 <span class="keyword">end</span>
+0860 
+0861 
+0862 <span class="comment">% --- Executes on slider movement.</span>
+0863 <a name="_sub59" href="#_subfunctions" class="code">function dynRangeBScanSlider_Callback(hObject, eventdata, handles)</a>
+0864 <span class="comment">% hObject    handle to dynRangeBScanSlider (see GCBO)</span>
+0865 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0866 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0867 
+0868 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+0869 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+0870 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+0871 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+0872 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+0873 drawnow; 
+0874 guidata(hObject, handles);
+0875 
+0876 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0877 <a name="_sub60" href="#_subfunctions" class="code">function dynRangeBScanSlider_CreateFcn(hObject, eventdata, handles)</a>
+0878 <span class="comment">% hObject    handle to dynRangeBScanSlider (see GCBO)</span>
+0879 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0880 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0881 
+0882 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+0883 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0884     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+0885 <span class="keyword">end</span>
+0886 
+0887 <a name="_sub61" href="#_subfunctions" class="code">function disableButtonsForStart(hObject, eventdata, handles)</a>
+0888 set(handles.resetButton, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0889 set(handles.recomputeDecorr, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0890 set(handles.beginButton, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0891 set(handles.continueButton, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0892 set(handles.computeNextVol, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0893 set(handles.runVols, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0894 set(handles.selectVolPopup, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0895 set(handles.backVol, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0896 set(handles.forwardVol, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0897 set(handles.xSlider, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0898 set(handles.ySlider, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0899 set(handles.zSlider, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0900 set(handles.dynRangeBScanSlider, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0901 set(handles.dynRangeDecorrSlider, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0902 set(handles.updateSettingsButton, <span class="string">'Enable'</span>, <span class="string">'off'</span>);
+0903 set(handles.pauseButton,<span class="string">'enable'</span>,<span class="string">'off'</span>);
+0904 
+0905 <a name="_sub62" href="#_subfunctions" class="code">function enableButtonsForStart(hObject,eventdata,handles)</a>
+0906 set(handles.resetButton, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0907 set(handles.recomputeDecorr, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0908 set(handles.beginButton, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0909 set(handles.updateSettingsButton, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0910 
+0911 <a name="_sub63" href="#_subfunctions" class="code">function enableButtonsControlPanel(hObject, eventdata, handles)</a>
+0912 set(handles.continueButton, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0913 set(handles.computeNextVol, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0914 set(handles.runVols, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0915 set(handles.selectVolPopup, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0916 set(handles.backVol, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0917 set(handles.forwardVol, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0918 set(handles.xSlider, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0919 set(handles.ySlider, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0920 set(handles.zSlider, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0921 set(handles.dynRangeBScanSlider, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0922 set(handles.dynRangeDecorrSlider, <span class="string">'Enable'</span>, <span class="string">'on'</span>);
+0923 
+0924 
+0925 <span class="comment">% --- Executes on button press in pauseButton.</span>
+0926 <a name="_sub64" href="#_subfunctions" class="code">function pauseButton_Callback(hObject, eventdata, handles)</a>
+0927 <span class="comment">% hObject    handle to pauseButton (see GCBO)</span>
+0928 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0929 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0930 
+0931 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of pauseButton</span>
+0932 set(handles.continueButton,<span class="string">'enable'</span>,<span class="string">'on'</span>);
+0933 set(handles.pauseButton,<span class="string">'enable'</span>,<span class="string">'off'</span>);
+0934 
+0935 
+0936 
+0937 <a name="_sub65" href="#_subfunctions" class="code">function dynRangeMin_Callback(hObject, eventdata, handles)</a>
+0938 <span class="comment">% hObject    handle to dynRangeMin (see GCBO)</span>
+0939 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0940 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0941 
+0942 <span class="comment">% Hints: get(hObject,'String') returns contents of dynRangeMin as text</span>
+0943 <span class="comment">%        str2double(get(hObject,'String')) returns contents of dynRangeMin as a double</span>
+0944 tempStrinArr = get(handles.outSerialPopUp,<span class="string">'String'</span>); 
+0945 handles.activeExperiment.outSerialString = tempStrinArr{get(handles.outSerialPopUp, <span class="string">'Value'</span>)};
+0946 
+0947 handles.dynRangeMinVal = get(handles.dynRangeMin,<span class="string">'String'</span>);
+0948 guidata(hObject, handles);
+0949 
+0950 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0951 <a name="_sub66" href="#_subfunctions" class="code">function dynRangeMin_CreateFcn(hObject, eventdata, handles)</a>
+0952 <span class="comment">% hObject    handle to dynRangeMin (see GCBO)</span>
+0953 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0954 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0955 
+0956 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0957 <span class="comment">%       See ISPC and COMPUTER.</span>
+0958 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0959     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0960 <span class="keyword">end</span>
+0961 
+0962 
+0963 <span class="comment">% --- Executes on button press in sendButton.</span>
+0964 <a name="_sub67" href="#_subfunctions" class="code">function sendButton_Callback(hObject, eventdata, handles)</a>
+0965 <span class="comment">% hObject    handle to sendButton (see GCBO)</span>
+0966 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0967 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0968 <span class="comment">%handles.activeExperiment.setUpSerialOutConnection();</span>
+0969 <span class="keyword">try</span>
+0970 handles.activeExperiment.sendSerialData(); 
+0971 <span class="keyword">catch</span>
+0972     display(<span class="string">'could not send serial data'</span>);
+0973 <span class="keyword">end</span>
+0974 
+0975 
+0976 <span class="comment">% --- Executes on button press in serialSetupButton.</span>
+0977 <a name="_sub68" href="#_subfunctions" class="code">function serialSetupButton_Callback(hObject, eventdata, handles)</a>
+0978 <span class="comment">% hObject    handle to serialSetupButton (see GCBO)</span>
+0979 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0980 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0981 tempStrinArr = get(handles.outSerialPopUp,<span class="string">'String'</span>); 
+0982 handles.activeExperiment.outSerialString = tempStrinArr{get(handles.outSerialPopUp, <span class="string">'Value'</span>)};
+0983 display(handles.activeExperiment.outSerialString);
+0984 handles.activeExperiment.setUpSerialOutConnection(); 
+0985 
+0986 
+0987 <span class="comment">% --- Executes on button press in roiSelectButton.</span>
+0988 <a name="_sub69" href="#_subfunctions" class="code">function roiSelectButton_Callback(hObject, eventdata, handles)</a>
+0989 <span class="comment">% hObject    handle to roiSelectButton (see GCBO)</span>
+0990 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0991 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0992 axes(handles.xCartVol);
+0993 [BW Xi_xslice, Yi_xSlice] = roipoly;
+0994 axes(handles.yCartVol);
+0995 [BW Xi_yslice, Yi_ySlice] = roipoly;
+0996 axes(handles.zCartVol);
+0997 [BW Xi_zslice, Yi_zSlice] = roipoly;
+0998 
+0999 
+1000 <span class="comment">% --- Executes on slider movement.</span>
+1001 <a name="_sub70" href="#_subfunctions" class="code">function xroiSlider_1_Callback(hObject, eventdata, handles)</a>
+1002 <span class="comment">% hObject    handle to xroiSlider_1 (see GCBO)</span>
+1003 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1004 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1005 
+1006 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1007 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1008 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1009 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1010 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1011 handles.activeExperiment.updateROIDataSet();
+1012 drawnow; 
+1013 guidata(hObject, handles);
+1014 
+1015 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1016 <a name="_sub71" href="#_subfunctions" class="code">function xroiSlider_1_CreateFcn(hObject, eventdata, handles)</a>
+1017 <span class="comment">% hObject    handle to xroiSlider_1 (see GCBO)</span>
+1018 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1019 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1020 
+1021 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1022 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1023     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1024 <span class="keyword">end</span>
+1025 
+1026 <span class="comment">% --- Executes on slider movement.</span>
+1027 <a name="_sub72" href="#_subfunctions" class="code">function xroiSlider_2_Callback(hObject, eventdata, handles)</a>
+1028 <span class="comment">% hObject    handle to xroiSlider_2 (see GCBO)</span>
+1029 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1030 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1031 
+1032 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1033 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1034 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1035 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1036 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1037 handles.activeExperiment.updateROIDataSet();
+1038 drawnow; 
+1039 guidata(hObject, handles);
+1040 
+1041 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1042 <a name="_sub73" href="#_subfunctions" class="code">function xroiSlider_2_CreateFcn(hObject, eventdata, handles)</a>
+1043 <span class="comment">% hObject    handle to xroiSlider_2 (see GCBO)</span>
+1044 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1045 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1046 
+1047 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1048 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1049     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1050 <span class="keyword">end</span>
+1051 
+1052 
+1053 <span class="comment">% --- Executes on slider movement.</span>
+1054 <a name="_sub74" href="#_subfunctions" class="code">function yroiSlider_1_Callback(hObject, eventdata, handles)</a>
+1055 <span class="comment">% hObject    handle to yroiSlider_1 (see GCBO)</span>
+1056 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1057 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1058 
+1059 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1060 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1061 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1062 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1063 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1064 handles.activeExperiment.updateROIDataSet();
+1065 drawnow; 
+1066 guidata(hObject, handles);
+1067 
+1068 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1069 <a name="_sub75" href="#_subfunctions" class="code">function yroiSlider_1_CreateFcn(hObject, eventdata, handles)</a>
+1070 <span class="comment">% hObject    handle to yroiSlider_1 (see GCBO)</span>
+1071 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1072 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1073 
+1074 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1075 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1076     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1077 <span class="keyword">end</span>
+1078 
+1079 
+1080 <span class="comment">% --- Executes on slider movement.</span>
+1081 <a name="_sub76" href="#_subfunctions" class="code">function yroiSlider_2_Callback(hObject, eventdata, handles)</a>
+1082 <span class="comment">% hObject    handle to yroiSlider_2 (see GCBO)</span>
+1083 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1084 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1085 
+1086 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1087 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1088 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1089 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1090 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1091 handles.activeExperiment.updateROIDataSet();
+1092 drawnow; 
+1093 guidata(hObject, handles);
+1094 
+1095 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1096 <a name="_sub77" href="#_subfunctions" class="code">function yroiSlider_2_CreateFcn(hObject, eventdata, handles)</a>
+1097 <span class="comment">% hObject    handle to yroiSlider_2 (see GCBO)</span>
+1098 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1099 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1100 
+1101 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1102 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1103     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1104 <span class="keyword">end</span>
+1105 
+1106 
+1107 <span class="comment">% --- Executes on slider movement.</span>
+1108 <a name="_sub78" href="#_subfunctions" class="code">function zroiSlider_1_Callback(hObject, eventdata, handles)</a>
+1109 <span class="comment">% hObject    handle to zroiSlider_1 (see GCBO)</span>
+1110 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1111 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1112 
+1113 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1114 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1115 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1116 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1117 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1118 drawnow; 
+1119 guidata(hObject, handles);
+1120 
+1121 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1122 <a name="_sub79" href="#_subfunctions" class="code">function zroiSlider_1_CreateFcn(hObject, eventdata, handles)</a>
+1123 <span class="comment">% hObject    handle to zroiSlider_1 (see GCBO)</span>
+1124 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1125 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1126 
+1127 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1128 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1129     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1130 <span class="keyword">end</span>
+1131 
+1132 
+1133 <span class="comment">% --- Executes on slider movement.</span>
+1134 <a name="_sub80" href="#_subfunctions" class="code">function slider19_Callback(hObject, eventdata, handles)</a>
+1135 <span class="comment">% hObject    handle to slider19 (see GCBO)</span>
+1136 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1137 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1138 
+1139 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1140 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1141 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1142 drawnow; 
+1143 guidata(hObject, handles);
+1144 
+1145 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1146 <a name="_sub81" href="#_subfunctions" class="code">function slider19_CreateFcn(hObject, eventdata, handles)</a>
+1147 <span class="comment">% hObject    handle to slider19 (see GCBO)</span>
+1148 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1149 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1150 
+1151 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1152 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1153     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1154 <span class="keyword">end</span>
+1155 
+1156 
+1157 <a name="_sub82" href="#_subfunctions" class="code">function updateSliceImage_ROICorrected(hObject,eventdata,handles,direction)</a>
+1158 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1159 decorrSliderValue = .1*(.0001+get(handles.dynRangeDecorrSlider,<span class="string">'Value'</span>));
+1160 bscanSliderValue = 10*(.0001+get(handles.dynRangeBScanSlider,<span class="string">'Value'</span>));
+1161 xMax = tempSize(3); 
+1162 yMax = tempSize(2); 
+1163 zMax = tempSize(1); 
+1164 xMid = floor(xMax/2);
+1165 yMid = floor(yMax/2); 
+1166 zMid = floor(zMax/2); 
+1167 <span class="comment">%</span>
+1168 handles.x_roi_left = floor((xMid-1)*get(handles.xroiSlider_1,<span class="string">'Value'</span>))+1; <span class="comment">%1:94</span>
+1169 handles.x_roi_right = xMid+floor((xMid)*get(handles.xroiSlider_2,<span class="string">'Value'</span>)); <span class="comment">% 94:188</span>
+1170 handles.y_roi_left = floor((yMid-1)*get(handles.xroiSlider_3,<span class="string">'Value'</span>))+1; <span class="comment">%1:94</span>
+1171 handles.y_roi_right = floor((yMid)+floor((yMid)*get(handles.xroiSlider_4,<span class="string">'Value'</span>)));
+1172 handles.z_roi_left = floor((zMid)*get(handles.yroiSlider_1,<span class="string">'Value'</span>))+1; <span class="comment">% 1:74</span>
+1173 handles.z_roi_right = floor(zMid-1)+floor((zMid)*get(handles.yroiSlider_2,<span class="string">'Value'</span>)); 
+1174 <span class="comment">%</span>
+1175 <span class="comment">%handles.x0_roiE = floor((xMid-1)*get(handles.ROIE_x0_slider,'Value'))+1; %1:94</span>
+1176 <span class="comment">%handles.y0_roiE = floor((yMid-1)*get(handles.ROIE_y0_slider,'Value'))+1; % 94:188</span>
+1177 <span class="comment">%handles.z0_roiE = floor((zMid-1)*get(handles.ROIE_z0_slider,'Value'))+1; %1:94</span>
+1178 
+1179 <span class="comment">%handles.r0_roiE = floor((xMid-1)*get(handles.ROIE_r0_slider,'Value'))+1; %1:94</span>
+1180 <span class="comment">%handles.r1_roiE = floor((yMid-1)*get(handles.ROIE_r1_slider,'Value'))+1; % 94:188</span>
+1181 <span class="comment">%handles.r2_roiE = floor((zMid-1)*get(handles.ROIE_r2_slider,'Value'))+1; %1:94</span>
+1182 <span class="comment">%</span>
+1183 handles.r0_roiE = str2double(get(handles.ROIE_r0,<span class="string">'String'</span>)); <span class="comment">%1:94</span>
+1184 handles.r1_roiE = str2double(get(handles.ROIE_r1,<span class="string">'String'</span>)); <span class="comment">% 94:188</span>
+1185 handles.r2_roiE = str2double(get(handles.ROIE_r2,<span class="string">'String'</span>)); <span class="comment">%1:94</span>
+1186 handles.x0_roiE = str2double(get(handles.ROIE_x0,<span class="string">'String'</span>));
+1187 handles.y0_roiE = str2double(get(handles.ROIE_y0,<span class="string">'String'</span>)); <span class="comment">% 1:74</span>
+1188 handles.z0_roiE = str2double(get(handles.ROIE_z0,<span class="string">'String'</span>)); 
+1189 <span class="comment">%</span>
+1190 handles.activeExperiment.ROI_xRange = [handles.x_roi_left,handles.x_roi_right];
+1191 handles.activeExperiment.ROI_yRange = [handles.y_roi_left,handles.y_roi_right];
+1192 handles.activeExperiment.ROI_zRange = [handles.z_roi_left,handles.z_roi_right];
+1193 
+1194 isOldMatlab = 0;
+1195 [a b c] = regexp(version,<span class="string">'R(\d+)\w'</span>,<span class="string">'tokens'</span>, <span class="string">'tokenExtents'</span>);
+1196     <span class="keyword">if</span> num2str(a{1}{1}) &lt; 2014
+1197         isOldMatlab = 1;
+1198     <span class="keyword">end</span>
+1199 <span class="keyword">switch</span> direction
+1200     <span class="keyword">case</span> <span class="string">'x'</span>
+1201         SliderValueX = floor((tempSize(1)-1)*get(handles.xSlider,<span class="string">'Value'</span>))+1;
+1202         SliderValueY = floor((tempSize(2)-1)*get(handles.ySlider,<span class="string">'Value'</span>))+1;
+1203         SliderValueZ = floor((tempSize(2)-1)*get(handles.zSlider,<span class="string">'Value'</span>))+1;
+1204         <span class="comment">% x axis</span>
+1205         axes(handles.xCartVol);
+1206         tempPic = handles.activeExperiment.getDataSlice_cart(direction,handles.activeN,1,SliderValueX);
+1207         
+1208         imagesc(abs(log10(tempPic)),[0 bscanSliderValue]);
+1209         colormap(handles.xCartVol,gray);
+1210   
+1211         edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(direction,handles.activeN,1,SliderValueX))));
+1212         alphamask(edgeVals,[256 0 0],.3);
+1213         hold on; 
+1214         <span class="comment">%rectangle('position',drawRect(handles.x_roi_left,handles.y_roi_left,handles.x_roi_right,handles.y_roi_right),'LineWidth',3);</span>
+1215         [r_y,r_z] = <a href="#_sub114" class="code" title="subfunction  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)">calculateEllipseProjection</a>(handles.r0_roiE,handles.r1_roiE,handles.r2_roiE,abs(xMid-SliderValueX));
+1216         line([0,yMax],[SliderValueY,SliderValueY],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1217         line([SliderValueZ,SliderValueZ],[0,yMax],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1218         <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.y0_roiE,handles.z0_roiE,r_y,r_z);
+1219         hold off; 
+1220         <span class="comment">% decorr plots</span>
+1221         <span class="comment">% x axis</span>
+1222         axes(handles.xDecorrVol);
+1223         hold on;
+1224         imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr(direction,handles.activeN,1,SliderValueX))),[0, decorrSliderValue]);
+1225         set(handles.xDecorrVol,<span class="string">'XTicklabel'</span>,[]);
+1226         set(handles.xDecorrVol,<span class="string">'YTicklabel'</span>,[]);
+1227         <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.z0_roiE,r_y,r_z);
+1228         hold off; 
+1229         <span class="keyword">if</span>(~isOldMatlab)
+1230             colormap(handles.xDecorrVol,hot(20));
+1231         <span class="keyword">end</span>
+1232     <span class="keyword">case</span> <span class="string">'y'</span>
+1233         SliderValueX = floor((tempSize(1)-1)*get(handles.xSlider,<span class="string">'Value'</span>))+1;
+1234         SliderValueY = floor((tempSize(2)-1)*get(handles.ySlider,<span class="string">'Value'</span>))+1;
+1235         SliderValueZ = floor((tempSize(2)-1)*get(handles.zSlider,<span class="string">'Value'</span>))+1;
+1236         <span class="comment">% y axis</span>
+1237         axes(handles.yCartVol);
+1238         <span class="comment">% y axis</span>
+1239         tempPic = handles.activeExperiment.getDataSlice_cart(direction,handles.activeN,1,SliderValueY);
+1240         
+1241 <span class="comment">%         tempPic(:,1:handles.x_roi_left) = 0;</span>
+1242 <span class="comment">%         tempPic(:,handles.x_roi_right:end) = 0;</span>
+1243 <span class="comment">%         tempPic(1:handles.z_roi_left,:) = 0;</span>
+1244 <span class="comment">%         tempPic(handles.z_roi_right:end,:) = 0;</span>
+1245         
+1246         imagesc(abs(log10(tempPic)),[0 bscanSliderValue]);
+1247         colormap(handles.yCartVol,gray);
+1248         edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(direction,handles.activeN,1,SliderValueY))));
+1249         alphamask(edgeVals,[256 0 0],.3);
+1250         hold on; 
+1251         <span class="comment">%rectangle('position',drawRect(handles.x_roi_left,handles.z_roi_left,handles.x_roi_right,handles.z_roi_right),'LineWidth',3);</span>
+1252         [r_x,r_z] = <a href="#_sub114" class="code" title="subfunction  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)">calculateEllipseProjection</a>(handles.r1_roiE,handles.r0_roiE,handles.r2_roiE,abs(yMid-SliderValueY));
+1253         line([0,yMax],[SliderValueY,SliderValueY],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1254         line([SliderValueZ,SliderValueZ],[0,yMax],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1255         <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.z0_roiE,r_x,r_z);
+1256         hold off; 
+1257         <span class="comment">% decorr plots</span>
+1258         <span class="comment">% x axis</span>
+1259         axes(handles.yDecorrVol);
+1260         hold on;
+1261         imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr(direction,handles.activeN,1,SliderValueY))),[0, decorrSliderValue]);
+1262         set(handles.yDecorrVol,<span class="string">'XTicklabel'</span>,[]);
+1263         set(handles.yDecorrVol,<span class="string">'YTicklabel'</span>,[]);
+1264         <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.z0_roiE,r_x,r_z);
+1265         hold off;
+1266         <span class="keyword">if</span>(~isOldMatlab)
+1267             colormap(handles.yDecorrVol,hot(20));
+1268         <span class="keyword">end</span>
+1269     <span class="keyword">case</span> <span class="string">'z'</span>
+1270         SliderValue = floor((tempSize(1)-1)*get(handles.zSlider,<span class="string">'Value'</span>))+1;
+1271         <span class="comment">% x axis</span>
+1272         axes(handles.zCartVol);
+1273         <span class="comment">% x axis</span>
+1274         tempPic = handles.activeExperiment.getDataSlice_cart(direction,handles.activeN,1,SliderValue);
+1275 <span class="comment">%         tempPic(:,1:handles.x_roi_left) = 0;</span>
+1276 <span class="comment">%         tempPic(:,handles.x_roi_right:end) = 0;</span>
+1277 <span class="comment">%         tempPic(1:handles.y_roi_left,:) = 0;</span>
+1278 <span class="comment">%         tempPic(handles.y_roi_right:end,:) = 0;</span>
+1279        
+1280         imagesc(abs(log10(tempPic)),[0 bscanSliderValue]);
+1281         colormap(handles.zCartVol,gray);
+1282         edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(direction,handles.activeN,1,SliderValue))));
+1283         alphamask(edgeVals,[256 0 0],.3);
+1284         hold on; 
+1285         <span class="comment">%rectangle('position',drawRect(handles.y_roi_left,handles.z_roi_left,handles.y_roi_right,handles.z_roi_right),'LineWidth',3);</span>
+1286         [r_x,r_y] = <a href="#_sub114" class="code" title="subfunction  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)">calculateEllipseProjection</a>(handles.r2_roiE,handles.r0_roiE,handles.r1_roiE,abs(zMid-SliderValue));
+1287         <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.y0_roiE,r_x,r_y);
+1288         hold off;
+1289         <span class="comment">% decorr plots</span>
+1290         axes(handles.zDecorrVol);
+1291         hold on;
+1292         imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr(direction,handles.activeN,1,SliderValue))),[0, decorrSliderValue]);
+1293         set(handles.zDecorrVol,<span class="string">'XTicklabel'</span>,[]);
+1294         set(handles.zDecorrVol,<span class="string">'YTicklabel'</span>,[]);
+1295         <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.z0_roiE,r_x,r_y);
+1296         hold off;
+1297         <span class="keyword">if</span>(~isOldMatlab)
+1298             colormap(handles.zDecorrVol,hot(20));
+1299         <span class="keyword">end</span>
+1300     <span class="keyword">otherwise</span>
+1301 <span class="keyword">end</span>
+1302 
+1303 
+1304 <span class="comment">% --- Executes on slider movement.</span>
+1305 <a name="_sub83" href="#_subfunctions" class="code">function xroiSlider_3_Callback(hObject, eventdata, handles)</a>
+1306 <span class="comment">% hObject    handle to xroiSlider_3 (see GCBO)</span>
+1307 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1308 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1309 
+1310 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1311 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1312 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1313 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1314 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1315 drawnow; 
+1316 guidata(hObject, handles);
+1317 
+1318 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1319 <a name="_sub84" href="#_subfunctions" class="code">function xroiSlider_3_CreateFcn(hObject, eventdata, handles)</a>
+1320 <span class="comment">% hObject    handle to xroiSlider_3 (see GCBO)</span>
+1321 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1322 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1323 
+1324 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1325 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1326     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1327 <span class="keyword">end</span>
+1328 
+1329 
+1330 <span class="comment">% --- Executes on slider movement.</span>
+1331 <a name="_sub85" href="#_subfunctions" class="code">function xroiSlider_4_Callback(hObject, eventdata, handles)</a>
+1332 <span class="comment">% hObject    handle to xroiSlider_4 (see GCBO)</span>
+1333 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1334 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1335 
+1336 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1337 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1338 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1339 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1340 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1341 drawnow; 
+1342 guidata(hObject, handles);
+1343 
+1344 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1345 <a name="_sub86" href="#_subfunctions" class="code">function xroiSlider_4_CreateFcn(hObject, eventdata, handles)</a>
+1346 <span class="comment">% hObject    handle to xroiSlider_4 (see GCBO)</span>
+1347 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1348 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1349 
+1350 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1351 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1352     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1353 <span class="keyword">end</span>
+1354 
+1355 <a name="_sub87" href="#_subfunctions" class="code">function setROIRange_sliders(hObject, eventdata, handles)</a>
+1356 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1357 xMax = tempSize(3); 
+1358 yMax = tempSize(2); 
+1359 zMax = tempSize(1); 
+1360 xMid = floor(xMax/2);
+1361 yMid = floor(yMax/2); 
+1362 zMid = floor(zMax/2); 
+1363 
+1364 handles.x_roi_left = floor((xMid-1)*get(handles.xroiSlider_1,<span class="string">'Value'</span>))+1; <span class="comment">%1:94</span>
+1365 handles.x_roi_right = xMid+floor((xMid)*get(handles.xroiSlider_2,<span class="string">'Value'</span>)); <span class="comment">% 94:188</span>
+1366 handles.y_roi_left = floor((yMid-1)*get(handles.xroiSlider_3,<span class="string">'Value'</span>))+1; <span class="comment">%1:94</span>
+1367 handles.y_roi_right = floor((yMid)+floor((yMid)*get(handles.xroiSlider_4,<span class="string">'Value'</span>)));
+1368 handles.z_roi_left = floor((zMid)*get(handles.yroiSlider_1,<span class="string">'Value'</span>))+1; <span class="comment">% 1:74</span>
+1369 handles.z_roi_right = floor(zMid-1)+floor((zMid)*get(handles.yroiSlider_2,<span class="string">'Value'</span>)); 
+1370 handles.activeExperiment.ROI_xRange = [handles.x_roi_left,handles.x_roi_right];
+1371 handles.activeExperiment.ROI_yRange = [handles.y_roi_left,handles.y_roi_right];
+1372 handles.activeExperiment.ROI_zRange = [handles.z_roi_left,handles.z_roi_right] ;
+1373 guidata(hObject, handles);              
+1374 
+1375 
+1376 <a name="_sub88" href="#_subfunctions" class="code">function rectInput = drawRect(p1,p2,p3,p4)</a>
+1377     pWidth = p3-p1;
+1378     pHeight = p4-p2; 
+1379     rectInput = [p1,p2,pWidth,pHeight];
+1380 
+1381 
+1382 <span class="comment">% --- Executes on slider movement.</span>
+1383 <a name="_sub89" href="#_subfunctions" class="code">function ROIE_z0_slider_Callback(hObject, eventdata, handles)</a>
+1384 <span class="comment">% hObject    handle to ROIE_z0_slider (see GCBO)</span>
+1385 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1386 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1387 
+1388 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1389 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1390 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1391 zMax = tempSize(3);
+1392 handles.z0_roiE = floor((zMax)*get(handles.ROIE_z0_slider,<span class="string">'Value'</span>))+1; <span class="comment">% 94:188</span>
+1393 set(handles.ROIE_z0,<span class="string">'String'</span>,handles.z0_roiE)
+1394 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1395 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'x');</span>
+1396 
+1397 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1398 <a name="_sub90" href="#_subfunctions" class="code">function ROIE_z0_slider_CreateFcn(hObject, eventdata, handles)</a>
+1399 <span class="comment">% hObject    handle to ROIE_z0_slider (see GCBO)</span>
+1400 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1401 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1402 
+1403 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1404 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1405     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1406 <span class="keyword">end</span>
+1407 
+1408 
+1409 <span class="comment">% --- Executes on slider movement.</span>
+1410 <a name="_sub91" href="#_subfunctions" class="code">function ROIE_x0_slider_Callback(hObject, eventdata, handles)</a>
+1411 <span class="comment">% hObject    handle to ROIE_x0_slider (see GCBO)</span>
+1412 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1413 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1414 
+1415 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1416 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1417 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1418 xMax = tempSize(1);
+1419 handles.x0_roiE = floor((xMax)*get(handles.ROIE_x0_slider,<span class="string">'Value'</span>))+1; <span class="comment">% 94:188</span>
+1420 set(handles.ROIE_x0,<span class="string">'String'</span>,handles.x0_roiE)
+1421 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1422 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1423 
+1424 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1425 <a name="_sub92" href="#_subfunctions" class="code">function ROIE_x0_slider_CreateFcn(hObject, eventdata, handles)</a>
+1426 <span class="comment">% hObject    handle to ROIE_x0_slider (see GCBO)</span>
+1427 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1428 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1429 
+1430 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1431 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1432     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1433 <span class="keyword">end</span>
+1434 
+1435 
+1436 <span class="comment">% --- Executes on slider movement.</span>
+1437 <a name="_sub93" href="#_subfunctions" class="code">function ROIE_y0_slider_Callback(hObject, eventdata, handles)</a>
+1438 <span class="comment">% hObject    handle to ROIE_y0_slider (see GCBO)</span>
+1439 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1440 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1441 
+1442 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1443 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1444 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1445 yMax = tempSize(2);
+1446 handles.y0_roiE = floor((yMax)*get(handles.ROIE_y0_slider,<span class="string">'Value'</span>))+1; <span class="comment">% 94:188</span>
+1447 set(handles.ROIE_y0,<span class="string">'String'</span>,handles.y0_roiE)
+1448 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1449 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1450 
+1451 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1452 <a name="_sub94" href="#_subfunctions" class="code">function ROIE_y0_slider_CreateFcn(hObject, eventdata, handles)</a>
+1453 <span class="comment">% hObject    handle to ROIE_y0_slider (see GCBO)</span>
+1454 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1455 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1456 
+1457 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1458 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1459     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1460 <span class="keyword">end</span>
+1461 
+1462 
+1463 
+1464 <a name="_sub95" href="#_subfunctions" class="code">function ROIE_z0_Callback(hObject, eventdata, handles)</a>
+1465 <span class="comment">% hObject    handle to ROIE_z0 (see GCBO)</span>
+1466 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1467 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1468 
+1469 <span class="comment">% Hints: get(hObject,'String') returns contents of ROIE_z0 as text</span>
+1470 <span class="comment">%        str2double(get(hObject,'String')) returns contents of ROIE_z0 as a double</span>
+1471 
+1472 
+1473 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1474 <a name="_sub96" href="#_subfunctions" class="code">function ROIE_z0_CreateFcn(hObject, eventdata, handles)</a>
+1475 <span class="comment">% hObject    handle to ROIE_z0 (see GCBO)</span>
+1476 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1477 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1478 
+1479 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+1480 <span class="comment">%       See ISPC and COMPUTER.</span>
+1481 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1482     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+1483 <span class="keyword">end</span>
+1484 
+1485 
+1486 
+1487 <a name="_sub97" href="#_subfunctions" class="code">function ROIE_y0_Callback(hObject, eventdata, handles)</a>
+1488 <span class="comment">% hObject    handle to ROIE_y0 (see GCBO)</span>
+1489 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1490 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1491 
+1492 <span class="comment">% Hints: get(hObject,'String') returns contents of ROIE_y0 as text</span>
+1493 <span class="comment">%        str2double(get(hObject,'String')) returns contents of ROIE_y0 as a double</span>
+1494 
+1495 
+1496 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1497 <a name="_sub98" href="#_subfunctions" class="code">function ROIE_y0_CreateFcn(hObject, eventdata, handles)</a>
+1498 <span class="comment">% hObject    handle to ROIE_y0 (see GCBO)</span>
+1499 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1500 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1501 
+1502 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+1503 <span class="comment">%       See ISPC and COMPUTER.</span>
+1504 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1505     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+1506 <span class="keyword">end</span>
+1507 
+1508 
+1509 
+1510 <a name="_sub99" href="#_subfunctions" class="code">function ROIE_x0_Callback(hObject, eventdata, handles)</a>
+1511 <span class="comment">% hObject    handle to ROIE_x0 (see GCBO)</span>
+1512 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1513 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1514 
+1515 <span class="comment">% Hints: get(hObject,'String') returns contents of ROIE_x0 as text</span>
+1516 <span class="comment">%        str2double(get(hObject,'String')) returns contents of ROIE_x0 as a double</span>
+1517 
+1518 
+1519 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1520 <a name="_sub100" href="#_subfunctions" class="code">function ROIE_x0_CreateFcn(hObject, eventdata, handles)</a>
+1521 <span class="comment">% hObject    handle to ROIE_x0 (see GCBO)</span>
+1522 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1523 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1524 
+1525 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+1526 <span class="comment">%       See ISPC and COMPUTER.</span>
+1527 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1528     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+1529 <span class="keyword">end</span>
+1530 
+1531 
+1532 <span class="comment">% --- Executes on slider movement.</span>
+1533 <a name="_sub101" href="#_subfunctions" class="code">function ROIE_r0_slider_Callback(hObject, eventdata, handles)</a>
+1534 <span class="comment">% hObject    handle to ROIE_r0_slider (see GCBO)</span>
+1535 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1536 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1537 
+1538 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1539 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1540 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1541 xMax = tempSize(1);
+1542 xMid = floor(xMax/2);
+1543 handles.r0_roiE = floor((xMid-1)*get(handles.ROIE_r0_slider,<span class="string">'Value'</span>))+1; <span class="comment">% 94:188</span>
+1544 set(handles.ROIE_r0,<span class="string">'String'</span>,handles.r0_roiE)
+1545 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1546 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1547 
+1548 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1549 <a name="_sub102" href="#_subfunctions" class="code">function ROIE_r0_slider_CreateFcn(hObject, eventdata, handles)</a>
+1550 <span class="comment">% hObject    handle to ROIE_r0_slider (see GCBO)</span>
+1551 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1552 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1553 
+1554 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1555 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1556     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1557 <span class="keyword">end</span>
+1558 
+1559 
+1560 <span class="comment">% --- Executes on slider movement.</span>
+1561 <a name="_sub103" href="#_subfunctions" class="code">function ROIE_r2_slider_Callback(hObject, eventdata, handles)</a>
+1562 <span class="comment">% hObject    handle to ROIE_r2_slider (see GCBO)</span>
+1563 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1564 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1565 
+1566 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1567 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1568 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1569 zMax = tempSize(3);
+1570 zMid = floor(zMax/2);
+1571 handles.r2_roiE = floor((zMid-1)*get(handles.ROIE_r2_slider,<span class="string">'Value'</span>))+1; <span class="comment">% 94:188</span>
+1572 set(handles.ROIE_r2,<span class="string">'String'</span>,handles.r2_roiE)
+1573 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1574 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'y');</span>
+1575 
+1576 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1577 <a name="_sub104" href="#_subfunctions" class="code">function ROIE_r2_slider_CreateFcn(hObject, eventdata, handles)</a>
+1578 <span class="comment">% hObject    handle to ROIE_r2_slider (see GCBO)</span>
+1579 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1580 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1581 
+1582 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1583 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1584     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1585 <span class="keyword">end</span>
+1586 
+1587 
+1588 <span class="comment">% --- Executes on slider movement.</span>
+1589 <a name="_sub105" href="#_subfunctions" class="code">function ROIE_r1_slider_Callback(hObject, eventdata, handles)</a>
+1590 <span class="comment">% hObject    handle to ROIE_r1_slider (see GCBO)</span>
+1591 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1592 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1593 
+1594 <span class="comment">% Hints: get(hObject,'Value') returns position of slider</span>
+1595 <span class="comment">%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider</span>
+1596 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1597 yMax = tempSize(2);
+1598 yMid = floor(yMax/2);
+1599 handles.r1_roiE = floor((yMid-1)*get(handles.ROIE_r1_slider,<span class="string">'Value'</span>))+1; <span class="comment">% 94:188</span>
+1600 set(handles.ROIE_r1,<span class="string">'String'</span>,handles.r1_roiE)
+1601 <a href="#_sub115" class="code" title="subfunction updateSliceImage_ROICorrected_all(hObject,eventdata,handles)">updateSliceImage_ROICorrected_all</a>(hObject,eventdata,handles);
+1602 <span class="comment">%updateSliceImage_ROICorrected(hObject,eventdata,handles,'z');</span>
+1603 
+1604 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1605 <a name="_sub106" href="#_subfunctions" class="code">function ROIE_r1_slider_CreateFcn(hObject, eventdata, handles)</a>
+1606 <span class="comment">% hObject    handle to ROIE_r1_slider (see GCBO)</span>
+1607 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1608 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1609 
+1610 <span class="comment">% Hint: slider controls usually have a light gray background.</span>
+1611 <span class="keyword">if</span> isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1612     set(hObject,<span class="string">'BackgroundColor'</span>,[.9 .9 .9]);
+1613 <span class="keyword">end</span>
+1614 
+1615 
+1616 
+1617 <a name="_sub107" href="#_subfunctions" class="code">function ROIE_r0_Callback(hObject, eventdata, handles)</a>
+1618 <span class="comment">% hObject    handle to ROIE_r0 (see GCBO)</span>
+1619 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1620 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1621 
+1622 <span class="comment">% Hints: get(hObject,'String') returns contents of ROIE_r0 as text</span>
+1623 <span class="comment">%        str2double(get(hObject,'String')) returns contents of ROIE_r0 as a double</span>
+1624 
+1625 
+1626 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1627 <a name="_sub108" href="#_subfunctions" class="code">function ROIE_r0_CreateFcn(hObject, eventdata, handles)</a>
+1628 <span class="comment">% hObject    handle to ROIE_r0 (see GCBO)</span>
+1629 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1630 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1631 
+1632 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+1633 <span class="comment">%       See ISPC and COMPUTER.</span>
+1634 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1635     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+1636 <span class="keyword">end</span>
+1637 
+1638 
+1639 
+1640 <a name="_sub109" href="#_subfunctions" class="code">function ROIE_r1_Callback(hObject, eventdata, handles)</a>
+1641 <span class="comment">% hObject    handle to ROIE_r1 (see GCBO)</span>
+1642 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1643 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1644 
+1645 <span class="comment">% Hints: get(hObject,'String') returns contents of ROIE_r1 as text</span>
+1646 <span class="comment">%        str2double(get(hObject,'String')) returns contents of ROIE_r1 as a double</span>
+1647 
+1648 
+1649 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1650 <a name="_sub110" href="#_subfunctions" class="code">function ROIE_r1_CreateFcn(hObject, eventdata, handles)</a>
+1651 <span class="comment">% hObject    handle to ROIE_r1 (see GCBO)</span>
+1652 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1653 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1654 
+1655 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+1656 <span class="comment">%       See ISPC and COMPUTER.</span>
+1657 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1658     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+1659 <span class="keyword">end</span>
+1660 
+1661 
+1662 
+1663 <a name="_sub111" href="#_subfunctions" class="code">function ROIE_r2_Callback(hObject, eventdata, handles)</a>
+1664 <span class="comment">% hObject    handle to ROIE_r2 (see GCBO)</span>
+1665 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1666 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+1667 
+1668 <span class="comment">% Hints: get(hObject,'String') returns contents of ROIE_r2 as text</span>
+1669 <span class="comment">%        str2double(get(hObject,'String')) returns contents of ROIE_r2 as a double</span>
+1670 
+1671 
+1672 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+1673 <a name="_sub112" href="#_subfunctions" class="code">function ROIE_r2_CreateFcn(hObject, eventdata, handles)</a>
+1674 <span class="comment">% hObject    handle to ROIE_r2 (see GCBO)</span>
+1675 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+1676 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+1677 
+1678 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+1679 <span class="comment">%       See ISPC and COMPUTER.</span>
+1680 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+1681     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+1682 <span class="keyword">end</span>
+1683 
+1684 
+1685 <a name="_sub113" href="#_subfunctions" class="code">function drawEllipse(x0,y0,r0,r1)</a>
+1686     <span class="comment">% (x-x0)^2/r0^2 + (y-y0)^2/r1^2 = 1</span>
+1687     x_supp = linspace(x0-r0,x0+r0,2000);
+1688     comTerm = sqrt((r1.^2) - (r1.^2) .* ((x_supp-x0).^2)./(r0.^2));
+1689     posEl = comTerm + y0;
+1690     negEl = -comTerm + y0;
+1691     <span class="comment">%plot(x_supp,posEl,'k',x_supp,negEl,'k','LineWidth',3);</span>
+1692     plot(real(posEl),x_supp,<span class="string">'k'</span>,real(negEl),x_supp,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,3);
+1693     <span class="comment">%posEllipse = @(r0_in,r1_in,x0_in,y0_in,points_in) sqrt((r0_in.^2) - (r0_in.^2) .* (((linspace(y0_in-r0_in,y0_in+r0_in,points_in))-y0_in).^2)./(r1_in.^2)) + x0_in;</span>
+1694     <span class="comment">%negEllipse = @(r0_in,r1_in,x0_in,y0_in,points_in) -sqrt((r0_in.^2) - (r0_in.^2) .* (((linspace(y0_in-r0_in,y0_in+r0_in,points_in))-y0_in).^2)./(r1_in.^2)) + x0_in;</span>
+1695     <span class="comment">%plotEllipse = @(r0_in,r1_in,x0_in,y0_in,points_in) cellfun(@(x) x(), {@() plot(linspace(x0_in-r0_in,x0_in+r0_in,points_in),posEllipse(r0_in,r1_in,x0_in,y0_in,points_in),'k',linspace(x0_in-r0_in,x0_in+r0_in,points_in),negEllipse(r0_in,r1_in,x0_in,y0_in,points_in),'k')});</span>
+1696     <span class="comment">%plotEllipse(r0,r1,x0,y0,5000)</span>
+1697 
+1698 <a name="_sub114" href="#_subfunctions" class="code">function  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)</a>
+1699     <span class="comment">% r0 is the radius in the direction parallel to the viewer</span>
+1700     <span class="comment">% r1 is the radius in the direction perp to the viewer</span>
+1701     <span class="comment">% r2 is the radius in the direction normal to the other two</span>
+1702     <span class="comment">% d is distance from the center in the r0 direction</span>
+1703     comVal = sqrt(1-(d^2)/(r_parallel^2));
+1704     <span class="comment">% r_01 is projection radius the r1 direction</span>
+1705     <span class="comment">% r_02 is projection radius the r2 direction</span>
+1706     r_00 = r_perpVertical*comVal;
+1707     r_01 = r_perpHorizontal*comVal;
+1708     
+1709     
+1710 <a name="_sub115" href="#_subfunctions" class="code">function updateSliceImage_ROICorrected_all(hObject,eventdata,handles)</a>
+1711 <span class="comment">%get size of data for normalization</span>
+1712 tempSize = size(handles.activeExperiment.ultrasoundDataSeries(handles.activeN).rawData_cart);
+1713 decorrSliderValue = .1*(.0001+get(handles.dynRangeDecorrSlider,<span class="string">'Value'</span>));
+1714 bscanSliderValue = 10*(.0001+get(handles.dynRangeBScanSlider,<span class="string">'Value'</span>));
+1715 xMax = tempSize(3); 
+1716 yMax = tempSize(2); 
+1717 zMax = tempSize(1); 
+1718 xMid = floor(xMax/2);
+1719 yMid = floor(yMax/2); 
+1720 zMid = floor(zMax/2); 
+1721 <span class="comment">% Get roi ranges</span>
+1722 handles.x_roi_left = floor((xMid-1)*get(handles.xroiSlider_1,<span class="string">'Value'</span>))+1; <span class="comment">%1:94</span>
+1723 handles.x_roi_right = xMid+floor((xMid)*get(handles.xroiSlider_2,<span class="string">'Value'</span>)); <span class="comment">% 94:188</span>
+1724 handles.y_roi_left = floor((yMid-1)*get(handles.xroiSlider_3,<span class="string">'Value'</span>))+1; <span class="comment">%1:94</span>
+1725 handles.y_roi_right = floor((yMid)+floor((yMid)*get(handles.xroiSlider_4,<span class="string">'Value'</span>)));
+1726 handles.z_roi_left = floor((zMid)*get(handles.yroiSlider_1,<span class="string">'Value'</span>))+1; <span class="comment">% 1:74</span>
+1727 handles.z_roi_right = floor(zMid-1)+floor((zMid)*get(handles.yroiSlider_2,<span class="string">'Value'</span>)); 
+1728 <span class="comment">% Get ellipse ROI radii</span>
+1729 handles.r0_roiE = str2double(get(handles.ROIE_r0,<span class="string">'String'</span>)); <span class="comment">%1:94</span>
+1730 handles.r1_roiE = str2double(get(handles.ROIE_r1,<span class="string">'String'</span>)); <span class="comment">% 94:188</span>
+1731 handles.r2_roiE = str2double(get(handles.ROIE_r2,<span class="string">'String'</span>)); <span class="comment">%1:94</span>
+1732 handles.x0_roiE = str2double(get(handles.ROIE_x0,<span class="string">'String'</span>));
+1733 handles.y0_roiE = str2double(get(handles.ROIE_y0,<span class="string">'String'</span>)); <span class="comment">% 1:74</span>
+1734 handles.z0_roiE = str2double(get(handles.ROIE_z0,<span class="string">'String'</span>)); 
+1735 <span class="comment">% get range of values</span>
+1736 handles.activeExperiment.ROI_xRange = [handles.x_roi_left,handles.x_roi_right];
+1737 handles.activeExperiment.ROI_yRange = [handles.y_roi_left,handles.y_roi_right];
+1738 handles.activeExperiment.ROI_zRange = [handles.z_roi_left,handles.z_roi_right];
+1739 <span class="comment">%</span>
+1740 SliderValueX = floor((tempSize(1)-1)*get(handles.xSlider,<span class="string">'Value'</span>))+1;
+1741 SliderValueY = floor((tempSize(2)-1)*get(handles.ySlider,<span class="string">'Value'</span>))+1;
+1742 SliderValueZ = floor((tempSize(2)-1)*get(handles.zSlider,<span class="string">'Value'</span>))+1;
+1743 <span class="comment">% check if old version of matlab</span>
+1744 isOldMatlab = 0;
+1745 [a b c] = regexp(version,<span class="string">'R(\d+)\w'</span>,<span class="string">'tokens'</span>, <span class="string">'tokenExtents'</span>);
+1746 <span class="keyword">if</span> num2str(a{1}{1}) &lt; 2014
+1747     isOldMatlab = 1;
+1748 <span class="keyword">end</span>
+1749 <span class="comment">% x axis</span>
+1750 axes(handles.xCartVol);
+1751 tempPic = handles.activeExperiment.getDataSlice_cart(<span class="string">'x'</span>,handles.activeN,1,SliderValueX);
+1752 imagesc(abs(log10(tempPic)),[0 bscanSliderValue]);
+1753 colormap(handles.xCartVol,gray);
+1754 edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(<span class="string">'x'</span>,handles.activeN,1,SliderValueX))));
+1755 alphamask(edgeVals,[256 0 0],.3);
+1756 hold on; 
+1757 <span class="comment">%rectangle('position',drawRect(handles.x_roi_left,handles.y_roi_left,handles.x_roi_right,handles.y_roi_right),'LineWidth',3);</span>
+1758 <span class="comment">% plot ellipse</span>
+1759 line([0,yMax],[SliderValueY,SliderValueY],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1760 line([SliderValueZ,SliderValueZ],[0,yMax],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1761 [r_y,r_z] = <a href="#_sub114" class="code" title="subfunction  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)">calculateEllipseProjection</a>(handles.r0_roiE,handles.r1_roiE,handles.r2_roiE,abs(handles.x0_roiE-SliderValueX));
+1762 <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.y0_roiE,handles.z0_roiE,r_y,r_z);
+1763 hold off; 
+1764 <span class="comment">% decorr plots</span>
+1765 <span class="comment">% x axis</span>
+1766 <span class="comment">%axes(handles.xDecorrVol);</span>
+1767 <span class="comment">%hold on;</span>
+1768 <span class="comment">%imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr('x',handles.activeN,1,SliderValueX))),[0, decorrSliderValue]);</span>
+1769 <span class="comment">%set(handles.xDecorrVol,'XTicklabel',[]);</span>
+1770 <span class="comment">%set(handles.xDecorrVol,'YTicklabel',[]);</span>
+1771 <span class="comment">%drawEllipse(handles.x0_roiE,handles.z0_roiE,r_y,r_z);</span>
+1772 <span class="comment">%hold off;</span>
+1773 <span class="keyword">if</span>(~isOldMatlab)
+1774     colormap(handles.xDecorrVol,hot(20));
+1775 <span class="keyword">end</span>
+1776 <span class="comment">% y axis</span>
+1777 axes(handles.yCartVol);
+1778 <span class="comment">% y axis</span>
+1779 tempPic = handles.activeExperiment.getDataSlice_cart(<span class="string">'y'</span>,handles.activeN,1,SliderValueY);
+1780 imagesc(abs(log10(tempPic)),[0 bscanSliderValue]);
+1781 colormap(handles.yCartVol,gray);
+1782 edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(<span class="string">'y'</span>,handles.activeN,1,SliderValueY))));
+1783 alphamask(edgeVals,[256 0 0],.3);
+1784 hold on; 
+1785 <span class="comment">%rectangle('position',drawRect(handles.x_roi_left,handles.z_roi_left,handles.x_roi_right,handles.z_roi_right),'LineWidth',3);</span>
+1786 line([0,xMax],[SliderValueX,SliderValueX],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1787 line([SliderValueZ,SliderValueZ],[0,zMax],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1788 [r_x,r_z] = <a href="#_sub114" class="code" title="subfunction  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)">calculateEllipseProjection</a>(handles.r1_roiE,handles.r0_roiE,handles.r2_roiE,abs(handles.y0_roiE-SliderValueY));
+1789 <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.z0_roiE,r_x,r_z);
+1790 hold off; 
+1791 <span class="comment">% z axis</span>
+1792 axes(handles.zCartVol);
+1793 <span class="comment">% x axis</span>
+1794 tempPic = handles.activeExperiment.getDataSlice_cart(<span class="string">'z'</span>,handles.activeN,1,SliderValueZ);
+1795 imagesc(abs(log10(tempPic)),[0 bscanSliderValue]);
+1796 colormap(handles.zCartVol,gray);
+1797 edgeVals = (squeeze(abs(handles.activeExperiment.getDataSlice_decorrMask(<span class="string">'z'</span>,handles.activeN,1,SliderValueZ))));
+1798 alphamask(edgeVals,[256 0 0],.3);
+1799 hold on; 
+1800 line([0,xMax],[SliderValueX,SliderValueX],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1801 line([SliderValueY,SliderValueY],[0,yMax],<span class="string">'Color'</span>,<span class="string">'k'</span>,<span class="string">'LineWidth'</span>,2);
+1802 <span class="comment">%rectangle('position',drawRect(handles.y_roi_left,handles.z_roi_left,handles.y_roi_right,handles.z_roi_right),'LineWidth',3);</span>
+1803 [r_x,r_y] = <a href="#_sub114" class="code" title="subfunction  [r_00,r_01] = calculateEllipseProjection(r_parallel,r_perpVertical,r_perpHorizontal,d)">calculateEllipseProjection</a>(handles.r2_roiE,handles.r0_roiE,handles.r1_roiE,abs(handles.z0_roiE-SliderValueZ));
+1804 <a href="#_sub113" class="code" title="subfunction drawEllipse(x0,y0,r0,r1)">drawEllipse</a>(handles.x0_roiE,handles.y0_roiE,r_x,r_y);
+1805 hold off;
+1806 <span class="comment">% set 3d plots</span>
+1807 axes(handles.yDecorrVol);
+1808 <span class="comment">%hold on;</span>
+1809 [x_e, y_e, z_e] = ellipsoid(handles.y0_roiE,handles.z0_roiE,handles.x0_roiE,handles.r1_roiE,handles.r2_roiE,handles.r0_roiE,30);
+1810 [x_pz, y_pz] = meshgrid(0:1:xMax,0:1:yMax);
+1811 z_pz = SliderValueZ*ones(size(x_pz)); <span class="comment">%-zMid;</span>
+1812 [x_py, z_py] = meshgrid(0:1:xMax,0:1:zMax);
+1813 y_py = SliderValueY*ones(size(x_py)); <span class="comment">%-yMid;</span>
+1814 [y_px, z_px] = meshgrid(0:1:yMax,0:1:zMax);
+1815 x_px = SliderValueX*ones(size(y_px)); <span class="comment">%-xMid;</span>
+1816 direction = [1,0,0];
+1817 <span class="comment">% View one</span>
+1818 axes(handles.yDecorrVol);
+1819 hold on;
+1820 cla(handles.yDecorrVol)
+1821 e_surf = surf(x_e,y_e,z_e);
+1822 pz_surf = surf(y_pz,z_pz,x_pz);
+1823 px_surf = surf(y_py,z_py,x_py);
+1824 py_surf = surf(y_px,z_px,x_px);
+1825 rotate(e_surf,direction,180)
+1826 rotate(pz_surf,direction,180)
+1827 rotate(px_surf,direction,180)
+1828 rotate(py_surf,direction,180)
+1829 view(-109,11)
+1830 axis equal
+1831 hold off; 
+1832 axes(handles.xDecorrVol);
+1833 hold on;
+1834 cla(handles.xDecorrVol)
+1835 e_surf = surf(x_e,y_e,z_e);
+1836 pz_surf = surf(y_pz,z_pz,x_pz);
+1837 px_surf = surf(y_py,z_py,x_py);
+1838 py_surf = surf(y_px,z_px,x_px);
+1839 rotate(e_surf,direction,180)
+1840 rotate(pz_surf,direction,180)
+1841 rotate(px_surf,direction,180)
+1842 rotate(py_surf,direction,180)
+1843 view(-50,11)
+1844 axis equal
+1845 hold off; 
+1846 axes(handles.zDecorrVol);
+1847 hold on;
+1848 cla(handles.zDecorrVol)
+1849 e_surf = surf(x_e,y_e,z_e);
+1850 pz_surf = surf(y_pz,z_pz,x_pz);
+1851 px_surf = surf(y_py,z_py,x_py);
+1852 py_surf = surf(y_px,z_px,x_px);
+1853 rotate(e_surf,direction,180)
+1854 rotate(pz_surf,direction,180)
+1855 rotate(px_surf,direction,180)
+1856 rotate(py_surf,direction,180)
+1857 
+1858 view(-169,11)
+1859 axis equal
+1860 hold off; 
+1861 
+1862 <span class="comment">% decorr plots</span>
+1863 <span class="comment">%axes(handles.zDecorrVol);</span>
+1864 <span class="comment">%hold on;</span>
+1865 <span class="comment">%imagesc(squeeze(abs(handles.activeExperiment.getDataSlice_cumulativeDecorr('z',handles.activeN,1,SliderValue))),[0, decorrSliderValue]);</span>
+1866 <span class="comment">%%set(handles.zDecorrVol,'XTicklabel',[]);</span>
+1867 <span class="comment">%set(handles.zDecorrVol,'YTicklabel',[]);</span>
+1868 <span class="comment">%drawEllipse(handles.x0_roiE,handles.z0_roiE,r_x,r_y);</span>
+1869 <span class="comment">%hold off;</span>
+1870 <span class="comment">%if(~isOldMatlab)</span>
+1871 <span class="comment">%    colormap(handles.zDecorrVol,hot(20));</span>
+1872 <span class="comment">%end</span>
+1873</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

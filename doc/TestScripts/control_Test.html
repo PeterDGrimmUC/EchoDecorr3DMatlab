@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of control_Test</title>
+  <meta name="keywords" content="control_Test">
+  <meta name="description" content="% Define parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">TestScripts</a> &gt; control_Test.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for TestScripts&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>control_Test
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% Define parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Define parameters</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% Define parameters</span>
+0002 
+0003 warning(<span class="string">'off'</span>,<span class="string">'all'</span>)
+0004 <span class="keyword">try</span> 
+0005     <span class="keyword">if</span> ispc
+0006         basePath = strcat(<span class="string">'C:\Users\'</span>,getenv(<span class="string">'username'</span>),<span class="string">'\Box\SiemensSC2000IQData'</span>);
+0007     <span class="keyword">elseif</span> ismac
+0008         basePath = strcat(<span class="string">'/Users/'</span>,getenv(<span class="string">'USER'</span>),<span class="string">'/box'</span>);
+0009     <span class="keyword">end</span>
+0010 <span class="keyword">catch</span>
+0011     basePath = matlabroot;
+0012 <span class="keyword">end</span>
+0013 fullDirectory =  uigetdir(basePath);
+0014 dataDirectory = dir(fullDirectory);
+0015 fileName = <span class="string">'bufApl0Out_0x0_0x0.data.dm.pmcr'</span>;
+0016 <span class="comment">%user defined</span>
+0017 azimuthAngle = 2*pi*80/360;
+0018 rangeAngle = 2*pi*80/360;
+0019 rmin = 0;
+0020 cartScalingFactor = 2; <span class="comment">% dx/dr</span>
+0021 sigma = 1; <span class="comment">%mm</span>
+0022 frameRate = 22; <span class="comment">% hz</span>
+0023 <span class="comment">%% get US data</span>
+0024 <span class="keyword">if</span> ispc
+0025     fullPath =strcat(fullDirectory,<span class="string">'\'</span>,{dataDirectory(6).name},<span class="string">'\'</span>,fileName);
+0026 <span class="keyword">elseif</span> ismac
+0027     fullPath =strcat(fullDirectory,<span class="string">'/'</span>,{dataDirectory(6).name},<span class="string">'/'</span>,fileName);
+0028 <span class="keyword">end</span>
+0029 
+0030 DmBase = read_lbdump(fullPath{1});
+0031 <span class="comment">%computed from existing parameters/infofile</span>
+0032 rmax = 90<span class="comment">%(size(DmBase.data,1)/DmBase.Info.NumSamplesPerMm)/10;</span>
+0033 thetamin= -azimuthAngle/2;
+0034 thetamax = azimuthAngle/2;
+0035 phimin=-rangeAngle/2;
+0036 phimax=rangeAngle/2;
+0037 
+0038 interFrameTime = 1/frameRate;
+0039 thresh = .1; 
+0040 <span class="comment">%% compute first decorrelation, to obtain size for cumumaltive decorr</span>
+0041 Dm.startTime =1;
+0042 usData(1) = USDataClass(Dm.data,Dm.startTime, Dm.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,interFrameTime);
+0043 usData(1).scanConv_Frust();
+0044 usData(1).compute3DDecorr();
+0045 cumulDecorr = usData(1).decorr;
+0046 <span class="comment">%%</span>
+0047 <span class="keyword">for</span> n = 5:size(dataDirectory)
+0048     <span class="comment">%tic</span>
+0049     <span class="keyword">if</span> ispc
+0050         fullPath =strcat(fullDirectory,<span class="string">'\'</span>,{dataDirectory(n).name},<span class="string">'\'</span>,fileName);
+0051     <span class="keyword">elseif</span> ismac
+0052         fullPath =strcat(fullDirectory,<span class="string">'/'</span>,{dataDirectory(n).name},<span class="string">'/'</span>,fileName);
+0053     <span class="keyword">end</span>
+0054     dataDirectory(n).name;
+0055     Dm = read_lbdump(fullPath{1});
+0056     usData(n-3) = USDataClass(Dm.data,Dm.startTime, Dm.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,interFrameTime);
+0057 
+0058     <span class="comment">%usData(n-3).scanConvert3DVolume_sliceMethod;</span>
+0059     <span class="comment">%usData(n-3).compute3DDecorr_sliceMethod;</span>
+0060     <span class="comment">%tic;</span>
+0061     usData(n-3).scanConv_Frust();
+0062     <span class="comment">%usData(n-3).scanConvert3D_Frust;</span>
+0063     <span class="comment">%toc;</span>
+0064     <span class="comment">%tic</span>
+0065     usData(n-3).compute3DDecorr();
+0066     cumulDecorr = max(cumulDecorr,usData(n-3).decorr);
+0067 <span class="keyword">end</span>
+0068 toc;
+0069 <span class="comment">%%</span>
+0070 cumulDecorr(1).totalDecorr = usData(1).decorr;
+0071 cumulDecorrSum(1) =  sum(cumulDecorr(1).totalDecorr(:));
+0072 <span class="keyword">for</span> n = 2:size(usData)
+0073     cumulDecorr(n).totalDecorr = max(usData(n).decorr,cumulDecorr(n-1).totalDecorr);
+0074     cumulDecorrSum(n) =  sum(cumulDecorr(n).totalDecorr(:));
+0075 <span class="keyword">end</span>
+0076 plot(cumulDecorrSum);</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

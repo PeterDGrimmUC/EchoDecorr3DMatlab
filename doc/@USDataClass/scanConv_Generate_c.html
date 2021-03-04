@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConv_Generate_c</title>
+  <meta name="keywords" content="scanConv_Generate_c">
+  <meta name="description" content="This script reads IQ data in the first section (SIEMENS Scripts), then">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; scanConv_Generate_c.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConv_Generate_c
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This script reads IQ data in the first section (SIEMENS Scripts), then</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [qOut] = scanConv_Generate_c( obj ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This script reads IQ data in the first section (SIEMENS Scripts), then
+ does the 3D interpolation on spherical IQ data with function named
+ &quot;frustumInterp&quot;. In the last section the spherical and
+ interpolated data in cartesian system are displayed.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [qOut] = scanConv_Generate_c( obj )</a>
+0002 <span class="comment">% This script reads IQ data in the first section (SIEMENS Scripts), then</span>
+0003 <span class="comment">% does the 3D interpolation on spherical IQ data with function named</span>
+0004 <span class="comment">% &quot;frustumInterp&quot;. In the last section the spherical and</span>
+0005 <span class="comment">% interpolated data in cartesian system are displayed.</span>
+0006 
+0007 <span class="comment">% Writers: Elmira Ghahramani Z., Dr. Douglas Mast</span>
+0008 <span class="comment">% Image-guided Ultrasound Therapeutics Laboratories</span>
+0009 <span class="comment">% University of Cincinnati</span>
+0010 <span class="comment">% Contacts: ghahraea@mail.uc.edu</span>
+0011 <span class="comment">%           masttd@UCMAIL.UC.EDU</span>
+0012 <span class="comment">% Date last updated: 02/19/2019</span>
+0013 
+0014 <span class="comment">%% Read IQ data</span>
+0015 
+0016 <span class="comment">%for volIndex = 1:size(obj.rawData,4)</span>
+0017     Isph = squeeze(obj.rawData(:,:,:,1));
+0018     
+0019     <span class="comment">%% set up the parameters</span>
+0020     sizeAz = size(Isph,2);
+0021     sizeEl = size(Isph,3);
+0022     
+0023     <span class="comment">% define coordinates on pyramidal grid</span>
+0024     obj.dr = 1/obj.InfoFile.NumSamplesPerMm;         <span class="comment">% range (mm)</span>
+0025     Rvec = obj.rmin:obj.dr:obj.rmax;
+0026     
+0027     <span class="comment">% sin theta (azimuth)</span>
+0028     mumax = sin(obj.thetamax); mumin = sin(obj.thetamin);
+0029     muvec = linspace(mumin,mumax,sizeAz);
+0030     dmu = muvec(2)-muvec(1);
+0031     
+0032     <span class="comment">% sin phi (elevation)</span>
+0033     numax = sin(obj.phimax); numin=sin(obj.phimin);
+0034     nuvec = linspace(numin,numax,sizeEl);
+0035     dnu = nuvec(2)-nuvec(1);
+0036     
+0037     [R,mu,nu] = ndgrid(Rvec,muvec,nuvec);
+0038     
+0039     <span class="comment">% Cartesian grid, onto which we're scan-converting (interpolating)</span>
+0040     <span class="comment">%obj.cartScalingFactor =2;</span>
+0041     obj.dz = obj.cartScalingFactor*obj.dr;<span class="comment">%0.5;  % spatial step</span>
+0042     obj.dx = obj.dz;
+0043     obj.dy = obj.dz;
+0044     maxY = obj.rmax*sin(obj.phimax);
+0045     minY = obj.rmax*sin(obj.phimin);
+0046     maxX = obj.rmax*sin(obj.thetamax);
+0047     minX = obj.rmax*sin(obj.thetamin);
+0048     obj.z_range = obj.rmin:obj.dz:obj.rmax;  <span class="comment">% depth</span>
+0049     obj.y_range = minY:obj.dz:maxY; <span class="comment">%-32:obj.dz:32;  % azimuth</span>
+0050     obj.x_range = minX:obj.dz:maxX; <span class="comment">%-31:obj.dz:31;  % elevation;</span>
+0051     [x,y,z] = ndgrid(obj.x_range,obj.y_range,obj.z_range);
+0052     obj.xMax = obj.x_range(end);
+0053     obj.xMin = obj.x_range(1); 
+0054     obj.yMax = obj.y_range(end);
+0055     obj.yMin = obj.y_range(1); 
+0056     obj.zMax = obj.z_range(end);
+0057     obj.zMin = obj.z_range(1); 
+0058     <span class="comment">%defining image cross sections (default: half range, az., el.)</span>
+0059     <span class="comment">% pyramidal coordinates of Cartesian grid points</span>
+0060     R0 = sqrt(x.^2+y.^2+z.^2);
+0061     mu0 = y./sqrt(z.^2+y.^2);
+0062     nu0 = x./(sqrt(R0.^2-y.^2));
+0063     
+0064     <span class="comment">% find Cartesian points inside pyramid to interpolate</span>
+0065     p = find(R0&gt;=obj.rmin &amp; R0&lt;=obj.rmax-obj.dr &amp; mu0&gt;=mumin &amp; mu0&lt;=mumax-dmu &amp; <span class="keyword">...</span>
+0066         nu0&gt;=numin &amp; nu0&lt;=numax-dnu); <span class="comment">% points for valid interpolation</span>
+0067     
+0068     <span class="comment">%image_initialization_time = toc</span>
+0069     
+0070     <span class="comment">%tic;</span>
+0071     <span class="comment">% for each point to interpolate, find nearest previous neighbors, and</span>
+0072     <span class="comment">%  distances from them along R, mu, nu directions</span>
+0073     imu = zeros(size(R0));
+0074     Lmu = zeros(size(R0));
+0075     imu(p) = floor((mu0(p) - mumin)/dmu) + 1;
+0076     Lmu(p) = mu0(p) - muvec(imu(p))';
+0077     
+0078     inu = zeros(size(R0));
+0079     Lnu = zeros(size(R0));
+0080     inu(p) = floor((nu0(p) - numin)/dnu) + 1;
+0081     Lnu(p) = nu0(p) - nuvec(inu(p))';
+0082     
+0083     iR = zeros(size(R0));
+0084     LR = zeros(size(R0));
+0085     iR(p) = floor((R0(p) - obj.rmin)/obj.dr) + 1;
+0086     LR(p) = R0(p) - Rvec(iR(p))';
+0087 
+0088     [qOut] = scanConv_Frust_c(p,Lmu,Lnu,LR,dmu,dnu,obj.dr,length(p));
+0089 <span class="keyword">end</span>
+0090</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

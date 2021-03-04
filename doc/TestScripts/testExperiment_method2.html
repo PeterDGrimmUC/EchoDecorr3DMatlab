@@ -1,0 +1,404 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of testExperiment_method2</title>
+  <meta name="keywords" content="testExperiment_method2">
+  <meta name="description" content="% Define parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">TestScripts</a> &gt; testExperiment_method2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for TestScripts&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>testExperiment_method2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>% Define parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% Define parameters</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% Define parameters</span>
+0002 
+0003 warning(<span class="string">'off'</span>,<span class="string">'all'</span>)
+0004 <span class="keyword">try</span> 
+0005     <span class="keyword">if</span> ispc
+0006         basePath = strcat(<span class="string">'C:\Users\'</span>,getenv(<span class="string">'username'</span>),<span class="string">'\Box\SiemensSC2000IQData'</span>);
+0007     <span class="keyword">elseif</span> ismac
+0008         basePath = strcat(<span class="string">'/Users/'</span>,getenv(<span class="string">'USER'</span>),<span class="string">'/box'</span>);
+0009         addpath(strcat(basePath,<span class="string">'/SiemensSC2000IQData/Experiment Data'</span>))
+0010     <span class="keyword">end</span>
+0011 <span class="keyword">catch</span>
+0012     basePath = matlabroot;
+0013 <span class="keyword">end</span>
+0014 fullDirectory =  uigetdir(basePath);
+0015 dataDirectory = dir(fullDirectory);
+0016 fileName = <span class="string">'bufApl0Out_0x0_0x0.data.dm.pmcr'</span>;
+0017 <span class="comment">%user defined</span>
+0018 azimuthAngle = 2*pi*80/360;
+0019 rangeAngle = 2*pi*80/360;
+0020 rmin = 0;
+0021 cartScalingFactor = 3; <span class="comment">% dx/dr</span>
+0022 sigma = 1; <span class="comment">%mm</span>
+0023 frameRate = 22; <span class="comment">% hz</span>
+0024 <span class="comment">%% get US data</span>
+0025 <span class="keyword">if</span> ispc
+0026     fullPath =strcat(fullDirectory,<span class="string">'\'</span>,{dataDirectory(6).name},<span class="string">'\'</span>,fileName);
+0027 <span class="keyword">elseif</span> ismac
+0028     fullPath =strcat(fullDirectory,<span class="string">'/'</span>,{dataDirectory(6).name},<span class="string">'/'</span>,fileName);
+0029 <span class="keyword">end</span>
+0030 
+0031 DmBase = read_lbdump(fullPath{1})
+0032 <span class="comment">%computed from existing parameters/infofile</span>
+0033 rmax = 80<span class="comment">%(size(DmBase.data,1)/DmBase.Info.NumSamplesPerMm)/10;</span>
+0034 thetamin= -azimuthAngle/2;
+0035 thetamax = azimuthAngle/2;
+0036 phimin=-rangeAngle/2;
+0037 phimax=rangeAngle/2;
+0038 
+0039 interFrameTime = 1/frameRate;
+0040 <span class="comment">%% get RF Data</span>
+0041 RFDataTable = readtable(<span class="string">'RFData_2019_1_31_22_8_654.txt'</span>);
+0042 <span class="keyword">for</span> index = 1:length(RFDataTable.Day_Month_Year)
+0043     dateInter = strsplit(RFDataTable.Day_Month_Year{index},<span class="string">'-'</span>);
+0044     RFDay(index) = str2num(dateInter{1});
+0045     RFMonth(index) = str2num(dateInter{2});
+0046     RFYear(index) = str2num(dateInter{3});
+0047 <span class="keyword">end</span>
+0048 RFData.RFDataTime = datetime(RFYear',RFMonth',RFDay',RFDataTable.Hours,RFDataTable.Minutes,RFDataTable.Seconds,RFDataTable.Milliseconds);
+0049 RFStartTime = RFData.RFDataTime(2);
+0050 USStartTime = DmBase.startTime;
+0051 diffTime = RFStartTime - USStartTime;
+0052 
+0053 <span class="keyword">for</span> index = 1:length(RFData.RFDataTime)
+0054     RFData.RFDataTime(index) = RFData.RFDataTime(index) - diffTime;
+0055     <span class="comment">%RFData.RFDataTime(index) = RFData.RFDataTime(index) -hours(5);</span>
+0056 <span class="keyword">end</span>
+0057 RFData.t1 = RFDataTable.t1;
+0058 RFData.t2 = RFDataTable.t2;
+0059 RFData.t3 = RFDataTable.t3;
+0060 RFData.t4 = RFDataTable.t4;
+0061 RFData.currentPower = RFDataTable.currentPower;
+0062 RFData.timer = RFDataTable.timer;
+0063 RFData.deliveredPower = RFDataTable.deliveredPower;
+0064 RFData.efficiency = RFDataTable.efficiency;
+0065 RFData.targetTemp = RFDataTable.targetTemp;
+0066 RFData.modeIndicator = RFDataTable.modeIndicator;
+0067 RFData.tempButtons = RFDataTable.tempButtons;
+0068 RFData.impedance = RFDataTable.impedance;
+0069 
+0070 <span class="comment">%% get consecutive US Data</span>
+0071 tic;
+0072 n = 4;
+0073 <span class="keyword">if</span> ispc
+0074         fullPath =strcat(fullDirectory,<span class="string">'\'</span>,{dataDirectory(n).name},<span class="string">'\'</span>,fileName);
+0075     <span class="keyword">elseif</span> ismac
+0076         fullPath =strcat(fullDirectory,<span class="string">'/'</span>,{dataDirectory(n).name},<span class="string">'/'</span>,fileName);
+0077 <span class="keyword">end</span>
+0078 Dm = read_lbdump(fullPath{1});
+0079 usData(1) = USDataClass(Dm.data,Dm.startTime, Dm.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,interFrameTime);
+0080 <span class="comment">%usData.computeGaussianMask;</span>
+0081 usData(1).computeScanConvParams;
+0082 usData(1).scanConvert3D_Frust;
+0083 <span class="keyword">for</span> n = 5:size(dataDirectory)
+0084     <span class="comment">%tic</span>
+0085     <span class="keyword">if</span> ispc
+0086         fullPath =strcat(fullDirectory,<span class="string">'\'</span>,{dataDirectory(n).name},<span class="string">'\'</span>,fileName);
+0087     <span class="keyword">elseif</span> ismac
+0088         fullPath =strcat(fullDirectory,<span class="string">'/'</span>,{dataDirectory(n).name},<span class="string">'/'</span>,fileName);
+0089     <span class="keyword">end</span>
+0090     Dm = read_lbdump(fullPath{1});
+0091     usData(n-3) = usData(1);
+0092     usData(n-3).rawData = Dm.data; 
+0093     <span class="comment">%usData(n-3).scanConvert3DVolume_sliceMethod;</span>
+0094     <span class="comment">%usData(n-3).compute3DDecorr_sliceMethod;</span>
+0095     
+0096     <span class="comment">%usData(n-3).scanConv_Frust();</span>
+0097     usData(n-3).scanConvert3D_Frust;
+0098     
+0099     <span class="comment">%tic</span>
+0100     usData(n-3).compute3DDecorr();
+0101     <span class="comment">%toc</span>
+0102     <span class="comment">%tocArr(n-3) = toc</span>
+0103 <span class="keyword">end</span>
+0104 toc;
+0105 <span class="comment">%% get maximum decorrelation for setting dynamic rance</span>
+0106 maxDecorr = 0;
+0107 <span class="keyword">for</span> n = 1:length(usData); 
+0108     <span class="keyword">if</span>(max(usData(n).decorr(:))&gt;maxDecorr)
+0109         maxDecorr = max(usData(n).decorr(:));
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">end</span>
+0112 maxDecorr
+0113 <span class="comment">%% display decorr in middle x-y slice for each data set</span>
+0114 <span class="keyword">for</span> n = 1:length(usData); 
+0115     imagesc(usData(1).y_range,usData(1).z_range, usData(n).decorr(:,:,floor(end/2),1),[0 maxDecorr]);
+0116     title(<span class="string">'decorrelation map'</span>);
+0117     xlabel(<span class="string">'Azimuth(mm)'</span>);
+0118     ylabel(<span class="string">'Range (mm)'</span>);
+0119     colorbar;
+0120     colormap(<span class="string">'gray'</span>);
+0121     pause(1);
+0122     
+0123 <span class="keyword">end</span>
+0124 <span class="comment">%% ROC curve from R</span>
+0125 decorrArr = usData(8).decorr(:,floor(end/2),:,1);
+0126 <span class="comment">%imagesc(usData(8).decorr(:,:,floor(end/2),1),[0 maxDecorr]);</span>
+0127 thisPic = imread(<span class="string">'ablationImage_1.png'</span>);
+0128 orignalImageSize = size(thisPic)
+0129 thisPicDown = imresize(thisPic,[144 184]);
+0130 imagesc(imrotate(flip(thisPicDown),180))
+0131 axis image
+0132 labelObj = imfreehand;
+0133 labelArr = labelObj.createMask;
+0134 labelArr = labelArr(:);
+0135 decorrArr = decorrArr(:);
+0136 save(<span class="string">'testDataExport.mat'</span>,<span class="string">'labelArr'</span>,<span class="string">'decorrArr'</span>)
+0137 shellString = strcat(pwd,<span class="string">'/'</span>,<span class="string">'3DEchoDecorrelationScripts/DataScripts/Matlab/TestScripts/ROCCurve.r '</span>,{<span class="string">' '</span>},<span class="string">'testDataExport.mat'</span>);
+0138 [test1234 testout] = system(shellString{1});
+0139 load(<span class="string">'ROCOutput.mat'</span>)
+0140 imshow(<span class="string">'rocPlot2.png'</span>)
+0141 
+0142 [maxVal maxInd] = max(1-ROC_fpr + ROC_tpr);
+0143 plot(ROC_fpr,ROC_tpr,ROC_fpr(maxInd),ROC_tpr(maxInd),<span class="string">'r*'</span>)
+0144 cutOff = ROC_cutoff(maxInd);
+0145 thisSlice = squeeze(usData(8).decorr(:,floor(end/2),:,1));
+0146 thisSlice(find(thisSlice &lt; cutOff)) = 0;
+0147 thisSlice(find(thisSlice &gt;= cutOff)) = 1;
+0148 
+0149 edgeVals = edge(thisSlice);
+0150 edgeVals = imresize(edgeVals,orignalImageSize(1:2));
+0151 thisSlice = imresize(thisSlice,orignalImageSize(1:2));
+0152 edgeVals(find(edgeVals &lt;1)) = 0;
+0153 thisSlice(find(thisSlice &lt;1)) = 0;
+0154 edgeVals = floor(edgeVals);
+0155 thisSlice = floor(thisSlice);
+0156 imshow(imrotate(flip(thisPic),180));
+0157 alphamask(thisSlice,[0 0 1],.2)
+0158 alphamask(edgeVals,[0 0 0],1)
+0159 <span class="comment">%%</span>
+0160 plot(ROC_fpr,ROC_tpr,ROC_fpr(maxInd),ROC_tpr(maxInd),<span class="string">'r*'</span>,linspace(0,1,length(ROC_fpr)),linspace(0,1,length(ROC_fpr)))
+0161 title(<span class="string">'ROC Curve'</span>)
+0162 xlabel(<span class="string">'False Positive Rate'</span>)
+0163 ylabel(<span class="string">'True Positive Rate'</span>)
+0164 
+0165 <span class="comment">%% display decorr in middle x-y slice for each data set</span>
+0166 <span class="keyword">for</span> n = 1:4:size(usData(1).rawData_cart,3); 
+0167     imagesc(log10(abs(usData(1).rawData_cart(:,:,n,1))),[log10(min(abs(usData(1).rawData_cart(:)))), log10(max(abs(usData(1).rawData_cart(:))))]);
+0168     colormap(<span class="string">'gray'</span>)
+0169     colorbar;
+0170     pause(.001);
+0171     
+0172 <span class="keyword">end</span>
+0173 <span class="comment">%%</span>
+0174 thresh = 15;
+0175 <span class="keyword">for</span> frames = 1:length(usData)
+0176     <span class="keyword">for</span> n = 1:size(usData(frames).decorr,3)
+0177     <span class="comment">%for n = 50:50</span>
+0178         figure(1)
+0179         thisVol = squeeze(abs(usData(frames).decorr(:,:,n,1))) <span class="comment">%-squeeze(abs(usData(1).decorr_slicemethod(:,:,n,1)));</span>
+0180         <span class="comment">%imagesc(20*log10(abs(usData(frames).rawData_cart_slicemethod(:,:,n,1))));</span>
+0181         imagesc(usData(5).y_range,usData(5).x_range,thisVol);
+0182 
+0183         colormap(<span class="string">'gray'</span>)
+0184         hold on
+0185         convolvedImage = conv2((1/25)*ones(10,10),squeeze((thisVol)));
+0186         <span class="comment">%contour(usData(5).y_range,usData(5).x_range,convolvedImage(5:end-5,5:end-5),[thresh thresh],'r');</span>
+0187         pause(.1);
+0188         hold off
+0189     <span class="keyword">end</span>
+0190 <span class="keyword">end</span>
+0191 <span class="comment">%%</span>
+0192 thresh = 15;
+0193 <span class="keyword">for</span> frames = 1:length(usData)
+0194     <span class="keyword">for</span> n = 1:size(usData(frames).decorr_slicemethod,3)
+0195     <span class="comment">%for n = 50:50</span>
+0196         figure(1)
+0197         thisVol = squeeze(abs(usData(frames).decorr_slicemethod(:,:,n,1))) <span class="comment">%-squeeze(abs(usData(1).decorr_slicemethod(:,:,n,1)));</span>
+0198         <span class="comment">%imagesc(20*log10(abs(usData(frames).rawData_cart_slicemethod(:,:,n,1))));</span>
+0199         imagesc(usData(5).y_range,usData(5).x_range,thisVol);
+0200 
+0201         colormap(<span class="string">'gray'</span>)
+0202         hold on
+0203         convolvedImage = conv2((1/25)*ones(10,10),squeeze((thisVol)));
+0204         contour(usData(5).y_range,usData(5).x_range,convolvedImage(5:end-5,5:end-5),[thresh thresh],<span class="string">'r'</span>);
+0205         pause(.1);
+0206         hold off
+0207     <span class="keyword">end</span>
+0208 <span class="keyword">end</span>
+0209 
+0210 <span class="comment">%%</span>
+0211 n = 50
+0212 figure(1)
+0213 thresh = .4;
+0214 <span class="keyword">for</span> frames = 3:length(usData)
+0215     thisVol = squeeze(abs(usData(frames).decorr_slicemethod(:,:,n,1))) <span class="comment">%-squeeze(abs(usData(1).decorr_slicemethod(:,:,n,1)));</span>
+0216     <span class="comment">%imagesc(20*log10(abs(usData(frames).rawData_cart_slicemethod(:,:,n,1))));</span>
+0217     imagesc(usData(5).y_range,usData(5).x_range,thisVol);
+0218 
+0219     colormap(<span class="string">'gray'</span>)
+0220     hold on
+0221     convolvedImage = conv2((1/25)*ones(10,10),squeeze((thisVol)));
+0222     contour(usData(5).y_range,usData(5).x_range,convolvedImage(5:end-5,5:end-5),[thresh thresh],<span class="string">'r'</span>);
+0223     pause(1);
+0224 <span class="keyword">end</span>
+0225 
+0226 h = ginput(2)
+0227 mydist = pdist(h)
+0228 plot(h)
+0229 <span class="comment">%%</span>
+0230 <span class="keyword">for</span> frames = 3:length(usData)
+0231     <span class="keyword">for</span> n = 1:size(usData(frames).decorr_slicemethod,2)
+0232     <span class="comment">%for n = 50:50</span>
+0233         figure(1)
+0234         thisVol = squeeze(abs(usData(frames).decorr_slicemethod(:,n,:,1))) -squeeze(abs(usData(1).decorr_slicemethod(:,n,:,1)));
+0235         <span class="comment">%imagesc(20*log10(abs(usData(frames).rawData_cart_slicemethod(:,:,n,1))));</span>
+0236         imagesc(thisVol,[0 .45]);
+0237 
+0238         <span class="comment">%colormap('gray')</span>
+0239         hold on
+0240         contour(conv2((1/25)*ones(10,10),squeeze((thisVol))),1,<span class="string">'r'</span>);
+0241         pause(.1);
+0242         hold off
+0243     <span class="keyword">end</span>
+0244 <span class="keyword">end</span>
+0245 <span class="comment">%%</span>
+0246 <span class="keyword">for</span> frames = 3:length(usData)
+0247     <span class="keyword">for</span> n = 61
+0248     <span class="comment">%for n = 50:50</span>
+0249         figure(1)
+0250         thisVol = squeeze(abs(usData(frames).decorr_slicemethod(:,n,:,1))) -squeeze(abs(usData(1).decorr_slicemethod(:,n,:,1)));
+0251         <span class="comment">%imagesc(20*log10(abs(usData(frames).rawData_cart_slicemethod(:,:,n,1))));</span>
+0252         imagesc(thisVol,[0 .45]);
+0253 
+0254         <span class="comment">%colormap('gray')</span>
+0255         hold on
+0256         contour(conv2((1/25)*ones(10,10),squeeze((thisVol))),1,<span class="string">'r'</span>);
+0257         pause(1);
+0258         hold off
+0259     <span class="keyword">end</span>
+0260 <span class="keyword">end</span>
+0261 <span class="comment">%% RF Time</span>
+0262 <span class="comment">% for dataSet = 1:length(usData)</span>
+0263 <span class="comment">%     usDataTime(dataSet) = usData(dataSet).time;</span>
+0264 <span class="comment">%     usData(dataSet).ROIBounds = [10,66,50,80,52,78,NaN,NaN];</span>
+0265 <span class="comment">%     usROIData_slicemethod(dataSet).data = (usData(dataSet).decorr_slicemethod(10:66,50:80,52:78,1:end));</span>
+0266 <span class="comment">%     usAvg_slicemethod(dataSet) = mean(mean(mean(mean(usROIData_slicemethod(dataSet).data))))</span>
+0267 <span class="comment">% end</span>
+0268 <span class="keyword">for</span> dataSet = 1:length(usData)
+0269     usDataTime(dataSet) = usData(dataSet).time;
+0270     <span class="comment">%usData(dataSet).ROIBounds = [10,66,50,80,52,78,NaN,NaN];</span>
+0271     usROIData(dataSet).data = (usData(dataSet).decorr);
+0272     usAvg(dataSet) = mean((usROIData(dataSet).data(:)))
+0273 <span class="keyword">end</span>
+0274 plot(usDataTime,usAvg/(max(usAvg(:))),usDataTime,usAvg_slicemethod/(max(usAvg_slicemethod(:))),RFData.RFDataTime,RFData.t1/(max(RFData.t1(:))), <span class="keyword">...</span>
+0275     RFData.RFDataTime,RFData.t2/(max(RFData.t2(:))),RFData.RFDataTime,RFData.t3/(max(RFData.t3(:))),RFData.RFDataTime,RFData.t4/(max(RFData.t4(:))))
+0276 <span class="comment">%%</span>
+0277 <span class="keyword">for</span> frames = 1:length(usData)
+0278     <span class="keyword">for</span> n = 1:size(usData(frames).decorr_slicemethod,3)
+0279     <span class="comment">%for n = 50:50</span>
+0280         figure(1)
+0281 
+0282         imagesc(imrotate(squeeze(abs(usROIData_slicemethod(frames).data(:,:,n,1))),180));
+0283         hold on
+0284         contour(imrotate(conv2((1/25)*ones(20,20),squeeze((usROIData_slicemethod(frames).data(:,:,n,1)))),180),1,<span class="string">'k'</span>);
+0285         pause(.1);
+0286         hold off
+0287     <span class="keyword">end</span>
+0288 <span class="keyword">end</span>
+0289 <span class="keyword">for</span> frames = 1:length(usData)
+0290     <span class="keyword">for</span> n = 1:size(usData(frames).decorr,3)
+0291     <span class="comment">%for n = 50:50</span>
+0292         figure(1)
+0293 
+0294         imagesc(imrotate(squeeze(abs(usROIData(frames).data(:,:,n,1))),180));
+0295         hold on
+0296         contour(imrotate(conv2((1/25)*ones(20,20),squeeze((usROIData(frames).data(:,:,n,1)))),180),1,<span class="string">'k'</span>);
+0297         pause(.1);
+0298         hold off
+0299     <span class="keyword">end</span>
+0300 <span class="keyword">end</span>
+0301 <span class="comment">%%</span>
+0302 <span class="keyword">for</span> frames = 3:length(usData)
+0303     <span class="keyword">for</span> n = 1:size(usData(frames).decorr_slicemethod,3)
+0304     <span class="comment">%for n = 50:50</span>
+0305         figure(1)
+0306         thisVol = squeeze(abs(usData(frames).decorr_slicemethod(:,:,n,1))) -squeeze(abs(usData(1).decorr_slicemethod(:,:,n,1)));
+0307         imagesc((abs(usData(frames).rawData_cart_slicemethod(:,:,n,1))),[0 .1]);
+0308         <span class="comment">%imagesc(thisVol,[0 20]);</span>
+0309 
+0310         <span class="comment">%colormap('gray')</span>
+0311         hold on
+0312         contour(conv2((1/25)*ones(10,10),squeeze((thisVol))),.4,<span class="string">'r'</span>);
+0313         <span class="comment">%imagesc(abs(conv2((1/25)*ones(10,10),squeeze((thisVol)))),1,'r','AlphaData', .1);</span>
+0314         <span class="comment">%imagesc(abs(thisVol),1,'r','AlphaData', .1);</span>
+0315         figure(2)
+0316         imagesc(abs(squeeze(thisVol)))
+0317         pause(.1);
+0318         hold off
+0319     <span class="keyword">end</span>
+0320 <span class="keyword">end</span>
+0321 
+0322 <span class="comment">%%</span>
+0323 <span class="keyword">for</span> i = 3:length(usData)
+0324     decorrSum(i-2) = sum(sum(sum(usData(i).decorr)));
+0325 <span class="keyword">end</span>
+0326 plot(RFData.RFDataTime,RFData.t1/(max(RFData.t1)),[usData(3:end).time],decorrSum/max(decorrSum))
+0327 title(<span class="string">'average decorrelation and temperature'</span>)
+0328 legend(<span class="string">'Decorrelation, normalized'</span>,<span class="string">'Temperature, normalized'</span>)
+0329 <span class="comment">%%</span>
+0330 <span class="keyword">for</span> i = 1:length(usData)
+0331     decorrAvg(i) = sum(sum(sum(usData(i).decorr_slicemethod(10:66,50:80,10:66))))/prod(size(usData(i).decorr_slicemethod(10:66,50:80,10:66)));
+0332 <span class="keyword">end</span>
+0333 <span class="comment">%%</span>
+0334 <span class="keyword">for</span> n = 2:length(usData)
+0335     thisVol = squeeze(usData(n).decorr_slicemethod(:,:,:,1));
+0336     kernelSize = 5;
+0337     smoothkernel = 1/(kernelSize^3)*ones(kernelSize,kernelSize,kernelSize);
+0338     convedVol = convn(smoothkernel,thisVol);
+0339     <span class="comment">%[xMax yMax zMax] = size(convedVol);</span>
+0340     [X Y Z] = meshgrid(1:usData(n).x_range,1:usData(n).y_range,usData(n).z_range);
+0341     isosurface(X,Y,Z,convedVol,0)
+0342     hold on
+0343     <span class="comment">%isosurface(X,Y,Z,convedVol,9)</span>
+0344     <span class="comment">%isosurface(X,Y,Z,convedVol,8)</span>
+0345     <span class="comment">%isosurface(X,Y,Z,convedVol,7)</span>
+0346     <span class="comment">%isosurface(X,Y,Z,convedVol,6)</span>
+0347     <span class="comment">%isosurface(X,Y,Z,convedVol,5)</span>
+0348     isosurface(X,Y,Z,convedVol,8)
+0349     <span class="comment">%isonormals(X,Y,Z,(squeeze(usData(2).decorr_slicemethod(:,:,:,1))),p1)</span>
+0350     <span class="comment">%p.FaceColor = 'red';</span>
+0351     <span class="comment">%p.EdgeColor = 'none';</span>
+0352     pause(.1);
+0353     hold off
+0354     view(-131,30)
+0355     input(<span class="string">'next'</span>)
+0356     clf
+0357 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

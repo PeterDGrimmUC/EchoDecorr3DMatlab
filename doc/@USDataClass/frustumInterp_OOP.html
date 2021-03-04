@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of frustumInterp_OOP</title>
+  <meta name="keywords" content="frustumInterp_OOP">
+  <meta name="description" content="3D Interpolation function for frustum-shaped volume">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; frustumInterp_OOP.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>frustumInterp_OOP
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>3D Interpolation function for frustum-shaped volume</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function res = frustumInterp_OOP(obj,Isph,dmu,dnu) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment">3D Interpolation function for frustum-shaped volume</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%3D Interpolation function for frustum-shaped volume</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function res = frustumInterp_OOP(obj,Isph,dmu,dnu)</a>
+0003 <span class="keyword">global</span> p LR Lmu Lnu iR imu inu R0 
+0004 Icart = zeros(size(R0));
+0005 
+0006 <span class="keyword">for</span> ip = 1:length(p)
+0007    q = p(ip);
+0008    
+0009    <span class="comment">% differences to be used below, trying to save a few flops</span>
+0010    drmLR = obj.dr-LR(q);
+0011    dmumLmu = dmu-Lmu(q);
+0012    dnumLnu = dnu-Lnu(q);
+0013    Icart(q) = Isph(iR(q),imu(q),inu(q)) <span class="keyword">...</span>
+0014                 * drmLR * dmumLmu * dnumLnu + <span class="keyword">...</span>
+0015               Isph(iR(q)+1,imu(q),inu(q)) <span class="keyword">...</span>
+0016                 * LR(q) * dmumLmu * dnumLnu + <span class="keyword">...</span>
+0017               Isph(iR(q),imu(q)+1,inu(q)) <span class="keyword">...</span>
+0018                 * drmLR * Lmu(q) * dnumLnu + <span class="keyword">...</span>
+0019               Isph(iR(q),imu(q),inu(q)+1) <span class="keyword">...</span>
+0020                 * drmLR * dmumLmu * Lnu(q) + <span class="keyword">...</span>
+0021               Isph(iR(q)+1,imu(q),inu(q)+1) <span class="keyword">...</span>
+0022                 * LR(q) * dmumLmu * Lnu(q) + <span class="keyword">...</span>
+0023               Isph(iR(q),imu(q)+1,inu(q)+1) <span class="keyword">...</span>
+0024                 * drmLR * Lmu(q) * Lnu(q) + <span class="keyword">...</span>
+0025               Isph(iR(q)+1,imu(q)+1,inu(q)) <span class="keyword">...</span>
+0026                 * LR(q) * Lmu(q) * dnumLnu + <span class="keyword">...</span>
+0027               Isph(iR(q)+1,imu(q)+1,inu(q)) <span class="keyword">...</span>
+0028                 * LR(q) * Lmu(q) * Lnu(q);
+0029 <span class="keyword">end</span>
+0030 res = Icart/(obj.dr*dmu*dnu);</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

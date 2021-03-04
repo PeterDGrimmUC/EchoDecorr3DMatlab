@@ -1,22 +1,22 @@
 classdef ExperimentClass < handle
     %EXPERIMENTCLASS: Performs processess on data sets for an experiment
     %  organizes decorrelation code for a simple to use and expandable
-    %  interface
+    %  interface.
+    %  Holds arrays of type USDataClass, the data set format for individual
+    %  volumes
     %  designed to be easily accessed for a GUI application 
-    % forms the 'Model-Controller' element in the model view controller architecture
     properties
         % machine state variables 
         machineState;
         % init
-        initDataSet; 
+        initDataSet; % Initial dataset, used for setting up parameters within the class.
         % main arrays
-        ultrasoundDataSeries; 
-        experimentalUSDataSeries; 
-        decorrelationMapSeries;
-        decorrelationMapSeriesROI;
-        cumulativeDecorr; 
-        cumulativeDecorrROI;
-        decorrSumSeries; 
+        ultrasoundDataSeries; % Array containing USDataClass objects, corresponding to a set of recorded volumes
+        decorrelationMapSeries; % Decorrelation data 
+        decorrelationMapSeriesROI; % Decorrelation data within specified ROI
+        cumulativeDecorr;  % Cumulative decorrelation map over the entire volume
+        cumulativeDecorrROI; % Cumulative decorrelation map in ROI
+        decorrSumSeries; % 
         decorrSumSeriesROI;
         decorrAverageSeries;
         decorrAverageSeriesROI;
@@ -26,31 +26,31 @@ classdef ExperimentClass < handle
         scanConvLookup; 
         templateFolder; 
         % ultrasound data parameters
-        dx
-        dy
-        dz
-        dr
-        rmin;
-        rmax;
-        cartScalingFactor;
-        sigma; 
-        interFrameTime; 
-        thetamin;
-        thetamax;
-        phimin;
-        phimax; 
-        decorrThresh;
-        phiRange;
-        thetaRange;
-        framerate;
+        dx % x (elevation) direction voxel length
+        dy % y (azimuth) direction voxel length
+        dz % z (range) direction voxel length
+        dr % r (radius in pyramidal coordinates) direction voxel length
+        rmin; % minimum r value
+        rmax; % maximum r value
+        cartScalingFactor; % dr/dx 
+        sigma; % Parameter used for Gaussian window
+        interFrameTime; % Time between volume frames
+        thetamin; % minimum azimuth angle
+        thetamax; % maximum azimuth angle
+        phimin; % minimum elevation angle
+        phimax; % maximum elevation angle
+        decorrThresh; % decorrelation threshold for stopping treatment
+        phiRange; % range of elevation values
+        thetaRange; % range of azimuth angles
+        framerate; % volumes per second
         % experiment parameters
-        numDataSets;
-        dataFolder; 
-        subRegionROIMap
-        activeFolder;
-        activeFolderDir; 
-        numVolumes; 
-        defaultDataFileName;
+        numDataSets; % Current number of data sets
+        dataFolder; % target folder for data
+        subRegionROIMap % ROI within minimum subregion for saving on computation
+        activeFolder; % Current folder containing decorrelation volumes
+        activeFolderDir; % File contents of activeFolder
+        numVolumes; % current number of volumes
+        defaultDataFileName; % 
         totalThresh; 
         totalThreshVolume; 
         inSerialString; 
@@ -61,12 +61,12 @@ classdef ExperimentClass < handle
         ROIVoxelNum;
         ROI_xRange; 
         ROI_yRange; 
-        ROI_zRange;
-        ROI_ellipPoints;
-        ROIx0;
-        ROIy0;
-        ROIz0;
-        ROIr0;
+        ROI_zRange; 
+        ROI_ellipPoints; 
+        ROIx0; 
+        ROIy0; 
+        ROIz0; 
+        ROIr0; 
         ROIr1;
         ROIr2;
         ROIr0_in;
@@ -103,14 +103,30 @@ classdef ExperimentClass < handle
     methods
         % Constructor 
         function obj = ExperimentClass()
-            % construct object
-            obj.defaultDataFileName = 'bufApl0Out_0x0_0x0.data.dm.pmcr';
+            %  ExperimentClass: Constructor for experiment class
+            %
+            %  Constructs ExperimentClass object, takes no arguments
+            %
+            % Usage:
+            %   obj = ExperimentClass()
+            %       inputs:
+            %          None
+            %       outputs:
+            %          None
+            obj.defaultDataFileName = 'bufApl0Out_0x0_0x0.data.dm.pmcr'; % Sets target file name
         end
         
         function reset(obj)
-            % Reset object %
-                %TODO%: Verify that this reset gets everything so the GUI
-                %doesn't have to be restarted
+            % reset: Resets object to empty
+            %
+            % Reset the object to empty for use with a new experiment
+            %
+            % Usage:
+            %   reset(obj)
+            %     inputs:
+            %        None
+            %     outputs:
+            %        None
             obj.ultrasoundDataSeries = []; 
             obj.decorrelationMapSeries = [];
             obj.cumulativeDecorr = []; 
@@ -121,12 +137,36 @@ classdef ExperimentClass < handle
         end
         
         function setControlParams(obj,myThresh)
-            % set threshold %
+            % setControlParams: Set parameters for control
+            %
+            % Sets the value of the decorrelation threshold for use during experiments
+            %
+            % Usage:
+            %   setControlParams(obj,myThresh)
+            %     inputs:
+            %        myThresh: Log10 Decorrelation value for threshold within ROI
+            %     outputs:
+            %        None
             obj.decorrThresh = myThresh; 
         end
         
         function setImagingParams(obj,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thisinterFrameTime,thissigma)
-            % Set object's imaging parameters %
+            % setImagingParams: Set parameters for ultrasound imaging, data gathered from scanner
+            %
+            % Sets scanner parameters such as scan angles, depth, interframetime, scale between pyramidal and cartesian coordinates
+            %
+            % Usage:
+            %   setImagingParams(obj,thisthetamin,thisthetamax,thisphimin,thisphimax,thiscartScalingFactor,thisinterFrameTime,thissigma)
+            %     inputs:
+            %        thisthetamin: minimum value of azimuthal angle in degrees
+            %        thisthetamax: maximum value of azimuthal angle in degrees
+            %        thisphimin: minimum value of elevation angle in degrees
+            %        thisphimax: maximum value of elevation angle in degrees
+            %        thiscartScalingFactor: dr/dx, the scale factor between the voxel size in the radial direction and cartesian directions
+            %        thisinterFrameTime: time between successive volumes (s)
+            %        thissigma: value of sigma for gaussian window (mm)
+            %     outputs:
+            %        None
             obj.cartScalingFactor = thiscartScalingFactor;
             obj.interFrameTime = thisinterFrameTime; 
             obj.thetamin = thisthetamin;
@@ -138,7 +178,27 @@ classdef ExperimentClass < handle
         end
         
         function setROIParams(obj,myx0,myy0,myz0,myr0,myr1,myr2,myr0_in,myr1_in,myr2_in,myalpha,mygamma,mybeta)
-            % Set ROI parameters %
+            % setROIParams: Set parameters for target ROI
+            %
+            % Sets values used to determine the target ellipsoid ROI
+            %
+            % Usage:
+            %   setROIParams(obj,myx0,myy0,myz0,myr0,myr1,myr2,myr0_in,myr1_in,myr2_in,myalpha,mygamma,mybeta)
+            %     inputs:
+            %        myx0: center of the ROI in the elevation direction (mm)
+            %        myy0: center of the ROI in the azimuth direction (mm)
+            %        myz0: center of the ROI in the range direction (mm)
+            %        myr0: principle axes of the ellipsoid in the elevation direction (mm)
+            %        myr1: principle axes of the ellipsoid in the azimuth direction (mm)
+            %        myr2: principle axes of the ellipsoid in the range direction (mm)
+            %        myr0_in: principle axes of the internal ellipsoid in the elevation direction (mm) (for use with two ellipsoid mode)
+            %        myr1_in: principle axes of the internal ellipsoid in the azimuth direction (mm) (for use with two ellipsoid mode)
+            %        myr2_in: principle axes of the internal ellipsoid in the range direction (mm) (for use with two ellipsoid mode)
+            %        myalpha: Angle of rotation in elevation direction
+            %        mygamma: Angle of rotation in azimuth direction
+            %        mybeta: Angle of rotation in range direction
+            %     outputs:
+            %        None  
             obj.ROIx0 = myx0;
             obj.ROIy0 = myy0;
             obj.ROIz0 = myz0;
@@ -155,7 +215,16 @@ classdef ExperimentClass < handle
         end
         
         function getInitDataSet_c(obj)
-            % get initial data set using C methods %
+            % getInitDataSet: Get initial dataset from folder
+            %
+            % Selects the first data set in the target folder to use as an initial dataset, geometry will be calibrated based on this given volume
+            %
+            % Usage:
+            %   getInitDataSet_c(obj)
+            %     inputs:
+            %        None
+            %     outputs:
+            %        None
             
             % check for new data set
             nextDataSet = obj.getNextDataSetFolder_c();
@@ -186,8 +255,18 @@ classdef ExperimentClass < handle
         end
         
         function outDataSet = parseDataFromDir_c(obj,thisFileName)
-            % Read file/map to memory
-            Dm = read_lbdump_wrapc(thisFileName);
+            % parseDataFromDir_c: parses a data set from a given folder
+            %
+            % Parses data from the siemens SC2000 scanner in a given folder, given as a parameter in the function.
+            %
+            % Usage:
+            %   outDataSet = parseDataFromDir_c(obj,thisFileName)
+            %              inputs:
+            %                thisFileName: Target file containing the data to be parsed as string
+            %             outputs:
+            %                outDataSet: A USDataClass object with the data from the provided folder
+            Dm = read_lbdump_wrapc(thisFileName); % call memory mapped read function
+            % get radius information
             obj.rmin = 0;
             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
             try 
@@ -201,10 +280,23 @@ classdef ExperimentClass < handle
             catch
                 disp('Could not read additional info file!');
             end
+            % create USDataClass objet
             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
         end
         
         function defineROI2(obj) 
+            % defineROI2: Use internal information to create ROI mask
+            %
+            % Uses information about the volume geometry as well as information about the ROI to create a vector of points within the ROI
+            % This version works on an arbitrary ellipsoid, it defines the axes as centered around 0 and uses the definition of an ellipsoid to create the region
+            % this is then translated to match the volume geomtry, and rotated to match the provided rotation information
+            %
+            % Usage:
+            %   defineROI2(obj)
+            %     inputs:
+            %        None
+            %     outputs:
+            %        None
             xMid = obj.initDataSet.x_range(floor(end/2));
             yMid = obj.initDataSet.y_range(floor(end/2));
             zMid = obj.initDataSet.z_range(floor(end/2));
@@ -227,6 +319,17 @@ classdef ExperimentClass < handle
         end
         
         function defineROI(obj) 
+            % defineROI: Use internal information to create ROI mask
+            %
+            % Uses information about the volume geometry as well as information about the ROI to create a vector of points within the ROI.
+            % This version assumes a spherical ROI and computes it using the definition of a sphere
+            %
+            % Usage:
+            %   defineROI(obj)
+            %     inputs:
+            %        None
+            %     outputs:
+            %        None
             [zGrid, yGrid, xGrid] = ndgrid(obj.initDataSet.z_range,obj.initDataSet.y_range,obj.initDataSet.x_range);
             validPoints = find((xGrid-obj.ROIx0).^2+(yGrid-obj.ROIy0).^2+(zGrid-obj.ROIz0).^2 <= obj.ROIr0^2);
             finalGrid = zeros(size(xGrid));
@@ -238,6 +341,16 @@ classdef ExperimentClass < handle
         end
         
         function defineGridBounds(obj)
+            % defineGridBounds: define bounds for a subregion to save on computation time, often unnessesary due to other optimizations
+            %
+            % Find the minimum bounds that will contain the entire target region with a margin of 3*sigma, does this computationally due to infeasibility of an analytic expression for an arbitrary rotated ellipsoid
+            %
+            % Usage:
+            %   defineGridBounds(obj)
+            %     inputs:
+            %        None
+            %     outputs:
+            %        None
             xMid = obj.initDataSet.x_range(floor(end/2));
             yMid = obj.initDataSet.y_range(floor(end/2));
             zMid = obj.initDataSet.z_range(floor(end/2));
@@ -323,6 +436,16 @@ classdef ExperimentClass < handle
         end
 
         function returnVal = addNextRawDataSet_c(obj)
+            % addNextRawData_set_c: Use the c program to add the next data set in the target folder to the object
+            %
+            % Checks form, adds and processes the next data set (chronologically) to the object. Uses USDataClass built in methods to handle processing, as well as the ROI defined in the ExperimentClass object. 
+            %
+            % Usage:
+            %   returnVal = addNextRawDataSet_c(obj)
+            %             inputs:
+            %                None
+            %             outputs:
+            %                None
             nextDataSet = obj.getNextDataSetFolder();
             if obj.numDataSets == []
                 obj.numDataSets = 1; 
@@ -352,7 +475,7 @@ classdef ExperimentClass < handle
                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
                 else
                     obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr - obj.initDataSet.decorr)./(1-obj.initDataSet.decorr));
-                    %obj.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr));
+                    %ob.cumulativeDecorr = max(obj.cumulativeDecorr,(dataObj.decorr));
                     obj.cumulativeDecorrROI = max(obj.cumulativeDecorrROI,obj.cumulativeDecorr.*obj.ROIMap);
                     obj.decorrAverageSeries(obj.numDataSets) = sum(obj.cumulativeDecorr(:))/numel(obj.cumulativeDecorr(:));
                     obj.decorrAverageSeriesROI(obj.numDataSets) = sum(obj.cumulativeDecorrROI(:))/sum(obj.ROIMap(:));
@@ -370,6 +493,16 @@ classdef ExperimentClass < handle
         end
         
         function nextDataSetFolder = getNextDataSetFolder(obj)
+            % getNextDataSetFolder: Checks the target directory for the next data set 
+            %
+            % Checks the directory for unprocessed data sets, returns the location of the next valid data set folder
+            %
+            % Usage:
+            %   nextDataSetFolder = getNextDataSetFolder(obj)
+            %                     inputs:
+            %                        None
+            %                     outputs:
+            %                        nextDataSetFolder: Path of next target directory
             % getNextDataSetFolder
             % gets next (chronologically) data set inside of the target
             % folder. 
@@ -387,6 +520,16 @@ classdef ExperimentClass < handle
         end
         
         function nextDataSetFolder = getNextDataSetFolder_c(obj)
+            % getNextDataSetFolder_c: checks the target directory for the next data set
+            %
+            % Checks the directory for unprocessed data sets, returns the location of the next valid data set folder
+            %
+            % Usage:
+            %   nextDataSetFolder = getNextDataSetFolder_c(obj)
+            %                     inputs:
+            %                        None
+            %                     outputs:
+            %                        nextDataSetFolder: Path of next target directory 
             % getNextDataSetFolder
             % gets next (chronologically) data set inside of the target
             % folder. 
@@ -404,6 +547,16 @@ classdef ExperimentClass < handle
         end
         
         function dataSetList = getWaitingDataSets(obj)
+            % getWaitingDataSets: Returns a list of unprocessed data sets
+            %
+            % List is used to determine which data set will be processed next by other functions
+            %
+            % Usage:
+            %   dataSetList = getWaitingDataSets(obj)
+            %               inputs:
+            %                  None
+            %               outputs:
+            %                  None     
             folderDir = dir(obj.dataFolder);
             folderDir = folderDir([folderDir.isdir]);
             invalidFolders = {'.','..','Complete','ready'};
@@ -415,6 +568,19 @@ classdef ExperimentClass < handle
         end
         
         function obj = addNextDataSetViaFilename2(obj, thisFileName) 
+            % addNextDataSetViaFilename2: Adds next data set to object
+            % given a filename
+            %
+            % Function to be called by another function which provides the
+            % target filename. 
+            %
+            % Usage:
+            %   obj = addNextDataSetViaFilename2(obj, thisFileName)
+            %       inputs:
+            %         thisFileName: The filename to extract data from.
+            %         Should be a pcmr file
+            %       outputs:
+            %         Obj: Updated object
             Dm = read_lbdump(thisFileName);
             obj.rmin = 0;
             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
@@ -445,6 +611,23 @@ classdef ExperimentClass < handle
         end
         
         function infoOut = getInitInfo(obj)
+            % getInitInfo: Get scanner parameters from 'extra data file'
+            %
+            % Gets data from the 'extra data file', which is created by the
+            % scanner script. Contains information about scanner
+            % parameters, targets previously set initial data set folder. 
+            %
+            % Usage:
+            %   infoOut = getInitInfo(obj)
+            %           inputs:
+            %             None
+            %           outputs:
+            %             infoOut: Data from extra data file
+            %               Index 1: Frame rate
+            %               Index 2: depth (mm)
+            %               Index 3: Azimuth scan angle range (degrees)
+            %               Index 4: Azimuth scan angle range (degrees)
+            
             infoOut = ones(1,4);
             folderDir = dir(obj.dataFolder);
             folderDir = folderDir([folderDir.isdir]);
@@ -489,7 +672,19 @@ classdef ExperimentClass < handle
         end
         
         function obj = addNextDataSetViaFilename(obj, thisFileName)
-            % Compute decorr of data set
+            % addNextDataSetViaFilename: Adds next data set to object
+            % given a filename
+            %
+            % Function to be called by another function which provides the
+            % target filename. 
+            %
+            % Usage:
+            %   obj = addNextDataSetViaFilename2(obj, thisFileName)
+            %       inputs:
+            %         thisFileName: The filename to extract data from.
+            %         Should be a pcmr file
+            %       outputs:
+            %         Obj: Updated object
             Dm = read_lbdump(thisFileName);
             obj.rmin = 0;
             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
@@ -556,6 +751,20 @@ classdef ExperimentClass < handle
         end
         
         function obj = initDataFolderGUI(obj)
+            % initDataFolderGUI: Set the target directory for an experiment
+            % using the matlab file selection GUI
+            %
+            % Interactively select a path to extract experiment data from
+            % should be one directory above each individual folder output
+            % from the scanner
+            % Interactive version of 'initDataFolder'
+            %
+            % Usage:
+            %   obj = initDataFolderGUI(obj)
+            %       inputs:
+            %         None
+            %       outputs:
+            %         Updated object
             try 
                 if ispc
                     basePath = strcat('C:\Users\',getenv('username'),'\Box\SiemensSC2000IQData');
@@ -574,6 +783,16 @@ classdef ExperimentClass < handle
         end
         
         function obj = initDataFolder(obj,dirName)
+            % obj : initialize data folder 
+            %
+            % Initialize data folder non interactively, identical to initDataFolderGUI but given a filename instead of a prompt
+            %
+            % Usage:
+            %   obj = initDataFolder(obj,dirName)
+            %       inputs:
+            %         dirName: directory target
+            %       outputs:
+            %         Update object
             
             obj.activeFolder =  dirName;
             obj.dataFolder = obj.activeFolder; 
@@ -584,6 +803,16 @@ classdef ExperimentClass < handle
         end
         
         function newFilePresent = checkFolder(obj)
+            % newFilePresent : Check if a new set of volumes is ready for processing 
+            %
+            % Checks if there is an unused folder in the target directory, returns true if so
+            %
+            % Usage:
+            %   newFilePresent = checkFolder(obj)
+            %                  inputs:
+            %                   None
+            %                 outputs:
+            %                   newFilePresent: True if a new folder is present
             obj.activeFolderDir  = dir(obj.activeFolder);
             if ismac
                 obj.activeFolderDir = obj.activeFolderDir(3:end); 
@@ -598,6 +827,16 @@ classdef ExperimentClass < handle
         end
         
         function nextDataSetInFolder(obj)
+            % nextDataSetInFolder: get the next data set in the folder
+            %
+            % %Description%
+            %
+            % Usage:
+            %   nextDataSetInFolder(obj)
+            %     inputs:
+            %       %inp1%:
+            %     outputs:
+            %       %outp1%
             if ispc
                 fullPath =strcat(obj.activeFolder,'\',{obj.activeFolderDir(obj.numVolumes).name},'\',obj.defaultDataFileName);
             elseif ismac
@@ -612,6 +851,16 @@ classdef ExperimentClass < handle
         end
         
         function boolOut = decorrExceedsThresh(obj) 
+            % decorrExceedsThread: Check if the current decorrelation exceeds the set threshold
+            %
+            % Uses internal variables and the current cumulative average decorrelation within the ROI
+            %
+            % Usage:
+            %   boolOut = decorrExceedsThresh(obj)
+            %           inputs:
+            %             None
+            %           outputs:
+            %             boolOut: boolean which is true if the current average decorrelation exceeds the threshold
             if((obj.decorrThresh) <= log10(obj.decorrAverageSeriesROI(obj.numDataSets-1)))
                 boolOut =  1; 
             else
@@ -620,32 +869,100 @@ classdef ExperimentClass < handle
         end
 
         function sendSerialData(obj)
+            % sendSerialData: Sends signal to the RF generator activating circuit
+            %
+            % Sends the character 'S' over serial to the RF generator activating circuit. The microcontroller listens on its serial port for a given command and activates the pump/release mechanism when it recieves the character 'S'
+            %
+            % Usage:
+            %   sendSerialData(obj)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             fprintf(obj.outSerialObj,'S');
         end
         
         function setSerialOutName(obj,myname)
+            % setSerialOutName: Set the name of the device to be used as the connection to the RF generator circuit.
+            %
+            % Sets the internal variable 'outSerialString', on windows this will look like 'COM[number]', no brackets
+            %
+            % Usage:
+            %   setSerialOutName(obj,myname)
+            %     inputs:
+            %       myname: Name of the serial device to use
+            %     outputs:
+            %       None
             obj.outSerialString = myname; 
         end
         
         function setSerialInName(obj,myname)
+            % setSerialInName: sets the name of the device to be used to gather data from the RF generator
+            %
+            % Sets the internal variable 'inSerialString', on windows this will look like 'COM[number]', no brackets
+            %
+            % Usage:
+            %   setSerialInName(obj,myname)
+            %     inputs:
+            %       myname: Name of the serial device to use
+            %     outputs:
+            %       None
             obj.inSerialString = myname; 
         end
         
         function setUpSerialOutConnection(obj)
+            % setUpSerialOutConnection: Create matlab object to handle serial output to the RF generator controlling device
+            %
+            % Sets up a serial object using MATLAB's internal serial object, sets the proper baud for communication
+            %
+            % Usage:
+            %   setUpSerialOutConnection(obj)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             obj.outSerialObj = serial(obj.outSerialString,'BaudRate', 115200);
             fopen(obj.outSerialObj);
         end
         
         function setUpSerialInConnection(obj)
+            % setUpSerialInConnection: Create matlab object to handle serial output to the RF generator controlling device
+            %
+            % Sets up a serial object using MATLAB's internal serial object, sets the proper baud rate for communication
+            %
+            % Usage:
+            %   setUpSerialInConnection(obj)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             obj.inSerialObj = SerialClass(obj.inSerialString, 9600);
             obj.inSerialObj = obj.inSerialObj.initSerialBlocks();
         end
         
         function removeSerialConnection(obj)
+            % removeSerialConnection: Delete outSerialObj
+            %
+            %
+            % Usage:
+            %   removeSerialConnection(obj)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             fclose(obj.outSerialObj); 
         end
         
         function updateROIDataSet(obj)
+            % updateROIDataSet: Recompute decorrelation within the ROI using newly set ROI parameters
+            %
+            %
+            % Usage:
+            %   updateROIDataSet(obj)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             for currN = 1:length(obj.ultrasoundDataSeries) 
                 interVal = obj.cumulativeDecorr(currN).decorr(obj.ROI_zRange(1):obj.ROI_zRange(2),obj.ROI_yRange(1):obj.ROI_yRange(2),obj.ROI_xRange(1):obj.ROI_xRange(2));
                 obj.decorrSumSeriesROI(currN) = mean(interVal(:));
@@ -653,16 +970,45 @@ classdef ExperimentClass < handle
         end
         
         function initExperiment(obj)
+            % initExperiment: Initailize experiment
+            %
+            % Inits data objects for later use
+            %
+            % Usage:
+            %   initExperiment(obj)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             interVal = obj.cumulativeDecorr(1).decorr(obj.ROI_zRange(1):obj.ROI_zRange(2),obj.ROI_yRange(1):obj.ROI_yRange(2),obj.ROI_xRange(1):obj.ROI_xRange(2));
             obj.decorrSumSeriesROI(1) = mean(interVal(:));
         end
         
         function generateTemplateFolder(obj,dirName)
+            % generateTemplateFolder: Create a template folder (unused)
+            %
+            %
+            % Usage:
+            %   generateTemplateFolder(obj,dirName)
+            %     inputs:
+            %       None
+            %     outputs:
+            %       None
             myDir = dir(dirName);
             obj.templateFolder = myDir;
         end
         
         function succ = checkTransfer(obj,dirName)
+            % checkTransfer: Checks if the data has been succesfully transferred from the scanner
+            %
+            % Makes sure all data has arrived from the scanner before proceeding, returns a boolean if so
+            %
+            % Usage:
+            %   succ = checkTransfer(obj,dirName)
+            %        inputs:
+            %         dirName: Name of directory to check
+            %       outputs:
+            %         succ: Boolean representing succesful transfer
             currDir = dir(dirName);
             succ = true;
             for n = 1:numel(obj.templateFolder)
@@ -675,6 +1021,16 @@ classdef ExperimentClass < handle
         end
         
         function volOut = fixvolume(obj,vol)
+            % fixvolume: Fix volume to match room coordinates (legacy)
+            %
+            % 
+            %
+            % Usage:
+            %   volOut = fixvolume(obj,vol)
+            %          inputs:
+            %            vol: Volume to fix
+            %         outputs:
+            %            volOut: fixed volume
             for j = 1:size(vol,4)
                 temp = permute(squeeze(vol(:,:,:,j)),[3,2,1]); % permute to same layout as mask data
                 temp = flipdim(temp,2); % flip dim from right to left -> left to right 
@@ -684,12 +1040,25 @@ classdef ExperimentClass < handle
         end
         
         function obj = setRFDataArray(obj,rfDataArr)
+            %  setRFDataArray: Set the variable 'rfDataArray' (legacy)
+            %
+            %
+            % Usage:
+            %   obj = setRFDataArray(obj,rfDataArr)
             obj.rfDataArr = rfDataArr;
         end
         
         function outObj = saveObj(obj)
-            % need inst decorr sets, scan converted volumes, imaging
-            % settings, timestamp
+            % saveObj: Create an object containing all relevant information to save for later use
+            %
+            % Creates a matlab structure to save all relevant information pertaining to the experiment, saving matlab objects often does not work so this is neccessary 
+            %
+            % Usage:
+            %   outObj = saveObj(obj)
+            %          inputs:
+            %           None
+            %         outputs:
+            %           Object that contains all relevant information 
             outObj.dx = obj.initDataSet.dx;
             outObj.dy = obj.initDataSet.dy;
             outObj.dz = obj.initDataSet.dz;
@@ -715,6 +1084,16 @@ classdef ExperimentClass < handle
         end
         
         function outObj = saveObj_withrf(obj,rfDataArr)
+            % saveObj_withrf: Create an object containing all relevant information to save for later use, with rf data
+            %
+            % Creates a matlab structure to save all relevant information pertaining to the experiment, saving matlab objects often does not work so this is neccessary 
+            %
+            % Usage:
+            %   outObj = saveObj_withrf(obj,rfDataArr)
+            %          inputs:
+            %           None
+            %         outputs:
+            %           outObj: object that contains all relevant information
             % need inst decorr sets, scan converted volumes, imaging
             % settings, timestamp
             outObj.dx = obj.initDataSet.dx;
@@ -743,11 +1122,31 @@ classdef ExperimentClass < handle
         end
         
         function outDat = getTimeArr(obj)
+            % outDat : get time series from ultrasound files
+            %
+            % Gets the time of each ultrasound volume pair 
+            %
+            % Usage:
+            %   outDat = getTimeArr(obj)
+            %          inputs:
+            %           None
+            %         outputs:
+            %           outDat: cell of times
             outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
         end
     end
     methods (Static)
         function succ = verifyFilesReady(nextDataSet)
+            %  verifyFilesReady: Check if all files are ready in the folder
+            %
+            % %Description%
+            %
+            % Usage:
+            %   succ = verifyFilesReady(nextDataSet)
+            %        inputs:
+            %         %inp1%:
+            %       outputs:
+            %         %outp1%
             temp = (dir(fullfile(nextDataSet.folder,nextDataSet.name)));
             tempInd = arrayfun(@(x) x.name(1) == '.',temp,'UniformOutput',false);
             tempInd = [tempInd{:}];

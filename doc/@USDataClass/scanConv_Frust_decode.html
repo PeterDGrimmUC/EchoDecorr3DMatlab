@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of scanConv_Frust_decode</title>
+  <meta name="keywords" content="scanConv_Frust_decode">
+  <meta name="description" content="This script reads IQ data in the first section (SIEMENS Scripts), then">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">@USDataClass</a> &gt; scanConv_Frust_decode.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for @USDataClass&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>scanConv_Frust_decode
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This script reads IQ data in the first section (SIEMENS Scripts), then</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function scanConv_Frust_decode( qOut,p,sz ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This script reads IQ data in the first section (SIEMENS Scripts), then
+ does the 3D interpolation on spherical IQ data with function named
+ &quot;frustumInterp&quot;. In the last section the spherical and
+ interpolated data in cartesian system are displayed.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function scanConv_Frust_decode( qOut,p,sz )</a>
+0002 <span class="comment">% This script reads IQ data in the first section (SIEMENS Scripts), then</span>
+0003 <span class="comment">% does the 3D interpolation on spherical IQ data with function named</span>
+0004 <span class="comment">% &quot;frustumInterp&quot;. In the last section the spherical and</span>
+0005 <span class="comment">% interpolated data in cartesian system are displayed.</span>
+0006 
+0007 <span class="comment">% Writers: Elmira Ghahramani Z., Dr. Douglas Mast</span>
+0008 <span class="comment">% Image-guided Ultrasound Therapeutics Laboratories</span>
+0009 <span class="comment">% University of Cincinnati</span>
+0010 <span class="comment">% Contacts: ghahraea@mail.uc.edu</span>
+0011 <span class="comment">%           masttd@UCMAIL.UC.EDU</span>
+0012 <span class="comment">% Date last updated: 02/19/2019</span>
+0013 
+0014 <span class="comment">%% Read IQ data</span>
+0015 
+0016 <span class="keyword">for</span> volIndex = 1:size(obj.rawData,4)
+0017   Icart = zeros(sz);
+0018     <span class="keyword">for</span> ip = 1:length(p)
+0019         q = p(ip);
+0020         
+0021         <span class="comment">% differences to be used below, trying to save a few flops</span>
+0022         
+0023         Icart(q) = Isph(iR(q),imu(q),inu(q)) <span class="keyword">...</span>
+0024             * qOut(q,1) + <span class="keyword">...</span>
+0025             Isph(iR(q)+1,imu(q),inu(q)) <span class="keyword">...</span>
+0026             * qOut(q,2) + <span class="keyword">...</span>
+0027             Isph(iR(q),imu(q)+1,inu(q)) <span class="keyword">...</span>
+0028             * qOut(q,3) + <span class="keyword">...</span>
+0029             Isph(iR(q),imu(q),inu(q)+1) <span class="keyword">...</span>
+0030             * qOut(q,4) + <span class="keyword">...</span>
+0031             Isph(iR(q)+1,imu(q),inu(q)+1) <span class="keyword">...</span>
+0032             * qOut(q,5) + <span class="keyword">...</span>
+0033             Isph(iR(q),imu(q)+1,inu(q)+1) <span class="keyword">...</span>
+0034             * qOut(q,6) + <span class="keyword">...</span>
+0035             Isph(iR(q)+1,imu(q)+1,inu(q)) <span class="keyword">...</span>
+0036             * qOut(q,7) + <span class="keyword">...</span>
+0037             Isph(iR(q)+1,imu(q)+1,inu(q)) <span class="keyword">...</span>
+0038             * qOut(q,8);
+0039     <span class="keyword">end</span>
+0040     obj.rawData_cart(:,:,:,volIndex) = Icart/(obj.dr*dmu*dnu);
+0041 <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043</pre></div>
+<hr><address>Generated on Tue 16-Feb-2021 15:03:34 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
