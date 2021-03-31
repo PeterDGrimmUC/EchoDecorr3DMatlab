@@ -1,7 +1,7 @@
 % Example usage of USDataClass object 
 % requires compiled c MEX files 
-%thisFileDir = uigetdir(); % point this towards the target data directory
-%thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr');
+thisFileDir = uigetdir(); % point this towards the target data directory
+thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr');
 Dm = read_lbdump_wrapc(thisFileName); % call memory mapped read function (requires MEX function)
 % get radius information
 rmin = 0;
@@ -34,6 +34,4 @@ ROIMask(validPts) = 1;
 % set ROI in the object
 outDataSet.ROIMap = ROIMask; 
 % compute decorrelation
-tic
 outDataSet.compute3DDecorr_Freq(); 
-toc

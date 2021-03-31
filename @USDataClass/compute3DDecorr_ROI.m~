@@ -36,7 +36,11 @@ function compute3DDecorr_ROI( obj )
     
     [z_mask_mat_2,y_mask_mat_2,x_mask_mat_2] = ndgrid(zmask_2,ymask_2,xmask_2); 
     
-    maskfilt = (fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat)); 
+    %maskfilt = (fftshift(x_mask_mat.*y_mask_mat.*z_mask_mat)); 
+    maskfilt2 = ((x_mask_mat_2.*y_mask_mat_2.*z_mask_mat_2));
+    maskfilt = ((x_mask_mat.*y_mask_mat.*z_mask_mat)); 
+    %maskfilt = padarray(maskfilt,padArr,'both');
+    %maskfilt = maskfilt/sum(maskfilt(:));
     
     %imagesc(maskfilt(:,:,1))
     % *compute windowed ibs and autocorr01*
@@ -64,8 +68,8 @@ function compute3DDecorr_ROI( obj )
         obj.decorr(:,:,:,currVolume) = 2*(B2-R01)./(B2 + mean(B2(:)))/tau;
     end
     % set values outside of volume to small number 
-    obj.autocorr01(find(abs(obj.rawData_cart(:,:,:,1:(end-1))) == 0)) = 0;
-    obj.ibs(find(abs(obj.rawData_cart(:,:,:,1:(end-1))) == 0)) = 0;
-    obj.decorr(find(abs(obj.rawData_cart(:,:,:,1:(end-1))) == 0)) = 0;
+    obj.autocorr01(find(isnan(obj.rawData_cart(:,:,:,1:(end-1))))) = realmin('double');
+    obj.ibs(find(isnan(obj.rawData_cart))) = realmin('double');
+    obj.decorr(find(isnan(obj.rawData_cart(:,:,:,1:(end-1))))) = realmin('double');
 end
 
