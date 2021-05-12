@@ -1,7 +1,10 @@
 % Example usage of USDataClass object 
 % requires compiled c MEX files 
-%thisFileDir = uigetdir(); % point this towards the target data directory
-%thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr');
+fileName = mfilename('fullpath');
+            addpath(genpath(fileName(1:end-length(mfilename('class')))));
+thisFileDir = uigetdir(); % point this towards the target data directory
+thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr');
+
 Dm = read_lbdump_wrapc(thisFileName); % call memory mapped read function (requires MEX function)
 % get radius information
 rmin = 0;
@@ -13,7 +16,7 @@ thetamax = pi/360*thetaRange;
 thetamin = -thetamax;
 phimax = pi/360*phiRange;
 phimin = -phimax;
-cartScalingFactor = 2.4268;
+cartScalingFactor = 2.4268*2;
 sigma = 3;
 % create USDataClass object
 outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,frameRate);

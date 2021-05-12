@@ -8,9 +8,9 @@ function compute3DDecorr_Freq( obj )
  
     % create gaussian kernel out to 3.5 sigma (odd number makes this
     % simpler)
-    xLen = (ceil(sigx)*7); xMid = floor(xLen/2)+1;
-    yLen = (ceil(sigy)*7); yMid = floor(xLen/2)+1;
-    zLen = (ceil(sigz)*7); zMid = floor(xLen/2)+1;
+    xLen = (ceil(sigx)*7)+~mod((ceil(sigx)*7),2); xMid = floor(xLen/2)+1;
+    yLen = (ceil(sigy)*7)+~mod((ceil(sigy)*7),2); yMid = floor(xLen/2)+1;
+    zLen = (ceil(sigz)*7)+~mod((ceil(sigz)*7),2); zMid = floor(xLen/2)+1;
     xmask = 1/(sigx*sqrt(2*pi))*exp(-((((1:xLen)-xMid)/(sigx)).^2)/2);
     ymask = 1/(sigy*sqrt(2*pi))*exp(-((((1:yLen)-yMid)/(sigy)).^2)/2);
     zmask = 1/(sigz*sqrt(2*pi))*exp(-((((1:zLen)-zMid)/(sigz)).^2)/2);

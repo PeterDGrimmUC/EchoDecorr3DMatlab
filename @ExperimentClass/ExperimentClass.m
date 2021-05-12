@@ -1116,13 +1116,14 @@ classdef ExperimentClass < handle
             outObj.zmin = obj.initDataSet.zMin;
             outObj.zmax = obj.initDataSet.zMax;
             outObj.timeArr = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
-            outObj.instibs = arrayfun(@(x)obj.fixvolume(x.ibs), obj.ultrasoundDataSeries,'UniformOutput',false);
-            outObj.instdecorr = arrayfun(@(x)obj.fixvolume(x.decorr), obj.ultrasoundDataSeries,'UniformOutput',false);
-            outObj.Bmode = arrayfun(@(x)obj.fixvolume(x.rawData_cart), obj.ultrasoundDataSeries,'UniformOutput',false);
-            outObj.decorr = obj.fixvolume(obj.cumulativeDecorr); 
+            outObj.instibs = arrayfun(@(x)x.ibs, obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.instdecorr = arrayfun(@(x)x.decorr, obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.Bmode = arrayfun(@(x)x.rawData_cart, obj.ultrasoundDataSeries,'UniformOutput',false);
+            outObj.decorr = obj.cumulativeDecorr; 
             outObj.decorrThresh = obj.decorrThresh; 
             outObj.folderNames = arrayfun(@(x)x.folderName, obj.ultrasoundDataSeries, 'UniformOutput', false); 
             outObj.rfDataArr = rfDataArr;
+            outObj.ROIMap = obj.ROIMap;
         end
         
         function outDat = getTimeArr(obj)

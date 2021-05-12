@@ -27,7 +27,7 @@ experiment.getInitDataSet_c(); % get first data set from folder
 %% set ROI information
 elevLoc = 0; % center of ROI in elevation, centered at 0
 azimLoc = 0; % center of ROI in azimuth, centered at 0
-depthLoc = 52; % center of ROI in depth, distance from transducer
+depthLoc = 30; % center of ROI in depth, distance from transducer
 % the script lets you define an arbitrary ellipsoid ROI, set all equal for a sphere
 elevR = 15; 
 azimR = 15; 
