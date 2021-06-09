@@ -284,42 +284,6 @@ classdef ExperimentClass < handle
             outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
         end
         
-        function defineROI2(obj) 
-            % defineROI2: Use internal information to create ROI mask
-            %
-            % Uses information about the volume geometry as well as information about the ROI to create a vector of points within the ROI
-            % This version works on an arbitrary ellipsoid, it defines the axes as centered around 0 and uses the definition of an ellipsoid to create the region
-            % this is then translated to match the volume geomtry, and rotated to match the provided rotation information
-            %
-            % Usage:
-            %   defineROI2(obj)
-            %     inputs:
-            %        None
-            %     outputs:
-            %        None
-            xMid = obj.initDataSet.x_range(floor(end/2));
-            yMid = obj.initDataSet.y_range(floor(end/2));
-            zMid = obj.initDataSet.z_range(floor(end/2));
-            diffX = abs(obj.initDataSet.x_range(1) - obj.initDataSet.x_range(2));
-            diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
-            diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
-            [zGrid, yGrid, xGrid] = ndgrid(obj.initDataSet.z_range-zMid,obj.initDataSet.y_range-yMid,obj.initDataSet.x_range-xMid);
-            validPoints = find(((xGrid).^2./obj.ROIr0^2 + (yGrid).^2./obj.ROIr1^2 + (zGrid).^2./obj.ROIr2^2)<1);
-            finalGrid = zeros(size(xGrid));
-            finalGrid(validPoints) = 1;
-            finalGrid = reshape(finalGrid,(size(xGrid)));
-            finalGrid = imrotate3(finalGrid, obj.ROIAlpha,[1 0 0],'crop');
-            finalGrid = imrotate3(finalGrid, obj.ROIBeta,[0 1 0],'crop');
-            finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],'crop');
-            finalGrid = imtranslate(finalGrid, [(obj.ROIz0-zMid)/diffZ,(obj.ROIy0-yMid)/diffY,(obj.ROIx0-xMid)/diffX ]);
-            obj.ROIMap = logical(finalGrid); 
-            obj.ROIVoxelNum = sum(obj.ROIMap(:)); 
-            obj.initDataSet.ROIMap = obj.ROIMap;
-            %TODO
-            %obj.initDataSet.compute3DDecorr_ROI();
-            obj.initDataSet.compute3DDecorr_Freq();
-        end
-        
         function defineROI(obj) 
             % defineROI: Use internal information to create ROI mask
             %
@@ -341,101 +305,6 @@ classdef ExperimentClass < handle
             obj.initDataSet.ROIMap = obj.ROIMap;
             %obj.initDataSet.compute3DDecorr_ROI();
             obj.initDataSet.compute3DDecorr_Freq();
-        end
-        
-        function defineGridBounds(obj)
-            % defineGridBounds: define bounds for a subregion to save on computation time, often unnessesary due to other optimizations
-            %
-            % Find the minimum bounds that will contain the entire target region with a margin of 3*sigma, does this computationally due to infeasibility of an analytic expression for an arbitrary rotated ellipsoid
-            %
-            % Usage:
-            %   defineGridBounds(obj)
-            %     inputs:
-            %        None
-            %     outputs:
-            %        None
-            xMid = obj.initDataSet.x_range(floor(end/2));
-            yMid = obj.initDataSet.y_range(floor(end/2));
-            zMid = obj.initDataSet.z_range(floor(end/2));
-            diffX = abs(obj.initDataSet.x_range(1) - obj.initDataSet.x_range(2));
-            diffY = abs(obj.initDataSet.y_range(1) - obj.initDataSet.y_range(2));
-            diffZ = abs(obj.initDataSet.z_range(1) - obj.initDataSet.z_range(2));
-            [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range-xMid,obj.initDataSet.y_range-yMid,obj.initDataSet.z_range-zMid);
-            validPoints = find(((xGrid).^2./((obj.ROIr0+6*obj.sigma)^2) + (yGrid).^2./((obj.ROIr1+6*obj.sigma)^2) + (zGrid).^2./((obj.ROIr2+6*obj.sigma)^2))<1);
-            finalGrid = zeros(size(xGrid));
-            finalGrid(validPoints) = 1;
-            finalGrid = reshape(finalGrid,(size(xGrid)));
-            finalGrid = imrotate3(finalGrid, obj.ROIAlpha,[1 0 0],'crop');
-            finalGrid = imrotate3(finalGrid, obj.ROIBeta,[0 1 0],'crop');
-            finalGrid = imrotate3(finalGrid, obj.ROIGamma,[0 0 1],'crop');
-            finalGrid = imtranslate(finalGrid, [(obj.ROIx0-xMid)/diffX,(obj.ROIy0-yMid)/diffY,(obj.ROIz0-zMid)/diffZ ]);
-            finalGrid = logical(finalGrid);
-            pts = find(finalGrid == 1); 
-            [xGrid,yGrid,zGrid] = ndgrid(obj.initDataSet.x_range,obj.initDataSet.y_range,obj.initDataSet.z_range);
-           
-            R = sqrt(xGrid.^2 + yGrid.^2 + zGrid.^2);
-            Theta = yGrid./(sqrt(zGrid.^2 + yGrid.^2));
-            Phi = xGrid./(sqrt(R.^2 - yGrid.^2));
-            ROIR = R(pts); maxR = max(ROIR); minR = min(ROIR);
-            ROITheta = Theta(pts); maxTheta = max(ROITheta); minTheta = min(ROITheta);
-            ROIPhi = Phi(pts); maxPhi = max(ROIPhi); minPhi = min(ROIPhi);
-            
-            sizeAz = size(obj.initDataSet.rawData,2);
-            sizeEl = size(obj.initDataSet.rawData,3);
-            obj.dr = 1/obj.initDataSet.InfoFile.NumSamplesPerMm;         % range (mm)
-            obj.rmin = obj.initDataSet.rmin;
-            obj.rmax = obj.initDataSet.rmax;
-            RVec = obj.rmin:obj.dr:obj.rmax;
-            muVec = linspace(sin(obj.thetamin),sin(obj.thetamax), sizeAz);
-            nuVec = linspace(sin(obj.phimin),sin(obj.phimax), sizeEl);
-           
-            
-            obj.subRegionRbounds = [minR,maxR];
-            obj.subRegionThetabounds = [minTheta,maxTheta];
-            obj.subRegionPhibounds = [minPhi,maxPhi];
-            [~,minRi] = min(abs(minR-RVec));
-            [~,maxRi] = min(abs(maxR-RVec));
-            [~,minThetai] = min(abs(minTheta-muVec));
-            [~,maxThetai] = min(abs(maxTheta-muVec));
-            [~,minPhii] = min(abs(minPhi-nuVec));
-            [~,maxPhii] = min(abs(maxPhi-nuVec));
-            
-            obj.subRegionRboundsi = [minRi,maxRi];
-            obj.subRegionThetaboundsi = [minThetai,maxThetai];
-            obj.subRegionPhiboundsi = [minPhii,maxPhii];
-            %obj.ROIMap = obj.ROIMap(xMini:xMaxi,yMini:yMaxi,zMini:zMaxi);
-            %obj.subRegionROIMap = obj.ROIMap(minRi:maxRi,minThetai,maxThetai,minPhii,maxPhii);
-            %obj.subRegionMap = zeros(size(obj.ROIMap));
-            %obj.subRegionMap(minRi:maxRi,minThetai,maxThetai,minPhii,maxPhii) = 1; 
-            rmin = obj.subRegionRbounds(1);
-            rmax = obj.subRegionRbounds(2);
-            thetamin = obj.subRegionThetabounds(1);
-            thetamax = obj.subRegionThetabounds(2);
-            phimin = obj.subRegionPhibounds(1);
-            phimax = obj.subRegionPhibounds(2);
-            rV = obj.subRegionRboundsi(1):obj.subRegionRboundsi(2);
-            thetaV = obj.subRegionThetaboundsi(1):obj.subRegionThetaboundsi(2);
-            phiV = obj.subRegionPhiboundsi(1):obj.subRegionPhiboundsi(2);
-            tempDataSet = USDataClass(obj.initDataSet.rawData,obj.initDataSet.time, obj.initDataSet.InfoFile,rmin,rmax,thetamin,thetamax,phimin,phimax,obj.cartScalingFactor,obj.sigma,obj.interFrameTime);
-            tempDataSet.scanConv_Frust(); 
-            [~,xMini] = min(abs(tempDataSet.x_range(1)-obj.initDataSet.x_range));
-            [~,yMini] = min(abs(tempDataSet.y_range(1)-obj.initDataSet.y_range));
-            [~,zMini] = min(abs(tempDataSet.z_range(1)-obj.initDataSet.z_range));
-            xRa = xMini:xMini+numel(tempDataSet.x_range)-1;
-            yRa = yMini:yMini+numel(tempDataSet.y_range)-1;
-            zRa = zMini:zMini+numel(tempDataSet.z_range)-1;
-            obj.ROIMapSubregion = obj.ROIMap(xRa,yRa,zRa);
-            obj.regionOverlay = zeros(size(obj.ROIMap)); 
-            obj.regionOverlay(xRa,yRa,zRa) = 1; 
-            obj.subRegionXRange = xRa; 
-            obj.subRegionYRange = yRa; 
-            obj.subRegionZRange = zRa; 
-            obj.subRegionXbounds = [xRa(1), xRa(end)];
-            obj.subRegionYbounds = [yRa(1), yRa(end)];
-            obj.subRegionZbounds = [zRa(1), zRa(end)];
-            obj.xVec_sub = tempDataSet.x_range;
-            obj.yVec_sub = tempDataSet.y_range;
-            obj.zVec_sub = tempDataSet.z_range;
         end
 
         function returnVal = addNextRawDataSet_c(obj)
@@ -612,67 +481,6 @@ classdef ExperimentClass < handle
             end
             obj.decorrSumSeries(obj.numVolumes) = sum(obj.cumulativeDecorr(:)/numel(obj.cumlativeDecorr));
             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries tempDataSet];
-        end
-        
-        function infoOut = getInitInfo(obj)
-            % getInitInfo: Get scanner parameters from 'extra data file'
-            %
-            % Gets data from the 'extra data file', which is created by the
-            % scanner script. Contains information about scanner
-            % parameters, targets previously set initial data set folder. 
-            %
-            % Usage:
-            %   infoOut = getInitInfo(obj)
-            %           inputs:
-            %             None
-            %           outputs:
-            %             infoOut: Data from extra data file
-            %               Index 1: Frame rate
-            %               Index 2: depth (mm)
-            %               Index 3: Azimuth scan angle range (degrees)
-            %               Index 4: Azimuth scan angle range (degrees)
-            
-            infoOut = ones(1,4);
-            folderDir = dir(obj.dataFolder);
-            folderDir = folderDir([folderDir.isdir]);
-            invalidFolders = {'.','..','Complete','ready'};
-            binOut = ones(1,numel(folderDir));
-            for invalidFoldN = 1:numel(invalidFolders)
-                binOut = ~arrayfun(@(x) strcmp(x.name,invalidFolders(invalidFoldN)),folderDir)' & binOut;
-            end
-            dataSetList = folderDir(binOut); 
-            chosenfile = dataSetList(1).name;
-            fileName = fullfile(obj.dataFolder,chosenfile,'addParamFile.txt');
-            fidAdd = fopen(fileName);
-            endOfFile = 0;
-            while ~endOfFile
-                lineText=fgetl(fidAdd);
-                regexString = '(\w+)\W+=\W+(\w+)';
-                if lineText==-1
-                    endOfFile=1;
-                else
-                    [mat, tok, ~ ] = regexp(lineText,regexString,'match','tokens', 'tokenExtents');
-                    if ~isempty(mat)
-                        varName = tok{1};
-                        varName = varName{1};
-                        varVal = tok{1};
-                        varVal = varVal{2};
-                        switch varName
-                            case 'frameRate'
-                                infoOut(1) = str2num(varVal);
-                            case 'depth'
-                                infoOut(2) = str2num(varVal);
-                            case 'phiRange'
-                                infoOut(3) = str2num(varVal);
-                            case 'thetaRange'
-                                infoOut(4) = str2num(varVal);
-                            otherwise
-                                error('Variable name not valid');
-                        end
-                    end
-                end
-            end
-            
         end
         
         function obj = addNextDataSetViaFilename(obj, thisFileName)
@@ -1157,6 +965,13 @@ classdef ExperimentClass < handle
             tempInd = [tempInd{:}];
             temp(tempInd) = [];
             succ = length(temp) == 21 || length(temp) == 23;
+        end
+        function succ = verifyFilesReadyNew(nextDataSet)
+            fileCells = {'addParamFile.txt', 'alfconfiga0.pmcr', 'apiconfiga0.pmcr', 'aqiconfiga0.pmcr', 'ariconfiga0.pmcr', 'bbfconfiga0.pmcr', 'bufApl0Out_0x0_0x0.data.dm.pmcr', 'bufApl0Out_0x0_0x0.info.txt', 'demodconfiga0.pmcr', 'dsfconfiga0.pmcr', 'dsfconfiga1.pmcr', 'factorygainconfiga0.pmcr', 'imagestatisticsconfiga0.pmcr', 'lsynthconfiga0.pmcr', 'patientcompressionconfig.pmcr', 'patientgainconfiga0.pmcr', 'phaseadjustconfiga0.pmcr', 'psynthconfiga0.pmcr', 'rangeadjustconfiga0.pmcr', 'rrfconfiga0.pmcr', 'scaleadjustconfiga0.pmcr'};
+            dir2check = dir(fullfile(nextDataSet.folder,nextDataSet.name));
+            dir2check = {dir2check.name};
+            checkExists = @(strIn) any(cellfun(@(currString) strcmp(strIn,currString), dir2check ));
+            succ = all(cellfun(checkExists,fileCells));
         end
     end
 end
