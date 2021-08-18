@@ -1,0 +1,10 @@
+function processDataSet(obj,ind)
+    switch obj.mode
+        case '2D'
+            obj.scanConvert2D();
+            obj.compute2DDecorr_freq(); 
+        case 'biplane'
+            obj.scanConvert();
+            obj.compute2DDecorr_freq(); 
+end
+

@@ -4,8 +4,11 @@ fileName = mfilename('fullpath');
             addpath(genpath(fileName(1:end-length(mfilename('class')))));
 thisFileDir = uigetdir(); % point this towards the target data directory
 thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr');
-
+%targetDir = '/Volumes/DATA 2/datadump07142021/AllBufferDump/IQDATA_Date_07-14-2021_Time_14-41-24-30/';
+%targetFile = 'bufApl4Out_0x1_0x0.data.dm.part';
+%thisFileName = fullfile(targetDir,targetFile);
 Dm = read_lbdump_wrapc(thisFileName); % call memory mapped read function (requires MEX function)
+%%
 % get radius information
 rmin = 0;
 rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;

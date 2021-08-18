@@ -6,7 +6,7 @@
 % After it processes a folder it will move it to the complete folder
 % to rerun the script you have to move the folders back to their original location outside of the 'complete' folder. 
 %% Init class
-experiment = ExperimentClass(); % Create experiment class object
+experiment = ExperimentClass2D('2D'); % Create experiment class object
 experiment.initDataFolderGUI(); % set target folder, should be one directory above each individual output folder from the scanner
 % Get geometry info
 % Manually set
