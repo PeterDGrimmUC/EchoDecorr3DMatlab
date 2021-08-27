@@ -103,7 +103,6 @@ classdef USDataClass2D < handle
         scanConvertBiplane( obj );
         computeBiplaneDecorr_Freq( obj );
         compute2DDecorr_Time( obj );
-        
     end
 end
 

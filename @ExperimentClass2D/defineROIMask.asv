@@ -1,6 +1,0 @@
-function defineROIMask2D(obj)
-    zVec = obj.initDataSet.z_range();
-    yVec = obj.initDataSet.y_range();
-    
-end
-

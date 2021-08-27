@@ -6,4 +6,3 @@ function defineROIMask2D(obj)
     obj.ROIMask = zeros(size(zGrid)); 
     obj.ROIMask(obj.ROIPoints) = 1; 
 end
-

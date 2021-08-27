@@ -1,4 +1,4 @@
-function compute2DDecorr_Freq( obj )
+function computeBiplaneDecorr_Freq( obj )
     %COMPUTE3DDECORR Summary of this function goes here
     %%
     % *Define Guassian Window* 
@@ -6,14 +6,10 @@ function compute2DDecorr_Freq( obj )
 for i = 1:length(obj.rawData)
     sigy = obj.windowSigma/obj.dy;
     sigz = obj.windowSigma/obj.dz;
- 
+    
     % create gaussian kernel out to 3.5 sigma (odd number makes this
     % simpler)
     tau = 10^3/(obj.interFrameTime);
-    %ymask = 1/(sigy*sqrt(2*pi))*exp(-((((1:yLen)-yMid)/(sigy)).^2)/2);
-    %zmask = 1/(sigz*sqrt(2*pi))*exp(-((((1:zLen)-zMid)/(sigz)).^2)/2);
-    %[z_mask_mat,y_mask_mat] = ndgrid(zmask,ymask); 
-    %maskfilt = y_mask_mat.*z_mask_mat; 
     % Pad data to be odd in all dims
     pad3Sigma = ceil([3*sigz, 3*sigy]); 
     padToOdd = [mod(size(obj.rawData_cart{i},[1,2])+pad3Sigma,2),0];
@@ -48,18 +44,16 @@ for i = 1:length(obj.rawData)
     tempDat = obj.rawData_cart{i}; 
     pointsInVol = (squeeze(tempDat(:,:,1))~=0);
     pointsNotInVol = (squeeze(tempDat(:,:,1))==0);
-    %temp = zeros(size(obj.rawData_cart{i},[1,2]));
     R00 = squeeze(obj.R(:,:,1));
-    %R00 = R00(pointsInVol);
     R11 = squeeze(obj.R(:,:,2));
-    %R11 = R11(pointsInVol); 
     B2 = (R00.*R11);
     R01 = abs(obj.autocorr01(:,:)).^2;
-    %R01 = R01(pointsInVol); 
     
     temp = 2*(B2-R01)./(B2 + mean(B2(pointsInVol)))/tau;
+    %temp = 2*(B2-R01)./(B2 + mean(B2(:)))/tau;
     temp(pointsNotInVol) = 0; 
     obj.decorr{i} = temp; 
 end
 end
+
 

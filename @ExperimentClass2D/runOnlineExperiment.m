@@ -21,7 +21,7 @@ function  runOnlineExperiment(obj)
         case 'biplane'
             if isempty(obj.cumulativeDecorr)
                 obj.cumulativeDecorr{end+1} = obj.dataSeries{1}.decorr{1};
-                obj.cumulativeDecorr{end+1} = obj.dataSeries{1}.decorr{2};
+            obj.cumulativeDecorr{end+1} = obj.dataSeries{1}.decorr{2};
             end
             
             for i = 1:length(cumulativeDecorr)

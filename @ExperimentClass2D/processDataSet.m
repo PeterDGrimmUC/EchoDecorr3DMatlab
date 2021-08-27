@@ -5,7 +5,7 @@ function processDataSet(obj,ind)
             obj.dataSeries{ind}.compute2DDecorr_Freq(); 
         case 'biplane'
             obj.dataSeries{ind}.scanConvertBiplane();
-            obj.dataSeries{ind}.computeBiplaneDecorr_freq();
+            obj.dataSeries{ind}.computeBiplaneDecorr_Freq();
     end
 end
 

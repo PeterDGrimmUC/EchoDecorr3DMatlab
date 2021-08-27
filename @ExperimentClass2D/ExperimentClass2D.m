@@ -88,8 +88,6 @@ classdef ExperimentClass2D < handle
         function obj = initDataFolder(obj,dirName)
             obj.dataFolder = dirName; 
             mkdir(fullfile(obj.dataFolder,'Complete'));
-            fullDirectory  = dir(obj.activeFolder);
-            obj.activeFolderDir = fullDirectory(3:end);
             obj.numVolumes = 1; 
         end
         %% External
@@ -102,5 +100,6 @@ classdef ExperimentClass2D < handle
         defineROIMaskBiplane(obj);
         defineROIMask(obj);
         updateCumulativeDecorr(obj)
+        runOnlineExperiment(obj);
     end
 end
