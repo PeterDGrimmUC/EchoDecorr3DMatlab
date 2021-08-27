@@ -53,11 +53,20 @@ function outDataSet = read_lbdump_wrap(thisFileName,obj)
     obj.phimax = pi/360*obj.elAngle;
     obj.phimin = -obj.phimax;
     % create USDataClass objet
-    outDataSet = USDataClass2D(Dm.data,datetime(), Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.frameRate,obj.mode);
+    thisTime = processDate(thisFileName);
+    outDataSet = USDataClass2D(Dm.data,thisTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.frameRate,obj.mode);
     %USDataClass2D(thisRawData,startTime,thisInfoFile,thisrmin,thisrmax,thisthetamin,thisthetamax,thiscartScalingFactor,thiswindowSigma,thisinterFrameTime,mode)
 end
 function moveToComplete(dataFolderPath,dataFolderName,obj)
     newPath = fullfile(obj.dataFolder,'Complete',dataFolderName);
     fclose all;
     movefile(dataFolderPath,newPath);
+end
+function outTime = processDate(thisFileName)
+    folderStr = split(thisFileName,'/');
+    folderStr = folderStr{6};
+    folderSplit = split(folderStr,'_');
+    dayString = folderSplit{3};
+    timeString = folderSplit{5};
+    outTime = datetime(strcat(dayString,'-',timeString),'InputFormat','MM-dd-yyyy-HH-mm-ss-SS');
 end

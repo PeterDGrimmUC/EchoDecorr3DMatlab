@@ -16,8 +16,6 @@ function getInitDataSet(obj)
         
         moveToComplete(targetFolder,dirListing(1).name,obj);
     end
-    obj.startTime = obj.initDataSet.time;
-    
 end
 function dirListing = preParseDir(dirListing)
     dirListing=dirListing(~ismember({dirListing.name},{'.','..','Complete'}));
@@ -49,7 +47,6 @@ function dat = loadNewFile(folderName,mode,plane1FileName,plane2FileName,obj)
 end
 function outDataSet = read_lbdump_wrap(thisFileName,obj)
     Dm = read_lbdump(thisFileName); % call memory mapped read function
-    
     % get radius information
     obj.rmin = 0;
     obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
@@ -60,9 +57,8 @@ function outDataSet = read_lbdump_wrap(thisFileName,obj)
     obj.thetamin = -obj.thetamax;
     obj.phimax = pi/360*obj.elAngle;
     obj.phimin = -obj.phimax;
-    thisTime = processDate(thisFileName);
     % create USDataClass objet
-    outDataSet = USDataClass2D(Dm.data,thisTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.frameRate,obj.mode);
+    outDataSet = USDataClass2D(Dm.data,datetime(), Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.cartScalingFactor,obj.sigma,obj.frameRate,obj.mode);
 end
 function moveToComplete(dataFolderPath,dataFolderName,obj)
     newPath = fullfile(obj.dataFolder,'Complete',dataFolderName);
@@ -70,11 +66,8 @@ function moveToComplete(dataFolderPath,dataFolderName,obj)
     movefile(dataFolderPath,newPath);
 end
 
-function outTime = processDate(thisFileName)
-    folderStr = split(thisFileName,'/');
-    folderStr = folderStr{6};
+function processDate(folderStr)
     folderSplit = split(folderStr,'_');
     dayString = folderSplit{3};
     timeString = folderSplit{5};
-    outTime = datetime(strcat(dayString,'-',timeString),'InputFormat','MM-dd-yyyy-HH-mm-ss-SS');
 end

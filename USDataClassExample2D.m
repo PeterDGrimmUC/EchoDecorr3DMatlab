@@ -1,31 +1,30 @@
-% Example usage of USDataClass object 
-% requires compiled c MEX files 
-%fileName = mfilename('fullpath');
-%            addpath(genpath(fileName(1:end-length(mfilename('class')))));
-%thisFileDir = uigetdir(); % point this towards the target data directory
-%thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr');
+%% Example usage of USDataClass object for 2d data 
+% set target directory to an individual data file of the form
+% 'IQData_Date...'
 targetDir = '/Volumes/DATA 2/datadump07142021/AllBufferDump/IQDATA_Date_07-14-2021_Time_14-41-24-30/';
-targetFile = 'bufApl4Out_0x1_0x0.data.dm.part';
-
-thisFileName = fullfile(targetDir,targetFile);
-
-Dm = read_lbdump(thisFileName2); % call memory mapped read function (requires MEX function)
-
+% specify buffers
+targetFileAz = 'bufApl4Out_0x0_0x0.data.dm.part'; % azimuth buffer
+% load the data 
+thisFileNameAz = fullfile(targetDir,targetFileAz); % location of elevation buffer
+DmAz = read_lbdump(thisFileNameAz); % read azimuth file
+mode = '2D';
 %%
 % get radius information
 rmin = 0;
-rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
-frameRate = 87;
+rmax = (1/DmEl.Info.NumSamplesPerMm)* DmEl.Info.NumRangeSamples;
+frameRate = 70;
 thetaRange = 90;
 thetamax = pi/360*thetaRange;
 thetamin = -thetamax;
-
-cartScalingFactor = 2.4268;
+phiRange = 90;
+phimax = pi/360*phiRange;
+phimin = -phimax;
+cartScalingFactor = DmEl.Info.NumSamplesPerMm/2;
 sigma = 3;
-% create USDataClass object
-Dm.startTime = datetime;
-outDataSet2D = USDataClass2D(Dm.data,Dm.startTime,Dm.Info,rmin,rmax,thetamin,thetamax,cartScalingFactor,sigma,frameRate);
+%% create USDataClass object
+DmEl.startTime = datetime;
+outDataSetBiplane = USDataClass2D(DmAz.data,DmEl.startTime,DmAz.Info,rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,frameRate,mode);
 %%
-outDataSet2D.scanConvert2D;
+outDataSetBiplane.scanConvert2D;
 %%
-outDataSet2D.compute2DDecorr_Time;
+outDataSetBiplane.compute2DDecorr_Freq;

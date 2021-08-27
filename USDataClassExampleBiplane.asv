@@ -10,7 +10,6 @@ thisFileNameAz = fullfile(targetDir,targetFileAz); % location of elevation buffe
 thisFileNameEl = fullfile(targetDir,targetFileEl); % location of azimuth buffer
 DmEl = read_lbdump(thisFileNameEl); % read elevation file
 DmAz = read_lbdump(thisFileNameAz); % read azimuth file
-mode = 'biplane';
 %%
 % get radius information
 rmin = 0;
@@ -20,14 +19,30 @@ thetaRange = 90;
 thetamax = pi/360*thetaRange;
 thetamin = -thetamax;
 phiRange = 90;
-phimax = pi/360*phiRange;
-phimin = -phimax;
+phimax = pi/360*thetaRange;
+phimin = -thetamax;
 cartScalingFactor = DmEl.Info.NumSamplesPerMm/2;
 sigma = 3;
 %% create USDataClass object
 DmEl.startTime = datetime;
-outDataSetBiplane = USDataClass2D({DmAz.data,DmEl.data},DmEl.startTime,{DmAz.Info,DmEl.Info},rmin,rmax,thetamin,thetamax,phimin,phimax,cartScalingFactor,sigma,frameRate,mode);
+outDataSetBiplane = USDataClass2D({DmEl.data,DmAz.data},DmEl.startTime,{DmEl.Info,DmAz.Info},rmin,rmax,thetamin,thetamax,cartScalingFactor,sigma,frameRate);
 %%
 outDataSetBiplane.scanConvertBiplane;
 %%
 outDataSetBiplane.computeBiplaneDecorr_Freq;
+%%
+biplaneB1 = outDataSetBiplane.rawData_cart{1};
+biplaneB2 = outDataSetBiplane.rawData_cart{2};
+biplaneD1 = outDataSetBiplane.decorr{1};
+biplaneD2 = outDataSetBiplane.decorr{2};
+figure(2), imagesc(log10(abs(biplaneB1(:,:,1))));
+colormap(gray)
+axis image
+figure(3), imagesc(log10(abs(biplaneB2(:,:,1))));
+colormap(gray)
+axis image
+figure(4), imagesc(log10((biplaneD1(:,:))));
+axis image
+figure(5), imagesc(log10((biplaneD2(:,:))));
+
+axis image
