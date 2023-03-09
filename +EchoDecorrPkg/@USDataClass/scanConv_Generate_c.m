@@ -86,6 +86,6 @@ function [qOut] = scanConv_Generate_c( obj )
     iR(p) = floor((R0(p) - obj.rmin)/obj.dr) + 1;
     LR(p) = R0(p) - Rvec(iR(p))';
 
-    [qOut] = scanConv_Frust_c(p,Lmu,Lnu,LR,dmu,dnu,obj.dr,length(p));
+    [qOut] = EchoDecorrPkg.Utils.bin.scanConv_Frust_c(p,Lmu,Lnu,LR,dmu,dnu,obj.dr,length(p));
 end
 

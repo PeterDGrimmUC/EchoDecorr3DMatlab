@@ -70,7 +70,7 @@ function scanConv_apply_c( obj, scanMap )
             iR(p) = floor((R0(p) - obj.rmin)/obj.dr) + 1;
             for volIndex = 1:size(obj.rawData,4)
                 Isph = squeeze(obj.rawData(:,:,:,volIndex));
-                [cOut] = scanConv_Frust_apply_c(p,Isph,scanMap,iR,inu,imu,length(p),length(obj.x_range),length(obj.y_range),length(obj.z_range),size(Isph));
+                [cOut] = EchoDecorrPkg.Utils.bin.scanConv_Frust_apply_c(p,Isph,scanMap,iR,inu,imu,length(p),length(obj.x_range),length(obj.y_range),length(obj.z_range),size(Isph));
                 obj.rawData_cart(:,:,:,volIndex) = reshape(cOut,length(obj.x_range),length(obj.y_range),length(obj.z_range))/(obj.dr*dmu*dnu);
             end
             for j = 1:size(obj.rawData_cart,4)

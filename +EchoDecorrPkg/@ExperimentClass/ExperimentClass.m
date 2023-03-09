@@ -92,7 +92,6 @@ classdef ExperimentClass < handle
             %          None
             %       outputs:
             %          None
-
             if (exist('overrideUncorrectedDecorrStruct','var'))
                 obj.uncorrectedDecorrArg=overrideUncorrectedDecorrStruct;
             end
@@ -262,7 +261,7 @@ classdef ExperimentClass < handle
             %                thisFileName: Target file containing the data to be parsed as string
             %             outputs:
             %                outDataSet: A USDataClass object with the data from the provided folder
-            Dm = read_lbdump_wrapc(thisFileName); % call memory mapped read function
+            Dm = EchoDecorrPkg.Utils.read_lbdump_wrapc(thisFileName); % call memory mapped read function
             % get radius information
             obj.rmin = 0;
             obj.rmax = (1/Dm.Info.NumSamplesPerMm)* Dm.Info.NumRangeSamples;
@@ -278,7 +277,7 @@ classdef ExperimentClass < handle
                 disp('Could not read additional info file! Enter information manually');
             end
             % create USDataClass objet
-            outDataSet = USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.voxelStepCart,obj.sigma,obj.interFrameTime);
+            outDataSet = EchoDecorrPkg.USDataClass(Dm.data,Dm.startTime, Dm.Info,obj.rmin,obj.rmax,obj.thetamin,obj.thetamax,obj.phimin,obj.phimax,obj.voxelStepCart,obj.sigma,obj.interFrameTime);
             if obj.IBSGeoSet
                 outDataSet.setIBSParam(obj.IBSrMin,obj.IBSrMax, obj.IBSAzMin,obj.IBSAzMax,obj.IBSElMin,obj.IBSElMax);
             end
@@ -551,7 +550,8 @@ classdef ExperimentClass < handle
             %       None
             %     outputs:
             %       None
-            obj.inSerialObj = SerialClass(obj.inSerialString, 9600);
+            
+            obj.inSerialObj = EchoDecorrPkg.SerialClass(obj.inSerialString, 9600);
             obj.inSerialObj = obj.inSerialObj.initSerialBlocks();
         end
         

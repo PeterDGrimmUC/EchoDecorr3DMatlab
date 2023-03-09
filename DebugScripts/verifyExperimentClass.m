@@ -5,9 +5,9 @@
 % Each 'IQData.q..' folder should be in another enclosing folder, which is where you should point the script toward when it asks you to select a folder
 % After it processes a folder it will move it to the complete folder
 % to rerun the script you have to move the folders back to their original location outside of the 'complete' folder. 
-lambdas;
+EchoDecorrPkg.Utils.lambdas;
 %% Init class
-experiment = ExperimentClass(); % Create experiment class object
+experiment = EchoDecorrPkg.ExperimentClass(); % Create experiment class object
 %experiment.initDataFolderGUI(); % set target folder, should be one directory above each individual output folder from the scanner
 experiment.initDataFolder('/Users/petergrimm/Documents/EchoDecorrData/Other data/in-vivo/2022-8-24_experiment_4')
 % Get geometry info
@@ -55,10 +55,8 @@ for i =1:numSham
 end
 experiment.initMotionCorrection()
 %%
-while ~isempty(experiment.getWaitingDataSets)
+while experiment.newDataSetReady()
     experiment.nextDataSet()
-    %cumTest=mapreduce(@(x,y) max(x,y), map(@(x)x.getFormattedDec(struct('local',true,'global',true)), experiment.ultrasoundDataSeries));
-    %assert(all(cumTest(:)==experiment.cumulativeDecorr(:)))
 end
 %%
 cumTest=mapreduce(@(x,y) max(x,y), map(@(x)x.getFormattedDec(struct('local',true,'global',true)), experiment.ultrasoundDataSeries));

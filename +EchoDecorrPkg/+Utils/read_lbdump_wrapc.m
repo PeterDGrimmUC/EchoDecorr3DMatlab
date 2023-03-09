@@ -4,7 +4,7 @@ function Dm = read_lbdump_wrapc(filename)
 % Inputs:
 %   filename - string of filename, may include path information
 % rcl
-
+import EchoDecorrPkg.Utils.bin.read_lbdump_c;
 Dm.H = [];
 Dm.data = [];
 
