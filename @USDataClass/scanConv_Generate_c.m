@@ -38,14 +38,15 @@ function [qOut] = scanConv_Generate_c( obj )
     
     % Cartesian grid, onto which we're scan-converting (interpolating)
     %obj.cartScalingFactor =2;
-    obj.dz = obj.cartScalingFactor*obj.dr;%0.5;  % spatial step
+    obj.dz = obj.voxelStepCart;%0.5;  % spatial step
     obj.dx = obj.dz;
     obj.dy = obj.dz;
-    maxY = obj.rmax*sin(obj.phimax);
-    minY = obj.rmax*sin(obj.phimin);
-    maxX = obj.rmax*sin(obj.thetamax);
-    minX = obj.rmax*sin(obj.thetamin);
-    obj.z_range = obj.rmin:obj.dz:obj.rmax;  % depth
+    obj.cartScalingFactor=obj.dx/obj.dr;
+    maxY = ceil(obj.rmax*sin(obj.phimax));
+    minY = floor(obj.rmax*sin(obj.phimin));
+    maxX = ceil(obj.rmax*sin(obj.thetamax));
+    minX = floor(obj.rmax*sin(obj.thetamin));
+    obj.z_range = obj.rmin:obj.dz:obj.rmax+1;  % depth
     obj.y_range = minY:obj.dz:maxY; %-32:obj.dz:32;  % azimuth
     obj.x_range = minX:obj.dz:maxX; %-31:obj.dz:31;  % elevation;
     [x,y,z] = ndgrid(obj.x_range,obj.y_range,obj.z_range);

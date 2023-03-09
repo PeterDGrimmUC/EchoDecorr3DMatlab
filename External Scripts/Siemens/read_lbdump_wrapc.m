@@ -63,9 +63,9 @@ Dm.H.qsz = size(Dm.data,3);
 
 % find an associated info file and read the data
 infoFilename=[filename(1:end-12) 'info.txt'];
-addInfoFilename=[filename(1:end-31) 'addParamFile.txt']
+addInfoFilename=[filename(1:end-31) 'addParamFile.txt'];
 fid=fopen(infoFilename);
-addFid = fopen(addInfoFilename)
+addFid = fopen(addInfoFilename);
 if fid==-1 
     warning('failed to open info file')
     Dm.Info = struct([]);
@@ -166,7 +166,7 @@ while ~endOfFile
         end
     end
 end
-endOfFile = 0
+endOfFile = 0;
 try
 while ~endOfFile
     lineText=fgetl(fidAdd);
@@ -196,5 +196,5 @@ while ~endOfFile
     end
 end
 catch
-    display('Could not parse additional info file')
+    display('Could not parse additional info file');
 end

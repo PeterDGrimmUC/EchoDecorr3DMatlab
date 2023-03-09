@@ -1,4 +1,4 @@
-function compute3DDecorr( obj)
+function computeDecorrTerms( obj)
     %% COMPUTE3DDECORR Summary of this function goes here
     validPts=obj.rawData_cart(:,:,:,1)~=0;
     obj.frustumPts=validPts;
