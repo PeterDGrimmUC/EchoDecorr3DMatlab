@@ -1,5 +1,4 @@
 # Scripts for ultrasound echo decorrelation imaging
-## Temporary branch for motion correction fixes and api overhaul
 ### Important: You must install a C++ compiler and run MexBuild.m before using the package
 The script MexBuild compiles all mex functions and places the binaries in the 'Util' subpackage.
 
