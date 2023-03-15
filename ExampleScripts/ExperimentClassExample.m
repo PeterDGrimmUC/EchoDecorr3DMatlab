@@ -6,9 +6,8 @@
 % After it processes a folder it will move it to the complete folder
 % to rerun the script you have to move the folders back to their original location outside of the 'complete' folder. 
 %% Init class
-experiment = ExperimentClass(); % Create experiment class object
-%experiment.initDataFolderGUI(); % set target folder, should be one directory above each individual output folder from the scanner
-experiment.initDataFolder('/Users/petergrimm/Documents/EchoDecorrData/Other data/in-vivo/2022-8-24_experiment_4');
+experiment = EchoDecorrPkg.ExperimentClass(); % Create experiment class object
+experiment.initDataFolderGUI(); % set target folder, should be one directory above each individual output folder from the scanner
 % Get geometry info
 % Manually set
 sigma = 3; 

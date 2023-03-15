@@ -77,6 +77,8 @@ classdef ExperimentClass < handle
         correctedDecorrArg=struct('global',false,'local',true);
         uncorrectedDecorrArg=struct('global',true,'local',true);
         numShamSets=0;
+        validVoxels;
+        IBSpts;
     end
     
     methods
@@ -208,7 +210,11 @@ classdef ExperimentClass < handle
             obj.IBSAzMin=myIBSazMin;
             
             obj.IBSGeoSet=true;
+            obj.IBSpts=ndgrid(obj.zVec>obj.IBSrMin&obj.zVec<obj.IBSrMax,...
+                    obj.yVec>obj.IBSAzMin&obj.yVec<obj.IBSAzMax,...
+                    obj.xVec>obj.IBSElMin&obj.xVec<obj.IBSElMax);
         end
+        
         function getInitDataSet_c(obj)
             % getInitDataSet: Get initial dataset from folder
             %
@@ -248,6 +254,8 @@ classdef ExperimentClass < handle
             obj.fileLUT{end+1}=nextDataSet.name;
             obj.cumulativeDecorr=zeros(size(obj.initDataSet.rawData_cart(:,:,:,1)));
             obj.cumulativeShamDecorr=zeros(size(obj.initDataSet.rawData_cart(:,:,:,1)));
+            obj.validVoxels=obj.initDataSet.rawData_cart(:,:,:,1)~=0;
+            obj.IBSpts=ones(size(obj.validVoxels));
         end
         
         function outDataSet = parseDataFromDir_c(obj,thisFileName)
@@ -328,9 +336,6 @@ classdef ExperimentClass < handle
                 obj.updateCumulativeMotionCorrectedDecorr(dataObj);
             end
         end
-        function initMotionCorrection(obj)
-            obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
-        end
         function nextShamDataSet(obj)
             incomingDataSet=obj.getNextDataSetFolder_c(); targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
             obj.fileLUT{end+1}=incomingDataSet.name;
@@ -340,17 +345,30 @@ classdef ExperimentClass < handle
             obj.updateCumulativeShamDecorr(dataObj)
             obj.cumulativeDecorr=obj.cumulativeShamDecorr;
         end
+        function initMotionCorrection(obj)
+            obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
+            obj.decorrAverageSeries=zeros(size(obj.decorrAverageSeries));
+            obj.decorrAverageSeriesROI=zeros(size(obj.decorrAverageSeries));
+        end
         function updateCumulativeDecorr(obj,dataObj)
             decorr=dataObj.getFormattedDec(obj.uncorrectedDecorrArg);
             obj.cumulativeDecorr=max(obj.cumulativeDecorr,decorr);
+            obj.updateDecAverageSeries();
         end
         function updateCumulativeShamDecorr(obj,dataObj)
             decorr=dataObj.getFormattedDec(obj.correctedDecorrArg);
             obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr, decorr);
+            obj.updateDecAverageSeries();
         end
         function updateCumulativeMotionCorrectedDecorr(obj,dataObj)
             decorr=dataObj.getMotionCorrectedDecorr(obj.cumulativeShamDecorr);
             obj.cumulativeDecorr=max(obj.cumulativeDecorr,decorr);
+            obj.updateDecAverageSeries();
+        end
+        function updateDecAverageSeries(obj)
+            interFrameTimeMS=obj.interFrameTime*1000;
+            obj.decorrAverageSeries(end+1)=mean(obj.cumulativeDecorr(obj.validVoxels&obj.IBSpts))/interFrameTimeMS;
+            obj.decorrAverageSeriesROI(end+1)=mean(obj.cumulativeDecorr(obj.ROIMap&obj.validVoxels&obj.IBSpts))/interFrameTimeMS;
         end
         function success=newDataSetReady(obj)
            % check if a new data set exists and all files are ready
@@ -439,7 +457,7 @@ classdef ExperimentClass < handle
             obj.activeFolder =  uigetdir(basePath);
             obj.dataFolder = obj.activeFolder; 
             mkdir(fullfile(obj.dataFolder,'Complete'));
-            fullDirectory  = dir(obj.activeFolder);
+            
         end
         
         function obj = initDataFolder(obj,dirName)
