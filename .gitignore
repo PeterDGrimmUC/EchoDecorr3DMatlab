@@ -1,9 +1,7 @@
 
-exp3.mat
-exp4_t.mat
-exp4.mat
-exp4-2.mat
-*.mat
-*.mexw64
-*.tsv
-DecorrApp.mlapp
+**/.DS_Store
+**/*.asv
+**/*.swp
+.DS_Store
+.DS_Store
+*.mexmaci64
