@@ -45,6 +45,7 @@ classdef ExperimentClass < handle
         outSerialString; 
         outSerialObj;
         inSerialObj; 
+        %
         ROIx0; 
         ROIy0; 
         ROIz0; 
@@ -65,6 +66,7 @@ classdef ExperimentClass < handle
         timeArr;
         rfDataArr;
         voxelStepCart;
+        %
         IBSVoxels;
         IBSrMax;
         IBSrMin;
@@ -73,12 +75,13 @@ classdef ExperimentClass < handle
         IBSAzMin;
         IBSAzMax;
         IBSGeoSet=false;
+        %
         isMotionCorrected=false;
         correctedDecorrArg=struct('global',false,'local',true);
         uncorrectedDecorrArg=struct('global',true,'local',true);
-        numShamSets=0;
         validVoxels;
         IBSpts;
+        isShamMask;
     end
     
     methods
@@ -101,26 +104,6 @@ classdef ExperimentClass < handle
                 obj.correctedDecorrArg=overrideCorrectedDecorrStruct;
             end
             obj.IBSGeoSet=false;
-        end
-        
-        function reset(obj)
-            % reset: Resets object to empty
-            %
-            % Reset the object to empty for use with a new experiment
-            %
-            % Usage:
-            %   reset(obj)
-            %     inputs:
-            %        None
-            %     outputs:
-            %        None
-            obj.ultrasoundDataSeries = []; 
-            obj.decorrelationMapSeries = [];
-            obj.cumulativeDecorr = []; 
-            obj.decorrSumSeries = []; 
-            obj.decorrSumSeriesROI = []; 
-            obj.decorrVolume = []; 
-            obj.averageDecorr = []; 
         end
 
         function setControlParams(obj,myThresh)
@@ -325,7 +308,8 @@ classdef ExperimentClass < handle
         end
 
         function nextDataSet(obj)
-            incomingDataSet=obj.getNextDataSetFolder_c(); targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
+            incomingDataSet=obj.getNextDataSetFolder_c(); 
+            targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
             obj.fileLUT{end+1}=incomingDataSet.name;
             % process data set
             dataObj=obj.processDataSet(targetDirectory);
@@ -335,20 +319,28 @@ classdef ExperimentClass < handle
             else
                 obj.updateCumulativeMotionCorrectedDecorr(dataObj);
             end
+            obj.isShamMask(end+1)=0;
         end
         function nextShamDataSet(obj)
-            incomingDataSet=obj.getNextDataSetFolder_c(); targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
+            incomingDataSet=obj.getNextDataSetFolder_c(); 
+            targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
             obj.fileLUT{end+1}=incomingDataSet.name;
             % process data set
             dataObj=obj.processDataSet(targetDirectory);
             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries, dataObj];
             obj.updateCumulativeShamDecorr(dataObj)
-            obj.cumulativeDecorr=obj.cumulativeShamDecorr;
+            obj.isShamMask(end+1)=1;
         end
-        function initMotionCorrection(obj)
+        function initMotionCorrection(obj,numVols)
             obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
             obj.decorrAverageSeries=zeros(size(obj.decorrAverageSeries));
             obj.decorrAverageSeriesROI=zeros(size(obj.decorrAverageSeries));
+            allVols=1:length(obj.ultrasoundDataSeries);
+            obj.cumulativeShamDecorr=zeros(size(obj.cumulativeDecorr));
+            for currVol=allVols(end-numVols+1:end)
+                obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr,obj.ultrasoundDataSeries(currVol).getFormattedDec(struct('global',false,'local',true)));
+            end
+            obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
         end
         function updateCumulativeDecorr(obj,dataObj)
             decorr=dataObj.getFormattedDec(obj.uncorrectedDecorrArg);
@@ -356,8 +348,10 @@ classdef ExperimentClass < handle
             obj.updateDecAverageSeries();
         end
         function updateCumulativeShamDecorr(obj,dataObj)
-            decorr=dataObj.getFormattedDec(obj.correctedDecorrArg);
-            obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr, decorr);
+            decorr_loc=dataObj.getFormattedDec(struct('local',true,'global',false));
+            decorr_global=dataObj.getFormattedDec(struct('local',true,'global',true));
+            obj.cumulativeDecorr=max(obj.cumulativeDecorr,decorr_global);
+            obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr, decorr_loc);
             obj.updateDecAverageSeries();
         end
         function updateCumulativeMotionCorrectedDecorr(obj,dataObj)
@@ -572,6 +566,13 @@ classdef ExperimentClass < handle
             obj.inSerialObj = EchoDecorrPkg.SerialClass(obj.inSerialString, 9600);
             obj.inSerialObj = obj.inSerialObj.initSerialBlocks();
         end
+
+        function succ=inSerialObjExists(obj)
+            succ = ~isempty(obj.inSerialObj);
+        end
+        function succ=outSerialObjExists(obj)
+            succ = ~isempty(obj.outSerialObj);
+        end
         
         function removeSerialConnection(obj)
             % removeSerialConnection: Delete outSerialObj
@@ -681,7 +682,11 @@ classdef ExperimentClass < handle
             %           None
             %         outputs:
             %           outDat: cell of times
-            outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
+            if ~isempty(obj.ultrasoundDataSeries)
+                outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
+            else
+                outDat=[];
+            end
         end
     end
     methods (Static)
