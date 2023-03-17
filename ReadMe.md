@@ -9,7 +9,7 @@ see [this matlab article for supported compilers](https://www.mathworks.com/supp
 ## Installation instructions
 1. Clone the repository with git 
 
-      git clone --recurse-submodules --branch MotionCorrectionFixes https://github.com/PeterDGrimmUC/EchoDecorr3DMatlab.git
+      git clone --recurse-submodules https://github.com/PeterDGrimmUC/EchoDecorr3DMatlab.git
 
 2. Run the script MexBuild.m (ensure you have a compiler installed beforehand)
 3. Ensure that the folder containing +EchoDecorrPkg is in your MATLAB path (do not add the folder itself to the path, just the folder containing it, otherwise there might be some namespace conflicts)
