@@ -105,26 +105,6 @@ classdef ExperimentClass < handle
             end
             obj.IBSGeoSet=false;
         end
-        
-        function reset(obj)
-            % reset: Resets object to empty
-            %
-            % Reset the object to empty for use with a new experiment
-            %
-            % Usage:
-            %   reset(obj)
-            %     inputs:
-            %        None
-            %     outputs:
-            %        None
-            obj.ultrasoundDataSeries = []; 
-            obj.decorrelationMapSeries = [];
-            obj.cumulativeDecorr = []; 
-            obj.decorrSumSeries = []; 
-            obj.decorrSumSeriesROI = []; 
-            obj.decorrVolume = []; 
-            obj.averageDecorr = []; 
-        end
 
         function setControlParams(obj,myThresh)
             % setControlParams: Set parameters for control
@@ -328,7 +308,8 @@ classdef ExperimentClass < handle
         end
 
         function nextDataSet(obj)
-            incomingDataSet=obj.getNextDataSetFolder_c(); targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
+            incomingDataSet=obj.getNextDataSetFolder_c(); 
+            targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
             obj.fileLUT{end+1}=incomingDataSet.name;
             % process data set
             dataObj=obj.processDataSet(targetDirectory);
@@ -341,7 +322,8 @@ classdef ExperimentClass < handle
             obj.isShamMask(end+1)=0;
         end
         function nextShamDataSet(obj)
-            incomingDataSet=obj.getNextDataSetFolder_c(); targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
+            incomingDataSet=obj.getNextDataSetFolder_c(); 
+            targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
             obj.fileLUT{end+1}=incomingDataSet.name;
             % process data set
             dataObj=obj.processDataSet(targetDirectory);
@@ -583,6 +565,13 @@ classdef ExperimentClass < handle
             
             obj.inSerialObj = EchoDecorrPkg.SerialClass(obj.inSerialString, 9600);
             obj.inSerialObj = obj.inSerialObj.initSerialBlocks();
+        end
+
+        function succ=inSerialObjExists(obj)
+            succ = ~isempty(obj.inSerialObj);
+        end
+        function succ=outSerialObjExists(obj)
+            succ = ~isempty(obj.outSerialObj);
         end
         
         function removeSerialConnection(obj)
