@@ -81,6 +81,7 @@ classdef ExperimentClass < handle
         uncorrectedDecorrArg=struct('global',true,'local',true);
         validVoxels;
         IBSpts;
+        isShamMask;
     end
     
     methods
@@ -337,6 +338,7 @@ classdef ExperimentClass < handle
             else
                 obj.updateCumulativeMotionCorrectedDecorr(dataObj);
             end
+            obj.isShamMask(end+1)=0;
         end
         function nextShamDataSet(obj)
             incomingDataSet=obj.getNextDataSetFolder_c(); targetDirectory = fullfile(obj.dataFolder,incomingDataSet.name);
@@ -346,11 +348,18 @@ classdef ExperimentClass < handle
             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries, dataObj];
             obj.updateCumulativeShamDecorr(dataObj)
             obj.cumulativeDecorr=obj.cumulativeShamDecorr;
+            obj.isShamMask(end+1)=1;
         end
-        function initMotionCorrection(obj)
+        function initMotionCorrection(obj,numVols)
             obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
             obj.decorrAverageSeries=zeros(size(obj.decorrAverageSeries));
             obj.decorrAverageSeriesROI=zeros(size(obj.decorrAverageSeries));
+            allVols=1:length(obj.ultrasoundDataSeries);
+            obj.cumulativeShamDecorr=zeros(size(obj.cumulativeDecorr));
+            for currVol=allVols(end-numVols:end)
+                obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr,obj.ultrasoundDataSeries(currVol).getFormattedDec(struct('global',false,'local',true)));
+            end
+            obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
         end
         function updateCumulativeDecorr(obj,dataObj)
             decorr=dataObj.getFormattedDec(obj.uncorrectedDecorrArg);
@@ -683,7 +692,11 @@ classdef ExperimentClass < handle
             %           None
             %         outputs:
             %           outDat: cell of times
-            outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
+            if ~isempty(obj.ultrasoundDataSeries)
+                outDat = arrayfun(@(x)x.time, obj.ultrasoundDataSeries,'UniformOutput',false);
+            else
+                outDat=[];
+            end
         end
     end
     methods (Static)

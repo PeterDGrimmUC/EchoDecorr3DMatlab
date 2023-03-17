@@ -44,12 +44,16 @@ function infoOut = getInitInfo(obj)
                         switch varName
                             case 'frameRate'
                                 infoOut(1) = str2num(varVal);
+                                obj.frameRate=infoOut(1);
                             case 'depth'
                                 infoOut(2) = str2num(varVal);
+                                obj.rmax=infoOut(2);
                             case 'phiRange'
                                 infoOut(3) = str2num(varVal);
+                                obj.phiRange=infoOut(3);
                             case 'thetaRange'
                                 infoOut(4) = str2num(varVal);
+                                obj.thetaRange=infoOut(4);
                             otherwise
                                 error('Variable name not valid');
                         end
