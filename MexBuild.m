@@ -20,5 +20,5 @@ for currTarg = sourceTargets
     eval(buildStr);
 end
 %%
-pkgBin=fullfile('+EchoDecorrelation','+Utils','+bin');
+pkgBin=fullfile('+EchoDecorrPkg','+Utils','+bin');
 copyfile(fullfile(buildBinDir,'*'), pkgBin);
