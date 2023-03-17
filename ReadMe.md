@@ -17,3 +17,4 @@ see [this matlab article for supported compilers](https://www.mathworks.com/supp
 ## Usage
 1. The GUI's for 2D and 3D echo decorrelation are in the GUI folder, when they are executed the correct paths will be set up
 2. Example scripts can be found in the ExampleScripts directory, these include most of the relevant calls 
+3. The logger submodule outputs information at different levels of severity, selecting a level from the dropdown will show all logged items of the same or less severity. In order of most severe to least, the levels are: FATAL, CRTICAL, ERROR, WARNING, INFO, MESSAGE, DEBUG, DETAIL and TRACE
