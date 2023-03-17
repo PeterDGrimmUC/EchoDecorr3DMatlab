@@ -347,7 +347,6 @@ classdef ExperimentClass < handle
             dataObj=obj.processDataSet(targetDirectory);
             obj.ultrasoundDataSeries = [obj.ultrasoundDataSeries, dataObj];
             obj.updateCumulativeShamDecorr(dataObj)
-            obj.cumulativeDecorr=obj.cumulativeShamDecorr;
             obj.isShamMask(end+1)=1;
         end
         function initMotionCorrection(obj,numVols)
@@ -356,7 +355,7 @@ classdef ExperimentClass < handle
             obj.decorrAverageSeriesROI=zeros(size(obj.decorrAverageSeries));
             allVols=1:length(obj.ultrasoundDataSeries);
             obj.cumulativeShamDecorr=zeros(size(obj.cumulativeDecorr));
-            for currVol=allVols(end-numVols:end)
+            for currVol=allVols(end-numVols+1:end)
                 obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr,obj.ultrasoundDataSeries(currVol).getFormattedDec(struct('global',false,'local',true)));
             end
             obj.cumulativeDecorr=zeros(size(obj.cumulativeDecorr));
@@ -367,8 +366,10 @@ classdef ExperimentClass < handle
             obj.updateDecAverageSeries();
         end
         function updateCumulativeShamDecorr(obj,dataObj)
-            decorr=dataObj.getFormattedDec(obj.correctedDecorrArg);
-            obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr, decorr);
+            decorr_loc=dataObj.getFormattedDec(struct('local',true,'global',false));
+            decorr_global=dataObj.getFormattedDec(struct('local',true,'global',true));
+            obj.cumulativeDecorr=max(obj.cumulativeDecorr,decorr_global);
+            obj.cumulativeShamDecorr=max(obj.cumulativeShamDecorr, decorr_loc);
             obj.updateDecAverageSeries();
         end
         function updateCumulativeMotionCorrectedDecorr(obj,dataObj)
