@@ -141,7 +141,7 @@ classdef USDataClass < handle
         end
         function outDecCorrected=getMotionCorrectedDecorr(obj, shamDec)
             % shamDec is local norm cumulative sham decorr (not per ms)
-            localDec=obj.getFormattedDec(struct('global',false,'local',true,'time',false));
+            localDec=obj.getFormattedDec(struct('global',false,'local',true));
             C=(obj.B2)./(obj.B2 + obj.B2_avg);
             outDecCorrected=C.* (localDec-shamDec);
             outDecCorrected(outDecCorrected<0)=realmin;

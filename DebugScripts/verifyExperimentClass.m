@@ -9,7 +9,7 @@ EchoDecorrPkg.Utils.lambdas;
 %% Init class
 experiment = EchoDecorrPkg.ExperimentClass(); % Create experiment class object
 %experiment.initDataFolderGUI(); % set target folder, should be one directory above each individual output folder from the scanner
-experiment.initDataFolder('/Users/petergrimm/Documents/EchoDecorrData/Other data/in-vivo/2022-8-24_experiment_4')
+experiment.initDataFolder('/Users/petergrimm/Documents/EchoDecorrData/Other data/in-vivo/InVivo_pig/2022-3-18_experiment_4')
 % Get geometry info
 % Manually set
 sigma = 3; 
@@ -29,7 +29,7 @@ experiment.getInitDataSet_c(); % get first data set from folder
 %% set ROI information
 elevLoc = 0; % center of ROI in elevation, centered at 0
 azimLoc = 0; % center of ROI in azimuth, centered at 0
-depthLoc = 15; % center of ROI in depth, distance from transducer
+depthLoc = 30; % center of ROI in depth, distance from transducer
 % the script lets you define an arbitrary ellipsoid ROI, set all equal for a sphere
 elevR = 10; 
 azimR = 10; 
@@ -47,7 +47,7 @@ depthR_in = 0;
 experiment.setIBSparam(-1000, 60, -30,30,-30,30)
 experiment.setROIParams(elevLoc,azimLoc,depthLoc,elevR,azimR,depthR,elevR_in,azimR_in,depthR_in,alphaAng,gammaAng,betaAng);
 %%
-numSham = 3; 
+numSham = 2; 
 for i =1:numSham
     if ~isempty(experiment.getWaitingDataSets)
         experiment.nextShamDataSet
@@ -59,8 +59,13 @@ while experiment.newDataSetReady()
     experiment.nextDataSet()
 end
 %%
-cumTest=mapreduce(@(x,y) max(x,y), map(@(x)x.getFormattedDec(struct('local',true,'global',true)), experiment.ultrasoundDataSeries));
-
+instDecLocal=map(@(x)x.getFormattedDec(struct('local',true,'global',false)), experiment.ultrasoundDataSeries);
+cumuDecSham=mapreduce(@(x,y) max(x,y), instDecLocal(1:numSham));
+motionCorrDecorr=map(@(x)x.getMotionCorrectedDecorr(cumuDecSham)/x.tau, experiment.ultrasoundDataSeries);
+cumMotionDecDecorr=mapreduce(@(x,y)max(x,y), motionCorrDecorr);
+figure(1)
+subplot(1,2,1),imagesc(log10(cumuDecSham(:,:,floor(end/2))/50),[-4,-1])
+subplot(1,2,2),imagesc(log10(cumMotionDecDecorr(:,:,floor(end/2))),[-4,-1])
 %% final output
 % this version cleans up the final output to match room coordinates after completion
 % the newer version does this at the beginning instead

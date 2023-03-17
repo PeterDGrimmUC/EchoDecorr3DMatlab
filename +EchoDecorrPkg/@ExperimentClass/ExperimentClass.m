@@ -45,6 +45,7 @@ classdef ExperimentClass < handle
         outSerialString; 
         outSerialObj;
         inSerialObj; 
+        %
         ROIx0; 
         ROIy0; 
         ROIz0; 
@@ -65,6 +66,7 @@ classdef ExperimentClass < handle
         timeArr;
         rfDataArr;
         voxelStepCart;
+        %
         IBSVoxels;
         IBSrMax;
         IBSrMin;
@@ -73,10 +75,10 @@ classdef ExperimentClass < handle
         IBSAzMin;
         IBSAzMax;
         IBSGeoSet=false;
+        %
         isMotionCorrected=false;
         correctedDecorrArg=struct('global',false,'local',true);
         uncorrectedDecorrArg=struct('global',true,'local',true);
-        numShamSets=0;
         validVoxels;
         IBSpts;
     end
