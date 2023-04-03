@@ -1,7 +1,7 @@
 #include "mex.h"
 #include <string>
 #include <math.h>
-float hex2Dec_SWFC_c(std::string hexString){
+inline float hex2Dec_SWFC_c(std::string hexString){
    /* HEX2Dec_SWFC
         Convert hex string to decimal using SWFC convention with swfc = [1 0 17 1]
         this means the number is signed, and that all of the information bits come after the decimal place (e.g output = 0.b1b2b3...bn where n = 17)

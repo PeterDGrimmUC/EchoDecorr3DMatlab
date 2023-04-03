@@ -6,3 +6,5 @@
 .DS_Store
 *.mexmaci64
 *.mat
+*.o
+*.log
