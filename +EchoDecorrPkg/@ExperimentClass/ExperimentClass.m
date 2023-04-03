@@ -699,6 +699,7 @@ classdef ExperimentClass < handle
             if succ
                 disp(strcat('Transfer complete. Folder: ',nextDataSet.name));
             end
+            drawnow;
         end
         function volOut = fixvolume(vol)
             % fixvolume: Fix volume to match room coordinates (legacy)
