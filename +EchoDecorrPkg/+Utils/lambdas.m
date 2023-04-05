@@ -22,15 +22,14 @@ dirRegexInd = @(targetFolder,exprin) ...
             cell2mat(arrayfun(@(x) ~isempty(regexp(x.name,exprin,'once')), dir(targetFolder),'UniformOutput',0))';
 dirRegex = @(targetFolder,exprin) indexat(dir(targetFolder), dirRegex(targetFolder, exprin));
 mapIgnore=@(expr,datIn) mapIgnoreF(expr,datIn);
-filterMap=@(f,x)indexatC(x,map(f,x));
-replaceElm = @(datIn,index,newVals) replaceElmF(datIn,index,newVals);
+filtermap=@(f,x)indexatC(x,map(f,x));
+replaceelm = @(datIn,index,newVals) replaceElmF(datIn,index,newVals);
 invmap=@(datIn,funcs) map(@(x)x(datIn),funcs);
 lcfun=@(outFunc,datIn,funcTerms)@(outFunc,datIn)outFunc();
 flatten=@(x)x(:);
 indexat = @(expr, index) expr(index);
 indexatC = @(expr, index) expr(cell2mat(index));
 %%
-sci_note=@(x)applyF(@(z) strcat(),floor(log10(x)));
 valAtSpec = @(rocObj, specVal) valAtSpecH(rocObj, specVal,@(x) log10(x));
 TPf = @(obs,pred) sum((obs==true) & (pred == true));
 FPf = @(obs,pred) sum((obs==false) & (pred == true));
@@ -54,6 +53,8 @@ optimalROC=@(x) struct('sens',optimalPtSens(x),'spec',optimalPtSpec(x),'value',l
 unravel=@(x)x(:);
 unravelAt=@(x,y)x(y);
 mapreduce=@(x,y) mapReduceH(x,y);
+mapreduceF=@(x,y) mapReduceH(x,y);
+mapaccumulateF=@(x,y) mapAccumulateH(x,y);
 %%
 ndgridMultT=@(c)ndgridMultH(c);
 maxind=@(d)maxindh(d);
@@ -106,5 +107,19 @@ function output=mapReduceH(funIn, datIn)
     output=funIn(callFunc(datIn,length(datIn)-1),callFunc(datIn,length(datIn)));
     for i = length(datIn)-2:-1:1
         output=funIn(callFunc(datIn,i),output);
+    end
+end
+function output=mapAccumulateH(funIn, datIn)
+    output=cell(1,length(datIn));
+    if iscell(datIn)
+        output{1}=datIn{1};
+        for i = 2:length(datIn)
+            output{i}=funIn(output{i-1},datIn{i});
+        end
+    else
+        output{1}=datIn(1);
+        for i = 2:length(datIn)
+            output{i}=funIn(output{i-1},datIn(i));
+        end
     end
 end
