@@ -35,3 +35,4 @@ end
 %%
 pkgBin=fullfile('+EchoDecorrPkg','+Utils','+bin');
 copyfile(fullfile(buildBinDir,'*'), pkgBin);
+
