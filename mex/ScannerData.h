@@ -1,6 +1,7 @@
 #ifndef SCANNERDATA_H_
 #define SCANNERDATA_H_
 #include "ScannerMetadata.h"
+#include "macro_debug.h"
 
 #define TWOS_COMP(z) (~z)+1
 #define printHexSubStr(thisstr,offset,name) printf("%s: %c%c%c%c%c ",name,thisstr[0+offset],thisstr[1+offset],thisstr[2+offset],thisstr[3+offset],thisstr[4+offset]);
@@ -24,24 +25,35 @@
 
 
 
-#ifdef __USE_MEX__
+#ifdef MATLAB_MEX_FILE
 #include "mex.h"
-#define WComplex mxComplexDouble
+#include "matrix.h"
+#define WDouble mxDouble
+#define WFloat mxDouble
+#define WComplexMalloc1D(_elm) mxMalloc(sizeof(WComplex)*_elm)
+#define WComplexFree(_dat) mxFree(_dat)
 #else
-typedef struct {
-    double real;
-    double imag;
-} WComplex;
+#define WDouble double
+#define WFloat double
+#define WComplexMalloc1D(_elm) malloc(sizeof(WComplex)*_elm)
+#define WComplexFree(_dat) free(_dat)
+typedef float mxSingle;
+typedef struct { mxSingle real, imag; } mxComplexSingle;
 #endif
+typedef struct {
+    WFloat real;
+    WFloat imag;
+} WComplex;
+
 
 typedef struct {
     ScannerMetadata metadata;
     WComplex * data;
 } ScannerData;
-
 ScannerData initScannerData(const char * folderName, ScannerOutputType outputType);
 
 int readScannerData(ScannerData * data, ScannerOutputType outputType);
 
 int freeScannerData(ScannerData * data);
+
 #endif // SCANNERDATA_H_

@@ -101,15 +101,18 @@ int readMetadata(ScannerMetadata * metadata, ScannerOutputType outputType){
                 return 1;
             }else{
                 fprintf(stderr, "Missing parameters! \n");
+                printf("Missing parameters! \n");
                 return -1;
             }
             break;
         case IQ2D:
             fprintf(stderr,"Not implemented for 2D \n");
+            printf("Not implemented for 2D \n");
             return -1;
             break;
         case IQBIPLANE:
             fprintf(stderr,"Not implemented for Biplane \n");
+            printf("Not implemented for Biplane \n");
             return -1;
             break;
     }
@@ -146,6 +149,7 @@ ScannerMetadata initMetadata(const char * folderName, ScannerOutputType outputTy
     strcpy(metadata.folderPath, folderName);
     if(!dir_exists(metadata.folderPath)){
         fprintf(stderr, "Could not open directory: %s \n", metadata.folderPath);
+        printf("Could not open directory: %s \n", metadata.folderPath);
     }
     return metadata;
 }

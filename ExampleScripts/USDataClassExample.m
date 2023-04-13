@@ -5,7 +5,8 @@ fileName = mfilename('fullpath');
 thisFileDir = uigetdir(); % point this towards the target data directory
 thisFileName = fullfile(thisFileDir,'bufApl0Out_0x0_0x0.data.dm.pmcr'); % this is the buffer used for 3D data, 2D/biplane have a different name
 %%
-Dm = EchoDecorrPkg.Utils.read_lbdump_wrapc_optim(thisFileName); % read in the data
+tic;Dm = EchoDecorrPkg.Utils.read_lbdump_wrapc(thisFileName); % read in the data
+toc
 %% Create a USDataClass object 
 % The constructor takes the following arguments:
 rmin = 0;

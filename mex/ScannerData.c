@@ -6,7 +6,6 @@
 #include <limits.h>
 #include "ScannerMetadata.h"
 #include "ScannerData.h"
-
 /* Bitwise helpers */
 static inline char charToHexNib(const char charIn){
     if(charIn >= 'A')
@@ -54,8 +53,8 @@ static inline int parseDataFile(const char * restrict mappedFile, WComplex * dat
         while(workingStr[0] != DATA_DELIM){
             workingStr++;
         }
-        data[i].real = (double) hexStr2Float_SWFC(workingStr+REAL_OFFSET);
-        data[i].imag = (double) hexStr2Float_SWFC(workingStr+IMAG_OFFSET);
+        data[i].real = (WFloat) hexStr2Float_SWFC(workingStr+REAL_OFFSET);
+        data[i].imag = (WFloat) hexStr2Float_SWFC(workingStr+IMAG_OFFSET);
         workingStr+=LINE_OFFSET;
     }
     return 1;
@@ -123,18 +122,22 @@ int readScannerData(ScannerData * data, ScannerOutputType outputType){
     size_t size;
     if(readMetadata(&data->metadata, outputType) < 0){
         fprintf(stderr,"Metadata read failed!\n");
+        printf("Metadata read failed!\n");
         return -1;
     }
     size_t alloc_size = sizeof(WComplex) * data->metadata.numElements;
-    printf("Allocating %lu bytes for %lu elements",alloc_size,data->metadata.numElements);
-    data->data = malloc(alloc_size);
+    //printf("Allocating %lu bytes for %lu elements",sizeof(WComplex) * data->metadata.numElements,data->metadata.numElements);
+    //data->data = malloc(alloc_size);
+    data->data = WComplexMalloc1D(data->metadata.numElements);
     if(!data->data){
         fprintf(stderr, "Allocation failed \n");
+        printf("Allocation failed \n");
         return -1;
     }
     char * dataFilePath = joinPath(data->metadata.folderPath, data->metadata.dataFileName);
     if(!file_exists(dataFilePath)){
         fprintf(stderr, "Could not open data file %s \n", dataFilePath);
+        printf("Could not open data file %s \n", dataFilePath);
         return -1;
     }
     char * mappedFile = (char *) mmap_file(dataFilePath, &size);
