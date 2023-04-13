@@ -382,7 +382,7 @@ classdef ExperimentClass < handle
             % helper functions
 
             tau=1000*obj.interFrameTime;
-            EchoDecorrPkg.Utils.lambdas;
+            %EchoDecorrPkg.Utils.lambdas;
             genGlobalDec = @(x)obj.ultrasoundDataSeries(x).getFormattedDec(struct('local',true,'global',true))/tau;
             genLocalDec = @(x)obj.ultrasoundDataSeries(x).getFormattedDec(struct('local',true,'global',false));
             genMotCorrDec = @(x,shamDec)obj.ultrasoundDataSeries(x).getMotionCorrectedDecorr(shamDec)/tau;

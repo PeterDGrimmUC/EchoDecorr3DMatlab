@@ -81,7 +81,7 @@ decorr_motcorrect_extclass=struct('cumDecorr',experiment.cumulativeDecorr,'cumSh
 % Without motion correction
 %%
 experiment_nomot = EchoDecorrPkg.ExperimentClass(); 
-experiment_nomot.initDataFolder('/Users/petergrimm/Downloads/2023-4-3_experiment_2');
+experiment_nomot.initDataFolder('/Users/petergrimm/Downloads/2023-4-3_experiment_8');
 infoOut = experiment_nomot.getInitInfo();
 experiment_nomot.setImagingParams(azimMin,azimMax,elevMin,elevMax,cartScalingFactor,frameRate,sigma);
 experiment_nomot.getInitDataSet_c();

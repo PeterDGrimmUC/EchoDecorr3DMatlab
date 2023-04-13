@@ -8,3 +8,8 @@
 *.mat
 *.o
 *.log
+*.pmcr
+*.txt
+*.plist
+mex/main.dSYM/Contents/Resources/DWARF/main
+*.json
