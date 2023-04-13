@@ -60,27 +60,27 @@ fclose(fid);
 % format data and load output structure
 if dataType == 0, % hww
         swfc = [0,18,0,0];
-        Dm.data = reshape(hex2dec_swfc(mdfdat,swfc),sz);
+        Dm.data = reshape(EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat,swfc),sz);
         Dm.H.ad = 'hww';
 elseif dataType == 1, % adm
         swfc = [1,0,17,1];
-        Dm.data = reshape(hex2dec_swfc(mdfdat,swfc),sz(2:end)); % i/q interleaving 1st dim
+        Dm.data = reshape(EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat,swfc),sz(2:end)); % i/q interleaving 1st dim
         Dm.H.ad = 'adm';
 elseif dataType == 2, % ddm
         swfc = [0,9,0,0];
-        Dm.data = reshape(hex2dec_swfc(mdfdat,swfc),sz);
+        Dm.data = reshape(EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat,swfc),sz);
         Dm.H.ad = 'ddm';
 elseif dataType == 3, % acd
         swfc = [1,0,39,0];
-        Dm.data = reshape(hex2dec_swfc(mdfdat,swfc),sz(2:end)); % lsb/msb interleaving 1st dim
+        Dm.data = reshape(EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat,swfc),sz(2:end)); % lsb/msb interleaving 1st dim
         Dm.H.ad = 'acd';
 elseif dataType == 4, % cpe
         swfcEne = [0,7,1,0];
         swfcVelVar = [1,0,7,0];
-        mdfdat(4:4:end) = hex2dec_swfc(mdfdat(4:4:end),swfcEne);
-        mdfdat(3:4:end) = hex2dec_swfc(mdfdat(3:4:end),swfcVelVar);
-        mdfdat(2:4:end) = hex2dec_swfc(mdfdat(2:4:end),swfcVelVar);
-        mdfdat(1:4:end) = hex2dec_swfc(mdfdat(1:4:end),swfcEne);
+        mdfdat(4:4:end) = EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat(4:4:end),swfcEne);
+        mdfdat(3:4:end) = EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat(3:4:end),swfcVelVar);
+        mdfdat(2:4:end) = EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat(2:4:end),swfcVelVar);
+        mdfdat(1:4:end) = EchoDecorrPkg.Utils.hex2dec_swfc(mdfdat(1:4:end),swfcEne);
         Dm.data = reshape(mdfdat,sz);
         Dm.H.ad = 'cpe';
 else
